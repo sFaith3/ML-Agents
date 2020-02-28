@@ -16,28 +16,30 @@ public class HitWall : MonoBehaviour
 
     public FloorHit lastFloorHit;
 
+    private bool firstTouch;
+
     TennisArea m_Area;
-    TennisAgent m_AgentA;
-    TennisAgent m_AgentB;
+    //TennisAgent m_AgentA;
+    //TennisAgent m_AgentB;
+    TennisAgent m_Agent;
 
     //  Use this for initialization
     void Start()
     {
         m_Area = areaObject.GetComponent<TennisArea>();
-        m_AgentA = m_Area.agentA.GetComponent<TennisAgent>();
-        m_AgentB = m_Area.agentB.GetComponent<TennisAgent>();
+        m_Agent = m_Area.agent.GetComponent<TennisAgent>();
+        firstTouch = true;
     }
 
     void Reset()
     {
-        m_AgentA.Done();
-        m_AgentB.Done();
         m_Area.MatchReset();
         lastFloorHit = FloorHit.Service;
         net = false;
+        firstTouch = true;
     }
     
-    void AgentAWins()
+    /*void AgentAWins()
     {
         m_AgentA.SetReward(1);
         m_AgentB.SetReward(-1);
@@ -53,11 +55,16 @@ public class HitWall : MonoBehaviour
         m_AgentB.score += 1;
         Reset();
 
-    }
+    }*/
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("iWall"))
+        if (collision.gameObject.name == "Floor") {
+            //refuerzo negativo
+            m_Agent.SetReward(-1);
+            Reset();
+        }
+        /*if (collision.gameObject.CompareTag("iWall"))
         {
             if (collision.gameObject.name == "wallA")
             {
@@ -130,27 +137,18 @@ public class HitWall : MonoBehaviour
                     AgentAWins();
                 }
             }
-        }
-        else if (collision.gameObject.name == "AgentA")
+        }*/
+        else if (collision.gameObject.name == "Agent")
         {
-            // Agent A double hit
-            if (lastAgentHit == 0)
-            {
-                AgentBWins();
+            if (!firstTouch) {
+                m_Agent.SetReward(1);
+            } else if (firstTouch) {
+                firstTouch = false;
+                m_Agent.SetReward(2);
             }
-            else
-            {
-                //agent can return serve in the air
-                if (lastFloorHit != FloorHit.Service && !net)
-                {
-                    net = true;
-                }
 
-                lastAgentHit = 0;
-                lastFloorHit = FloorHit.FloorHitUnset;
-            }
         }
-        else if (collision.gameObject.name == "AgentB")
+        /*else if (collision.gameObject.name == "AgentB")
         {
             // Agent B double hit
             if (lastAgentHit == 1)
@@ -167,6 +165,6 @@ public class HitWall : MonoBehaviour
                 lastAgentHit = 1;
                 lastFloorHit = FloorHit.FloorHitUnset;
             }
-        }
+        }*/
     }
 }
