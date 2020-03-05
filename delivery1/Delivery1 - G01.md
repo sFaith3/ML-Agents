@@ -2,23 +2,21 @@
 
 <img src="../docs/images/image-banner.png" align="middle" width="3000"/>
 
-## Introduction 
+## G01: Victor Armisen and David Recuenco
 
-This first delivery of the input/output course at ENTI delivered during Spring 2020 is focused on showing you understood the basic notions of modern machine learning, and how to use such techniques as they are available in Unity. Your goal is to analyze  one of the basic examples, dissect it, understand it, and apply the same strategy to a different problem.
+## **Introduction**
+The purpose of this notebook is explaining our work with the environment "Tennis" from the ml-agents examples.
+This example, as its name says, simulates a tennis match between two agents which follows the real tennis rules.
+What we wanted to do with the example was using only an agent and:
+* Make the agent play paddle alone and following the game's rules: the ball has to touch the ground once before being hit and if the ball touches the ground two times in a row without touching the front wall, the point is lost.
+* Make the agent do keepy-ups not letting the ball touching the ground. 
+* The same keepy-ups as above but with wind, making it harder for the agent to keep the ball in the air.
 
-## Assets 
-
-The assets to explore and use are the ones available at the ml-agents repository, which for this course I have forked [here]( https://github.com/joanllobera/ml-agents.git). It is also possible to add examples from the Marathon environmetns, which can be found [here](https://github.com/Unity-Technologies/marathon-envs)
- 
- 
- <img src="https://github.com/Unity-Technologies/marathon-envs/blob/master/images/MarathonEnvsBanner.gif" align="middle" width="3000"/>
- 
-## Delivery format 
-
-You must deliver a notebook reflecting the exercises outlined below. You will also be asked to go through your notebook in class, explaining to the rest  of the class what you did, and how to reproduce your results.
-
-A complementary scene or example implemented may also be included in the delivery.
-
+### The team
+Name | Enti email | Picture
+--- | --- | ---
+Victor Armisen | victorarmisencapo@enti.cat | placeholder picture
+David Recuenco | davidrecuencooliver@enti.cat | placeholder picture
 
 
 ## Exercises 
@@ -40,8 +38,6 @@ You do a performance analysis of the training using TensorBoard, exploring what 
 Taking as basis the example analysed, you propose, implement and test a different task for the same training procedure, or a very similar one. You explain how to train the new use case, and how the setup, rewards, states or training changed, compared to the example. 
 
 
-5. **Team**
-A table with your names, recent picture and enti emails
 
 ## Grades
 

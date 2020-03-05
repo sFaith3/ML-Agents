@@ -16,7 +16,7 @@ public class HitWall : MonoBehaviour
 
     public FloorHit lastFloorHit;
 
-    private bool firstTouch;
+    private bool hasTouchedFloor;
 
     TennisArea m_Area;
     //TennisAgent m_AgentA;
@@ -28,7 +28,7 @@ public class HitWall : MonoBehaviour
     {
         m_Area = areaObject.GetComponent<TennisArea>();
         m_Agent = m_Area.agent.GetComponent<TennisAgent>();
-        firstTouch = true;
+        hasTouchedFloor = false;
     }
 
     void Reset()
@@ -36,7 +36,7 @@ public class HitWall : MonoBehaviour
         m_Area.MatchReset();
         lastFloorHit = FloorHit.Service;
         net = false;
-        firstTouch = true;
+        hasTouchedFloor = false;
     }
     
     /*void AgentAWins()
@@ -60,9 +60,14 @@ public class HitWall : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.name == "Floor") {
-            //refuerzo negativo
-            m_Agent.SetReward(-1);
-            Reset();
+            if (!hasTouchedFloor) hasTouchedFloor = true;
+            else if (hasTouchedFloor) {
+                //refuerzo negativo por el segundo bote
+                m_Agent.SetReward(-1);
+                Reset();
+            }
+        } else if(collision.gameObject.name == "WallFront") {
+            hasTouchedFloor = false; //reset
         }
         /*if (collision.gameObject.CompareTag("iWall"))
         {
@@ -140,12 +145,7 @@ public class HitWall : MonoBehaviour
         }*/
         else if (collision.gameObject.name == "Agent")
         {
-            if (!firstTouch) {
-                m_Agent.SetReward(1);
-            } else if (firstTouch) {
-                firstTouch = false;
-                m_Agent.SetReward(2);
-            }
+            m_Agent.SetReward(1);
 
         }
         /*else if (collision.gameObject.name == "AgentB")
