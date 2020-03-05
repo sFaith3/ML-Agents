@@ -257,7 +257,7 @@ public class FoodCollectorAgent : Agent
             if(!hasFood)
             {
                 collision.gameObject.GetComponent<FoodLogic>().isEaten = true;
-                collision.gameObject.GetComponent<FoodLogic>().Respawn();
+                collision.gameObject.GetComponent<FoodLogic>().OnEaten();
                 //foodGrabbed = collision.gameObject;
                 //Destroy(collision.GetComponent<Rigidbody>());
                 //collision.gameObject.transform.parent = transform;
@@ -265,7 +265,7 @@ public class FoodCollectorAgent : Agent
             }
             else
             {
-                collision.gameObject.GetComponent<FoodLogic>().Respawn();
+                collision.gameObject.GetComponent<FoodLogic>().OnEaten();
                 AddReward(-1f);
                 if (contribute)
                 {
@@ -278,7 +278,7 @@ public class FoodCollectorAgent : Agent
         {
             if(hasFood)
             {
-                collision.gameObject.GetComponent<FoodLogic>().Respawn();
+                collision.gameObject.GetComponent<FoodLogic>().OnEaten();
                 AddReward(1f);
                 /*if(foodGrabbed != null)
                 {
@@ -293,7 +293,7 @@ public class FoodCollectorAgent : Agent
             else
             {
                 Poison();
-                collision.gameObject.GetComponent<FoodLogic>().Respawn();
+                collision.gameObject.GetComponent<FoodLogic>().OnEaten();
                 AddReward(-1f);
                 if (contribute)
                 {

@@ -6,7 +6,7 @@ public class FoodLogic : MonoBehaviour
     public bool respawn;
     public FoodCollectorArea myArea;
 
-    public void Respawn()
+    public void OnEaten()
     {
         /*Rigidbody rc = gameObject.AddComponent<Rigidbody>() as Rigidbody;
         GetComponent<Rigidbody>().mass = 5f;*/
