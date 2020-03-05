@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEditor;
+using System.Collections;
 
 public class MaxJavi_PyramidSwitch : MonoBehaviour
 {
@@ -9,7 +11,10 @@ public class MaxJavi_PyramidSwitch : MonoBehaviour
     GameObject m_Area;
     MaxJavi_PyramidArea m_AreaComponent;
     int m_PyramidIndex;
-    
+    public enum colorButtonEnum { RED, ORANGE };
+    public colorButtonEnum buttonColor;
+    public GameObject agent;
+    MaxJavi_PyramidAgent pyramidAgentScript;
 
     public bool GetState()
     {
@@ -20,6 +25,9 @@ public class MaxJavi_PyramidSwitch : MonoBehaviour
     {
         m_Area = gameObject.transform.parent.gameObject;
         m_AreaComponent = m_Area.GetComponent<MaxJavi_PyramidArea>();
+        agent.GetComponent<GameObject>();
+        pyramidAgentScript = agent.GetComponent<MaxJavi_PyramidAgent>();
+
     }
 
     public void ResetSwitch(int spawnAreaIndex, int pyramidSpawnIndex)
@@ -30,6 +38,7 @@ public class MaxJavi_PyramidSwitch : MonoBehaviour
         tag = "switchOff";
         transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         myButton.GetComponent<Renderer>().material = offMaterial;
+        pyramidAgentScript.buttonCounter = 0;
     }
 
     void OnCollisionEnter(Collision other)
@@ -38,8 +47,17 @@ public class MaxJavi_PyramidSwitch : MonoBehaviour
         {
             myButton.GetComponent<Renderer>().material = onMaterial;
             m_State = true;
-            m_AreaComponent.CreatePyramid(1, m_PyramidIndex);
             tag = "switchOn";
+            pyramidAgentScript.buttonCounter += 1;   
+        }
+      
+    }
+    private void Update()
+    {
+        if(pyramidAgentScript.buttonCounter == 2)
+        {
+            m_AreaComponent.CreatePyramid(1, m_PyramidIndex);
+            pyramidAgentScript.buttonCounter = 0;
         }
     }
 }

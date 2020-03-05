@@ -10,8 +10,12 @@ public class MaxJavi_PyramidAgent : Agent
     MaxJavi_PyramidArea m_MyArea;
     Rigidbody m_AgentRb;
     MaxJavi_PyramidSwitch m_SwitchLogic;
+    MaxJavi_PyramidSwitch m_SwitchLogic2;
     public GameObject areaSwitch;
+    public GameObject areaSwitch2;
     public bool useVectorObs;
+
+    public int buttonCounter = 0;
 
     public override void InitializeAgent()
     {
@@ -19,6 +23,7 @@ public class MaxJavi_PyramidAgent : Agent
         m_AgentRb = GetComponent<Rigidbody>();
         m_MyArea = area.GetComponent<MaxJavi_PyramidArea>();
         m_SwitchLogic = areaSwitch.GetComponent<MaxJavi_PyramidSwitch>();
+        m_SwitchLogic2 = areaSwitch2.GetComponent<MaxJavi_PyramidSwitch>();
     }
 
     public override void CollectObservations()
@@ -26,6 +31,7 @@ public class MaxJavi_PyramidAgent : Agent
         if (useVectorObs)
         {
             AddVectorObs(m_SwitchLogic.GetState());
+            AddVectorObs(m_SwitchLogic2.GetState());
             AddVectorObs(transform.InverseTransformDirection(m_AgentRb.velocity));
         }
     }
@@ -94,12 +100,13 @@ public class MaxJavi_PyramidAgent : Agent
         transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
 
         m_SwitchLogic.ResetSwitch(items[1], items[2]);
-        m_MyArea.CreateStonePyramid(1, items[3]);
-        m_MyArea.CreateStonePyramid(1, items[4]);
+        m_SwitchLogic2.ResetSwitch(items[3], items[4]);
         m_MyArea.CreateStonePyramid(1, items[5]);
         m_MyArea.CreateStonePyramid(1, items[6]);
         m_MyArea.CreateStonePyramid(1, items[7]);
         m_MyArea.CreateStonePyramid(1, items[8]);
+        //m_MyArea.CreateStonePyramid(1, items[7]);
+        //m_MyArea.CreateStonePyramid(1, items[8]);
     }
 
     void OnCollisionEnter(Collision collision)
