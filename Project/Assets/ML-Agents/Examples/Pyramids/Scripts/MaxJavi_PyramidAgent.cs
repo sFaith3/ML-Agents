@@ -116,5 +116,27 @@ public class MaxJavi_PyramidAgent : Agent
             SetReward(2f);
             Done();
         }
+        if (collision.gameObject.CompareTag("switchOff"))
+        {
+            if (m_SwitchLogic2.buttonColor == 0 && buttonCounter >= 1)
+            {
+                AddReward(.5f);
+            }
+            else
+            {
+                AddReward(-.5f);
+                Done();
+            }
+
+            if(m_SwitchLogic.buttonColor != 0 && buttonCounter == 0)
+            {
+                AddReward(-.5f);
+                Done();
+            }
+            else
+            {
+                AddReward(.5f);
+            }
+        }
     }
 }

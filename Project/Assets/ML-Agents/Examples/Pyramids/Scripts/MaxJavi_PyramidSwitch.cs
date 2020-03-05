@@ -1,6 +1,5 @@
 using UnityEngine;
-using UnityEditor;
-using System.Collections;
+
 
 public class MaxJavi_PyramidSwitch : MonoBehaviour
 {
@@ -45,10 +44,12 @@ public class MaxJavi_PyramidSwitch : MonoBehaviour
     {
         if (other.gameObject.CompareTag("agent") && m_State == false)
         {
+
             myButton.GetComponent<Renderer>().material = onMaterial;
             m_State = true;
             tag = "switchOn";
-            pyramidAgentScript.buttonCounter += 1;   
+            pyramidAgentScript.buttonCounter += 1;
+            Debug.Log(buttonColor);
         }
       
     }
