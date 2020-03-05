@@ -18,16 +18,16 @@ public class HitWall_Keep : MonoBehaviour
 
     private bool firstTouch;
 
-    TennisArea m_Area;
+    TennisKeepArea m_Area;
     //TennisAgent m_AgentA;
     //TennisAgent m_AgentB;
-    TennisAgent m_Agent;
+    TennisKeepAgent m_Agent;
 
     //  Use this for initialization
     void Start()
     {
-        m_Area = areaObject.GetComponent<TennisArea>();
-        m_Agent = m_Area.agent.GetComponent<TennisAgent>();
+        m_Area = areaObject.GetComponent<TennisKeepArea>();
+        m_Agent = m_Area.agent.GetComponent<TennisKeepAgent>();
         firstTouch = true;
     }
 

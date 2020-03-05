@@ -2,11 +2,11 @@
 using UnityEngine.UI;
 using MLAgents;
 
-public class Tennis_Keep : Agent
+public class TennisKeepAgent : Agent
 {
     [Header("Specific to Tennis")]
     public GameObject ball;
-    public bool invertX;
+    public bool invertX = true;
     public int score;
     public GameObject myArea;
     public float angle;
@@ -55,14 +55,14 @@ public class Tennis_Keep : Agent
         AddVectorObs(m_InvertMult * m_BallRb.velocity.x);
         AddVectorObs(m_BallRb.velocity.y);
 
-        AddVectorObs(m_InvertMult * gameObject.transform.rotation.z);
+        AddVectorObs(m_InvertMult * gameObject.transform.rotation.x);
     }
 
     public override void AgentAction(float[] vectorAction)
     {
         var moveX = Mathf.Clamp(vectorAction[0], -1f, 1f) * m_InvertMult;
         var moveY = Mathf.Clamp(vectorAction[1], -1f, 1f);
-        var rotate = Mathf.Clamp(vectorAction[2], -1f, 1f) * m_InvertMult;
+        var rotate = Mathf.Clamp(0f, -1f, 1f) * m_InvertMult;
         //
         if (moveY > 0.5 && transform.position.y - transform.parent.transform.position.y < -1.5f)
         {
@@ -97,7 +97,7 @@ public class Tennis_Keep : Agent
     {
         m_InvertMult = invertX ? -1f : 1f;
 
-        transform.position = new Vector3(0.0f, -6.5f, 1.5f) /*+ transform.parent.transform.position*/;
+        transform.position = new Vector3(0.0f, -4.5f, 1.5f) + transform.parent.transform.position;
         m_AgentRb.velocity = new Vector3(0f, 0f, 0f);
 
         SetResetParameters();
@@ -107,7 +107,7 @@ public class Tennis_Keep : Agent
     {
         angle = m_ResetParams.GetPropertyWithDefault("angle", 55);
         gameObject.transform.eulerAngles = new Vector3(
-            m_InvertMult * angle,
+            m_InvertMult * angle,                               // Invertido en la X en vez que en la Z
             gameObject.transform.eulerAngles.y,
             gameObject.transform.eulerAngles.z
         );

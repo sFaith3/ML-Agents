@@ -791,7 +791,6 @@ GameObject:
   - component: {fileID: 65276342467178626}
   - component: {fileID: 114176424229738618}
   - component: {fileID: 1170495231318461}
-  - component: {fileID: 114915945868456046}
   - component: {fileID: 2449890525605034791}
   m_Layer: 0
   m_Name: Agent
@@ -809,7 +808,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1170495231318460}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 088ffe4534279f44586bdbba8065f4af, type: 3}
+  m_Script: {fileID: 11500000, guid: 53c1cc6dae8bc3b4d9ef6a7dfa70a21e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   agentParameters:
@@ -854,7 +853,6 @@ GameObject:
   - component: {fileID: 23820197126527428}
   - component: {fileID: 54551620089504486}
   - component: {fileID: 1273408238800245}
-  - component: {fileID: 114864719371771648}
   m_Layer: 0
   m_Name: Ball
   m_TagString: ball
@@ -974,7 +972,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4172343192766894}
-  - component: {fileID: 114965703341268124}
+  - component: {fileID: 1541948140088427}
   m_Layer: 0
   m_Name: TennisArea
   m_TagString: Untagged
@@ -982,6 +980,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1541948140088427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1541948140088426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e77067fed8f57748850803552743702, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ball: {fileID: 1273408238800244}
+  agent: {fileID: 1170495231318460}
 --- !u!1 &1573815770374298
 GameObject:
   m_ObjectHideFlags: 0
@@ -2153,58 +2165,6 @@ MonoBehaviour:
   myArea: {fileID: 1541948140088426}
   angle: 0
   scale: 0
---- !u!114 &114864719371771648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1273408238800244}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05eee2a5536934f5684a65f151efd304, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  areaObject: {fileID: 1541948140088426}
-  lastAgentHit: 0
-  net: 0
-  lastFloorHit: 0
---- !u!114 &114915945868456046
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1170495231318460}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e51a3fb0b3186433ea84fc1e0549cc91, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  maxStep: 0
-  ball: {fileID: 1273408238800244}
-  invertX: 0
-  score: 0
-  myArea: {fileID: 1541948140088426}
-  angle: 0
-  scale: 0
---- !u!114 &114965703341268124
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1541948140088426}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bc15854a4efe14dceb84a3183ca4c896, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ball: {fileID: 1273408238800244}
-  agent: {fileID: 1170495231318460}
 --- !u!135 &135169800405340218
 SphereCollider:
   m_ObjectHideFlags: 0
