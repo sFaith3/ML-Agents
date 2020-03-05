@@ -30,7 +30,6 @@ public class FoodCollectorAgent : Agent
     public bool contribute;
     public bool useVectorObs;
 
-
     public override void InitializeAgent()
     {
         base.InitializeAgent();
@@ -253,21 +252,25 @@ public class FoodCollectorAgent : Agent
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("food"))
+        if (collision.gameObject.CompareTag("food") && !collision.gameObject.GetComponent<FoodLogic>().isEaten)
         {
             if(!hasFood)
             {
-                foodGrabbed = collision.gameObject;
+                collision.gameObject.GetComponent<FoodLogic>().isEaten = true;
+                collision.gameObject.GetComponent<FoodLogic>().Respawn();
+                //foodGrabbed = collision.gameObject;
+                //Destroy(collision.GetComponent<Rigidbody>());
+                //collision.gameObject.transform.parent = transform;
                 Satiate();
-                collision.gameObject.GetComponent<FoodLogic>().OnEaten(m_Satiated);
-                if (contribute)
-                {
-                    m_FoodCollecterSettings.totalScore += 1;
-                }
             }
             else
             {
+                collision.gameObject.GetComponent<FoodLogic>().Respawn();
                 AddReward(-1f);
+                if (contribute)
+                {
+                    m_FoodCollecterSettings.totalScore -= 1;
+                }
             }
             
         }
@@ -275,17 +278,22 @@ public class FoodCollectorAgent : Agent
         {
             if(hasFood)
             {
+                collision.gameObject.GetComponent<FoodLogic>().Respawn();
                 AddReward(1f);
-                if(foodGrabbed != null)
+                /*if(foodGrabbed != null)
                 {
-                    Destroy(foodGrabbed);
+                    foodGrabbed.GetComponent<FoodLogic>().Respawn();
+                    foodGrabbed = null;
+                }*/
+                if (contribute)
+                {
+                    m_FoodCollecterSettings.totalScore += 1;
                 }
             }
             else
             {
                 Poison();
-                collision.gameObject.GetComponent<FoodLogic>().OnEaten(m_Satiated);
-
+                collision.gameObject.GetComponent<FoodLogic>().Respawn();
                 AddReward(-1f);
                 if (contribute)
                 {
