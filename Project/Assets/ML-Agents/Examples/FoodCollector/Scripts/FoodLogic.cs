@@ -6,17 +6,25 @@ public class FoodLogic : MonoBehaviour
     public FoodCollectorArea myArea;
     
 
-    public void OnEaten()
+    public void OnEaten(bool agentSatiated)
     {
-        if (respawn)
+        if(!agentSatiated)
         {
-            transform.position = new Vector3(Random.Range(-myArea.range, myArea.range),
-                3f,
-                Random.Range(-myArea.range, myArea.range)) + myArea.transform.position;
+            if (respawn)
+            {
+                transform.position = new Vector3(Random.Range(-myArea.range, myArea.range),
+                    3f,
+                    Random.Range(-myArea.range, myArea.range)) + myArea.transform.position;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
         }
         else
         {
             Destroy(gameObject);
         }
+        
     }
 }

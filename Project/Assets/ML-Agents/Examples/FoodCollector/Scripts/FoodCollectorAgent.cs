@@ -17,6 +17,9 @@ public class FoodCollectorAgent : Agent
     // Speed of agent rotation.
     public float turnSpeed = 300;
 
+    public bool hasFood = false;
+    public GameObject foodGrabbed;
+
     // Speed of agent movement.
     public float moveSpeed = 2;
     public Material normalMaterial;
@@ -67,7 +70,7 @@ public class FoodCollectorAgent : Agent
         {
             Unfreeze();
         }
-        if (Time.time > m_EffectTime + 0.5f)
+        if (Time.time > m_EffectTime + 15f)
         {
             if (m_Poisoned)
             {
@@ -191,6 +194,7 @@ public class FoodCollectorAgent : Agent
 
     void Satiate()
     {
+        hasFood = true;
         m_Satiated = true;
         m_EffectTime = Time.time;
         gameObject.GetComponentInChildren<Renderer>().material = goodMaterial;
@@ -198,6 +202,7 @@ public class FoodCollectorAgent : Agent
 
     void Unsatiate()
     {
+        hasFood = false;
         m_Satiated = false;
         gameObject.GetComponentInChildren<Renderer>().material = normalMaterial;
     }
@@ -250,24 +255,44 @@ public class FoodCollectorAgent : Agent
     {
         if (collision.gameObject.CompareTag("food"))
         {
-            Satiate();
-            collision.gameObject.GetComponent<FoodLogic>().OnEaten();
-            AddReward(1f);
-            if (contribute)
+            if(!hasFood)
             {
-                m_FoodCollecterSettings.totalScore += 1;
+                foodGrabbed = collision.gameObject;
+                Satiate();
+                collision.gameObject.GetComponent<FoodLogic>().OnEaten(m_Satiated);
+                if (contribute)
+                {
+                    m_FoodCollecterSettings.totalScore += 1;
+                }
             }
+            else
+            {
+                AddReward(-1f);
+            }
+            
         }
         if (collision.gameObject.CompareTag("badFood"))
         {
-            Poison();
-            collision.gameObject.GetComponent<FoodLogic>().OnEaten();
-
-            AddReward(-1f);
-            if (contribute)
+            if(hasFood)
             {
-                m_FoodCollecterSettings.totalScore -= 1;
+                AddReward(1f);
+                if(foodGrabbed != null)
+                {
+                    Destroy(foodGrabbed);
+                }
             }
+            else
+            {
+                Poison();
+                collision.gameObject.GetComponent<FoodLogic>().OnEaten(m_Satiated);
+
+                AddReward(-1f);
+                if (contribute)
+                {
+                    m_FoodCollecterSettings.totalScore -= 1;
+                }
+            }
+            
         }
     }
 
