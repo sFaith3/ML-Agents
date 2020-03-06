@@ -1,7 +1,7 @@
 using UnityEngine;
 using MLAgents;
 
-public class Ball3DAgent : Agent
+public class Ball3DWithCubeAgent : Agent
 {
     [Header("Specific to Ball3D")]
     public GameObject ball1;
