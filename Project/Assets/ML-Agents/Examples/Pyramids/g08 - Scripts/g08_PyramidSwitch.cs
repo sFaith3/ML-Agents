@@ -7,7 +7,7 @@ public class g08_PyramidSwitch : MonoBehaviour
     public GameObject myButton;
     bool m_State;
     GameObject m_Area;
-    PyramidArea m_AreaComponent;
+    g08_PyramidArea m_AreaComponent;
     int m_PyramidIndex;
 
     public bool GetState()
@@ -18,7 +18,7 @@ public class g08_PyramidSwitch : MonoBehaviour
     void Start()
     {
         m_Area = gameObject.transform.parent.gameObject;
-        m_AreaComponent = m_Area.GetComponent<PyramidArea>();
+        m_AreaComponent = m_Area.GetComponent<g08_PyramidArea>();
     }
 
     public void ResetSwitch(int spawnAreaIndex, int pyramidSpawnIndex)

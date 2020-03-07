@@ -7,9 +7,9 @@ using MLAgents;
 public class g08_PyramidAgent : Agent
 {
     public GameObject area;
-    PyramidArea m_MyArea;
+    g08_PyramidArea m_MyArea;
     Rigidbody m_AgentRb;
-    PyramidSwitch m_SwitchLogic;
+    g08_PyramidSwitch m_SwitchLogic;
     public GameObject areaSwitch;
     public bool useVectorObs;
 
@@ -17,8 +17,8 @@ public class g08_PyramidAgent : Agent
     {
         base.InitializeAgent();
         m_AgentRb = GetComponent<Rigidbody>();
-        m_MyArea = area.GetComponent<PyramidArea>();
-        m_SwitchLogic = areaSwitch.GetComponent<PyramidSwitch>();
+        m_MyArea = area.GetComponent<g08_PyramidArea>();
+        m_SwitchLogic = areaSwitch.GetComponent<g08_PyramidSwitch>();
     }
 
     public override void CollectObservations()
