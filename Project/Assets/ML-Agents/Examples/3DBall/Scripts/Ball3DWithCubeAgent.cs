@@ -4,18 +4,20 @@ using MLAgents;
 public class Ball3DWithCubeAgent : Agent
 {
     [Header("Specific to Ball3D")]
-    public GameObject ball1;
-    public GameObject ball2;
-    Rigidbody m_BallRb1;
-    Rigidbody m_BallRb2;
+    public GameObject ball;
+    public GameObject cube;
+    Rigidbody m_BallRb;
+    Rigidbody m_CubeRb;
     IFloatProperties m_ResetParams;
-    float minBallDist = 1.2f;
-    float maxBallDist = 6.0f;
+
+    float minReward = 0.1f;
+    float maxReward = 0.95f;
+    float normalThreshold = 0.5f;
 
     public override void InitializeAgent()
     {
-        m_BallRb1 = ball1.GetComponent<Rigidbody>();
-        m_BallRb2 = ball2.GetComponent<Rigidbody>();
+        m_BallRb = ball.GetComponent<Rigidbody>();
+        m_CubeRb = cube.GetComponent<Rigidbody>();
         m_ResetParams = Academy.Instance.FloatProperties;
         SetResetParameters();
     }
@@ -25,12 +27,14 @@ public class Ball3DWithCubeAgent : Agent
         AddVectorObs(gameObject.transform.rotation.z);
         AddVectorObs(gameObject.transform.rotation.x);
 
-        AddVectorObs(ball1.transform.position - gameObject.transform.position);
-        AddVectorObs(ball2.transform.position - gameObject.transform.position);
-        AddVectorObs(ball1.transform.position - ball2.transform.position);
-        
-        AddVectorObs(m_BallRb1.velocity);
-        AddVectorObs(m_BallRb2.velocity);
+        AddVectorObs(ball.transform.position - gameObject.transform.position);
+        AddVectorObs(cube.transform.position - gameObject.transform.position);
+        AddVectorObs(cube.transform.position - ball.transform.position);
+
+        AddVectorObs(m_BallRb.velocity);
+
+        AddVectorObs(cube.transform.up);
+
     }
 
     public override void AgentAction(float[] vectorAction)
@@ -49,21 +53,27 @@ public class Ball3DWithCubeAgent : Agent
         {
             gameObject.transform.Rotate(new Vector3(1, 0, 0), actionX);
         }
-        if ((ball1.transform.position.y - gameObject.transform.position.y) < -2f ||
-            (ball2.transform.position.y - gameObject.transform.position.y) < -2f ||
-            Mathf.Abs(ball1.transform.position.x - gameObject.transform.position.x) > 3f ||
-            Mathf.Abs(ball2.transform.position.x - gameObject.transform.position.x) > 3f ||
-            Mathf.Abs(ball1.transform.position.z - gameObject.transform.position.z) > 3f ||
-            Mathf.Abs(ball2.transform.position.z - gameObject.transform.position.z) > 3f)
+        if ((ball.transform.position.y - gameObject.transform.position.y) < -2f ||
+            Mathf.Abs(ball.transform.position.x - gameObject.transform.position.x) > 3f ||
+            Mathf.Abs(ball.transform.position.z - gameObject.transform.position.z) > 3f ||
+            Mathf.Abs(cube.transform.position.y - ball.transform.position.y) < 0.5f ||
+            Vector3.Dot(cube.transform.up, Vector3.up) < normalThreshold)
         {
             SetReward(-1f);
             Done();
         }
         else
         {
-            
-            float reward = Mathf.Lerp(0.95f,0.1f,(Mathf.Clamp(Vector3.Distance(ball1.transform.position, ball2.transform.position),minBallDist,maxBallDist) -minBallDist) / maxBallDist);
-            SetReward(reward);
+            float xDist = Mathf.Abs((ball.transform.position - transform.position).x);
+            float zDist = Mathf.Abs((ball.transform.position - transform.position).z);
+
+            float ballXReward = Mathf.Lerp(maxReward, minReward, (xDist/ 3f));
+            float ballZReward = Mathf.Lerp(maxReward, minReward, (zDist / 3f));
+            float ballReward = (ballXReward + ballZReward) / 2f;
+
+            float cubeReward = Mathf.Lerp(minReward, maxReward, (Vector3.Dot(cube.transform.up, Vector3.up) - normalThreshold) * 2f);
+            float reward = (ballReward + cubeReward) / 2f;
+            SetReward(ballReward);
         }
     }
 
@@ -72,12 +82,18 @@ public class Ball3DWithCubeAgent : Agent
         gameObject.transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
         gameObject.transform.Rotate(new Vector3(1, 0, 0), Random.Range(-10f, 10f));
         gameObject.transform.Rotate(new Vector3(0, 0, 1), Random.Range(-10f, 10f));
-        m_BallRb1.velocity = new Vector3(0f, 0f, 0f);
-        m_BallRb2.velocity = new Vector3(0f, 0f, 0f);
-        ball1.transform.position = new Vector3(Random.Range(-0.6f, -1.5f), 4f, Random.Range(-1.5f, 1.5f))
-            + gameObject.transform.position;
-        ball2.transform.position = new Vector3(Random.Range(0.6f, 1.5f), 4f, Random.Range(-1.5f, 1.5f))
-            + gameObject.transform.position;
+        cube.transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
+
+        m_BallRb.velocity = new Vector3(0f, 0f, 0f);
+        m_BallRb.angularVelocity = new Vector3(0f, 0f, 0f);
+
+        m_CubeRb.velocity = new Vector3(0f, 0f, 0f);
+        m_CubeRb.angularVelocity = new Vector3(0f, 0f, 0f);
+
+        float xRange = Random.Range(-0.6f, -1.5f);
+        float zRange = Random.Range(-1.5f, 1.5f);
+        ball.transform.position = new Vector3(xRange, 4f, zRange) + gameObject.transform.position;
+        cube.transform.position = new Vector3(xRange, 6f, zRange) + gameObject.transform.position;
         //Reset the parameters when the Agent is reset.
         SetResetParameters();
     }
@@ -94,11 +110,11 @@ public class Ball3DWithCubeAgent : Agent
     public void SetBall()
     {
         //Set the attributes of the ball by fetching the information from the academy
-        m_BallRb1.mass = m_ResetParams.GetPropertyWithDefault("mass", 1.0f);
-        m_BallRb2.mass = m_ResetParams.GetPropertyWithDefault("mass", 1.0f);
+        m_BallRb.mass = m_ResetParams.GetPropertyWithDefault("mass", 1.0f);
+        //m_CubeRb.mass = m_ResetParams.GetPropertyWithDefault("mass", 1.0f);
         var scale = m_ResetParams.GetPropertyWithDefault("scale", 1.0f);
-        ball1.transform.localScale = new Vector3(scale, scale, scale);
-        ball2.transform.localScale = new Vector3(scale, scale, scale);
+        ball.transform.localScale = new Vector3(scale, scale, scale);
+        //cube.transform.localScale = new Vector3(scale, scale, scale);
     }
 
     public void SetResetParameters()

@@ -106,7 +106,7 @@ VisualPyramids:
             encoding_size: 256
 
 3DBall:
-    max_steps: 30.0e5
+    max_steps: 500.0e5
     normalize: true
     batch_size: 64
     buffer_size: 12000
