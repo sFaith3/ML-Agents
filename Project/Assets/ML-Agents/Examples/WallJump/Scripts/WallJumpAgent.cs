@@ -10,27 +10,38 @@ public class WallJumpAgent : Agent
 {
     // Depending on this value, the wall will have different height
     int m_Configuration;
+
+    [Header("Brains")]
     // Brain to use when no wall is present
     public NNModel noWallBrain;
     // Brain to use when a jumpable wall is present
     public NNModel smallWallBrain;
     // Brain to use when a wall requiring a block to jump over is present
     public NNModel bigWallBrain;
+    // Brain to use when a wall requiring a block to jump through a hole is present
+    public NNModel holeWallBrain;
 
+    [Header("Wall Prefabs")]
+    public GameObject DynamicWallHole;
+    public GameObject NormalWall;
+
+    [Header("Scene References")]
     public GameObject ground;
     public GameObject spawnArea;
     Bounds m_SpawnAreaBounds;
 
-
     public GameObject goal;
     public GameObject shortBlock;
     public GameObject wall;
+    public Transform wallTransform;
+
     Rigidbody m_ShortBlockRb;
     Rigidbody m_AgentRb;
     Material m_GroundMaterial;
     Renderer m_GroundRenderer;
     WallJumpSettings m_WallJumpSettings;
 
+    [Header("Config Parameters")]
     public float jumpingTime;
     public float jumpTime;
     // This is a downward force applied when falling to make jumps look
@@ -307,6 +318,8 @@ public class WallJumpAgent : Agent
     /// Other : Tall wall and BigWallBrain. </param>
     void ConfigureAgent(int config)
     {
+        Destroy(wall);
+        wall = Instantiate(NormalWall, wallTransform.position, Quaternion.identity);
         var localScale = wall.transform.localScale;
         if (config == 0)
         {
@@ -326,7 +339,7 @@ public class WallJumpAgent : Agent
             wall.transform.localScale = localScale;
             GiveModel("SmallWallJump", smallWallBrain);
         }
-        else
+        else if (config == 2)
         {
             var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_min_height", 8);
             var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_max_height", 8);
@@ -337,6 +350,12 @@ public class WallJumpAgent : Agent
                 localScale.z);
             wall.transform.localScale = localScale;
             GiveModel("BigWallJump", bigWallBrain);
+        }
+        else
+        {
+            Destroy(wall);
+            wall = Instantiate(DynamicWallHole, wallTransform.position, Quaternion.identity);
+            GiveModel("HoleWallJump", holeWallBrain);
         }
     }
 }
