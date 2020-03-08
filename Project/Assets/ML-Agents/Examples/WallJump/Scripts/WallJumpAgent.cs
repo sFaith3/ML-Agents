@@ -33,7 +33,8 @@ public class WallJumpAgent : Agent
     public GameObject goal;
     public GameObject shortBlock;
     public GameObject wall;
-    public Transform wallTransform;
+    public Transform normalWallTransform;
+    public Transform dynamicWallTransform;
 
     Rigidbody m_ShortBlockRb;
     Rigidbody m_AgentRb;
@@ -319,7 +320,7 @@ public class WallJumpAgent : Agent
     void ConfigureAgent(int config)
     {
         Destroy(wall);
-        wall = Instantiate(NormalWall, wallTransform.position, Quaternion.identity);
+        wall = Instantiate(NormalWall, normalWallTransform.position, Quaternion.identity);
         var localScale = wall.transform.localScale;
         if (config == 0)
         {
@@ -354,7 +355,7 @@ public class WallJumpAgent : Agent
         else
         {
             Destroy(wall);
-            wall = Instantiate(DynamicWallHole, wallTransform.position, Quaternion.identity);
+            wall = Instantiate(DynamicWallHole, dynamicWallTransform.position, Quaternion.identity);
             GiveModel("HoleWallJump", holeWallBrain);
         }
     }
