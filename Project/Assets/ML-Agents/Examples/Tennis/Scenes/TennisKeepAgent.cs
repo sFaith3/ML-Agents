@@ -60,26 +60,76 @@ public class TennisKeepAgent : Agent
 
     public override void AgentAction(float[] vectorAction)
     {
-        var moveX = Mathf.Clamp(vectorAction[0], -1f, 1f) * m_InvertMult;
+        Vector3 dirToGo = Vector3.zero;
+        var moveX = /*Mathf.Clamp(*/vectorAction[0] * m_InvertMult;
         var moveY = Mathf.Clamp(vectorAction[1], -1f, 1f);
-        var rotate = Mathf.Clamp(0f, -1f, 1f) * m_InvertMult;
-        //
+        //var rotate = Mathf.Clamp(0f, -1f, 1f) * m_InvertMult;
+
+        //print(new Vector2(moveX, moveY) + m_InvertMult.ToString());
+
+        ////
         if (moveY > 0.5 && transform.position.y - transform.parent.transform.position.y < -1.5f)
         {
             m_AgentRb.velocity = new Vector3(m_AgentRb.velocity.x, 7f, 0f);
         }
 
+        //switch (vectorAction[0])
+        //{
+        //    case 1:
+        //        dirToGo = transform.forward * 10.0f;
+        //        break;
+        //}
+
+        //switch (vectorAction[1])
+        //{
+        //    case 1:
+        //        dirToGo = transform.right * 3f;
+        //        break;
+        //    case 2:
+        //        dirToGo = transform.right * -3f;
+        //        break;
+        //}
+
+        //float distance = Vector3.Distance(ball.gameObject.transform.position, transform.position);
+        //if (vectorAction[0] > 0.0f)
+        //    gameObject.GetComponent<Rigidbody>().AddForce(Vector3.right * 2.0f, ForceMode.Impulse);
+        //else if(vectorAction[0] < 0.0f)
+        //    gameObject.GetComponent<Rigidbody>().AddForce(Vector3.right * -2.0f, ForceMode.Impulse);
+        //if (vectorAction[1] > 0.0f)
+        //    gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up * 1.0f, ForceMode.Impulse);
+        //else if (vectorAction[1] < 0.0f)
+        //    gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up * -1.0f, ForceMode.Impulse);
+
+        //m_AgentRb.AddForce(dirToGo, ForceMode.VelocityChange);
         m_AgentRb.velocity = new Vector3(moveX * 30.0f, m_AgentRb.velocity.y, 0f);
 
-        //m_AgentRb.transform.rotation = Quaternion.Euler(55.0f * rotate + m_InvertMult * 180.0f, 0.0f, 0.0f);
-        m_AgentRb.transform.rotation = Quaternion.Euler(55.0f * rotate + m_InvertMult * 180.0f, -180.0f, 0.0f);
-        if (invertX && transform.position.x - transform.parent.transform.position.x < -m_InvertMult ||
-            !invertX && transform.position.x - transform.parent.transform.position.x > -m_InvertMult)
-        {
-            transform.position = new Vector3(-m_InvertMult + transform.parent.transform.position.x,
-                transform.position.y,
-                transform.position.z);
-        }
+        transform.eulerAngles = new Vector3(-180.0f, -180.0f, 0.0f);
+
+
+
+
+
+
+
+
+
+
+
+        //m_AgentRb.velocity = new Vector3(moveX * 30.0f, m_AgentRb.velocity.y, 0f);
+
+        ////m_AgentRb.transform.rotation = Quaternion.Euler(55.0f * rotate + m_InvertMult * 180.0f, 0.0f, 0.0f);
+        //m_AgentRb.transform.rotation = Quaternion.Euler(55.0f * rotate + m_InvertMult * 180.0f, -180.0f, 0.0f);
+        //if (invertX && transform.position.x - transform.parent.transform.position.x < -m_InvertMult ||
+        //    !invertX && transform.position.x - transform.parent.transform.position.x > -m_InvertMult)
+        //{
+        //    transform.position = new Vector3(-m_InvertMult + transform.parent.transform.position.x,
+        //        transform.position.y,
+        //        transform.position.z);
+        //}
+
+
+ 
+
 
         m_TextComponent.text = score.ToString();
     }
