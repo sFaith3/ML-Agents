@@ -300,6 +300,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1432086782037750, guid: 7ae0945413457854cbea77ff0c92361c, type: 3}
+      propertyPath: m_Name
+      value: OrangeSwitch
+      objectReference: {fileID: 0}
     - target: {fileID: 1464170487903594, guid: 7ae0945413457854cbea77ff0c92361c, type: 3}
       propertyPath: m_Name
       value: MaxJavi_AreaPB
@@ -358,6 +362,11 @@ PrefabInstance:
       propertyPath: agent
       value: 
       objectReference: {fileID: 1224854131}
+    - target: {fileID: 1286537023210137407, guid: 7ae0945413457854cbea77ff0c92361c,
+        type: 3}
+      propertyPath: m_Name
+      value: RedSwitch
+      objectReference: {fileID: 0}
     - target: {fileID: 2491855539983937660, guid: 7ae0945413457854cbea77ff0c92361c,
         type: 3}
       propertyPath: areaSwitch2

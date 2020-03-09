@@ -49,7 +49,7 @@ public class MaxJavi_PyramidSwitch : MonoBehaviour
             m_State = true;
             tag = "switchOn";
             pyramidAgentScript.buttonCounter += 1;
-            Debug.Log(buttonColor);
+            
         }
       
     }
