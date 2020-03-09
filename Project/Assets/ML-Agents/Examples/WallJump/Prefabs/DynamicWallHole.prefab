@@ -11,14 +11,13 @@ GameObject:
   - component: {fileID: 72852155}
   - component: {fileID: 72852158}
   - component: {fileID: 72852157}
-  - component: {fileID: 72852156}
   m_Layer: 0
   m_Name: Hole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &72852155
 Transform:
   m_ObjectHideFlags: 0
@@ -80,19 +79,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &72852156
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 72852154}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4240413656744128836
 GameObject:
   m_ObjectHideFlags: 0
@@ -423,6 +409,8 @@ MonoBehaviour:
   PercentageHole: 0.2
   CubeLeft: {fileID: 4240413658469392780}
   CubeRight: {fileID: 4240413657292057622}
+  CubeTop: {fileID: 4240413656744128836}
+  CubeBottom: {fileID: 4240413657011847988}
   Hole: {fileID: 72852154}
 --- !u!1 &4240413658469392780
 GameObject:

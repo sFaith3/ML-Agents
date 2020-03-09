@@ -36,8 +36,6 @@ public class WallJumpAgent : Agent
     public Transform normalWallTransform;
     public Transform dynamicWallTransform;
 
-    private Transform m_holePos;
-
     Rigidbody m_ShortBlockRb;
     Rigidbody m_AgentRb;
     Material m_GroundMaterial;
@@ -248,6 +246,9 @@ public class WallJumpAgent : Agent
             StartCoroutine(
                 GoalScoredSwapGroundMaterial(m_WallJumpSettings.failMaterial, .5f));
         }
+
+        if (CheckHoleCollision())
+            AddReward(0.05f);
     }
 
     public override float[] Heuristic()
@@ -286,13 +287,30 @@ public class WallJumpAgent : Agent
     }
 
     // Detect when the agent enters the hole
-    //private void OnTriggerEnter(Collider col)
+    //private void ontriggerenter(collider col)
     //{
-    //    if (col.gameObject.CompareTag("Hole"))
+    //    if (col.gameobject.comparetag("hole"))
     //    {
-    //        AddReward(0.05f);
+    //        setreward(0.05f);
     //    }
     //}
+
+    private bool CheckHoleCollision()
+    {
+        return (m_Configuration > 2 && wall == DynamicWallHole &&
+        transform.position.x > wall.GetComponent<WallHole>().CubeLeft.GetComponent<MeshRenderer>().bounds.center.x
+                                 + wall.GetComponent<WallHole>().CubeLeft.GetComponent<MeshRenderer>().bounds.size.x / 2
+        && transform.position.x < wall.GetComponent<WallHole>().CubeRight.GetComponent<MeshRenderer>().bounds.center.x
+                                 - wall.GetComponent<WallHole>().CubeRight.GetComponent<MeshRenderer>().bounds.size.x / 2
+        && transform.position.y > wall.GetComponent<WallHole>().CubeBottom.GetComponent<MeshRenderer>().bounds.center.y
+                                 + wall.GetComponent<WallHole>().CubeBottom.GetComponent<MeshRenderer>().bounds.size.y / 2
+        && transform.position.y < wall.GetComponent<WallHole>().CubeTop.GetComponent<MeshRenderer>().bounds.center.y
+                                 - wall.GetComponent<WallHole>().CubeTop.GetComponent<MeshRenderer>().bounds.size.y / 2
+        && transform.position.z < wall.GetComponent<WallHole>().CubeBottom.GetComponent<MeshRenderer>().bounds.center.z
+                                 + wall.GetComponent<WallHole>().CubeBottom.GetComponent<MeshRenderer>().bounds.size.z / 2
+        && transform.position.z > wall.GetComponent<WallHole>().CubeBottom.GetComponent<MeshRenderer>().bounds.center.z
+                                 - wall.GetComponent<WallHole>().CubeBottom.GetComponent<MeshRenderer>().bounds.size.z / 2);
+    }
 
     //Reset the orange block position
     void ResetBlock(Rigidbody blockRb)
@@ -330,8 +348,8 @@ public class WallJumpAgent : Agent
     /// Other : Tall wall and BigWallBrain. </param>
     void ConfigureAgent(int config)
     {
-        //Destroy(wall);
-        //wall = Instantiate(NormalWall, normalWallTransform.position, Quaternion.identity);
+        Destroy(wall);
+        wall = Instantiate(NormalWall, normalWallTransform.position, Quaternion.identity);
         var localScale = wall.transform.localScale;
         if (config == 0)
         {
@@ -351,7 +369,7 @@ public class WallJumpAgent : Agent
             wall.transform.localScale = localScale;
             GiveModel("SmallWallJump", smallWallBrain);
         }
-        else /*if (config == 2)*/
+        else if (config == 2)
         {
             var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_min_height", 8);
             var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_max_height", 8);
@@ -363,17 +381,17 @@ public class WallJumpAgent : Agent
             wall.transform.localScale = localScale;
             GiveModel("BigWallJump", bigWallBrain);
         }
-        //else
-        //{
-        //    var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("hole_wall_min_percentage", 0.4f);
-        //    var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("hole_wall_max_percentage", 0.4f);
-        //    var perc = min + Random.value * (max - min);
+        else
+        {
+            var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("hole_wall_min_percentage", 0.4f);
+            var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("hole_wall_max_percentage", 0.4f);
+            var perc = min + Random.value * (max - min);
 
-        //    Destroy(wall);
-        //    wall = Instantiate(DynamicWallHole, dynamicWallTransform.position, Quaternion.identity);
-        //    wall.GetComponent<WallHole>().PercentageHole = perc;
-        //    wall.GetComponent<WallHole>().ResetHole();
-        //    GiveModel("HoleWallJump", holeWallBrain);
-        //}
+            Destroy(wall);
+            wall = Instantiate(DynamicWallHole, dynamicWallTransform.position, Quaternion.identity);
+            wall.GetComponent<WallHole>().PercentageHole = perc;
+            wall.GetComponent<WallHole>().ResetHole();
+            GiveModel("HoleWallJump", holeWallBrain);
+        }
     }
 }

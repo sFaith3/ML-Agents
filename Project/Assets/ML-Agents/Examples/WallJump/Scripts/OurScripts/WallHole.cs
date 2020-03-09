@@ -11,6 +11,8 @@ public class WallHole : MonoBehaviour
 
     public GameObject CubeLeft;
     public GameObject CubeRight;
+    public GameObject CubeTop;
+    public GameObject CubeBottom;
     public GameObject Hole;
 
     // Start is called before the first frame update
@@ -43,7 +45,7 @@ public class WallHole : MonoBehaviour
         if (Hole)
         {
             Hole.transform.localScale = new Vector3(PercentageHole, Hole.transform.localScale.y, Hole.transform.localScale.z);
-            Hole.transform.position = new Vector3(CubeLeft.GetComponent<Collider>().bounds.center.x + CubeLeft.GetComponent<Collider>().bounds.size.x / 2 + Hole.GetComponent<Collider>().bounds.size.x / 2, Hole.transform.position.y, Hole.transform.position.z);
+            Hole.transform.position = new Vector3(CubeLeft.GetComponent<MeshRenderer>().bounds.center.x + CubeLeft.GetComponent<MeshRenderer>().bounds.size.x / 2 + Hole.GetComponent<MeshRenderer>().bounds.size.x / 2, Hole.transform.position.y, Hole.transform.position.z);
         }
     }
 }
