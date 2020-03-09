@@ -159,7 +159,7 @@ MonoBehaviour:
     vectorActionSize: 03000000030000000300000002000000
     vectorActionDescriptions: []
     vectorActionSpaceType: 0
-  m_Model: {fileID: 5022602860645237092, guid: f2df168bbf4bfdd43bc6b1a2efcca998, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: SmallWallJump
@@ -181,13 +181,10 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   maxStep: 2000
-  noWallBrain: {fileID: 5022602860645237092, guid: f2df168bbf4bfdd43bc6b1a2efcca998,
-    type: 3}
-  smallWallBrain: {fileID: 5022602860645237092, guid: f2df168bbf4bfdd43bc6b1a2efcca998,
-    type: 3}
-  bigWallBrain: {fileID: 11400000, guid: 0468bf44b1efd4992b6bf22cadb50d89, type: 3}
-  holeWallBrain: {fileID: 5022602860645237092, guid: 15d47599e857bb343bb2d382e4376d6f,
-    type: 3}
+  noWallBrain: {fileID: 0}
+  smallWallBrain: {fileID: 0}
+  bigWallBrain: {fileID: 0}
+  holeWallBrain: {fileID: 0}
   DynamicWallHole: {fileID: 4240413658191375073, guid: 89c6c307825f9cb41b8f6cb31903ed05,
     type: 3}
   NormalWall: {fileID: 1831431273132548671, guid: 17c7d6c1fcf287643bcac5412bf8e3f9,

@@ -47,7 +47,7 @@ PushBlock:
     num_layers: 2
 
 SmallWallJump:
-    max_steps: 3e5
+    max_steps: 3e7
     batch_size: 128
     buffer_size: 2048
     beta: 5.0e-3
@@ -58,7 +58,7 @@ SmallWallJump:
     normalize: false
 
 BigWallJump:
-    max_steps: 3e5
+    max_steps: 3e7
     batch_size: 128
     buffer_size: 2048
     beta: 5.0e-3
@@ -69,7 +69,7 @@ BigWallJump:
     normalize: false
     
 HoleWallJump:
-    max_steps: 3e5
+    max_steps: 3e7
     batch_size: 128
     buffer_size: 2048
     beta: 5.0e-3

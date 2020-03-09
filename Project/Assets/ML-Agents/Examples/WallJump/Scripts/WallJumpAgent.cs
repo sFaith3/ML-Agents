@@ -36,6 +36,8 @@ public class WallJumpAgent : Agent
     public Transform normalWallTransform;
     public Transform dynamicWallTransform;
 
+    private Transform m_holePos;
+
     Rigidbody m_ShortBlockRb;
     Rigidbody m_AgentRb;
     Material m_GroundMaterial;
@@ -283,6 +285,15 @@ public class WallJumpAgent : Agent
         }
     }
 
+    // Detect when the agent enters the hole
+    //private void OnTriggerEnter(Collider col)
+    //{
+    //    if (col.gameObject.CompareTag("Hole"))
+    //    {
+    //        AddReward(0.05f);
+    //    }
+    //}
+
     //Reset the orange block position
     void ResetBlock(Rigidbody blockRb)
     {
@@ -319,8 +330,8 @@ public class WallJumpAgent : Agent
     /// Other : Tall wall and BigWallBrain. </param>
     void ConfigureAgent(int config)
     {
-        Destroy(wall);
-        wall = Instantiate(NormalWall, normalWallTransform.position, Quaternion.identity);
+        //Destroy(wall);
+        //wall = Instantiate(NormalWall, normalWallTransform.position, Quaternion.identity);
         var localScale = wall.transform.localScale;
         if (config == 0)
         {
@@ -340,7 +351,7 @@ public class WallJumpAgent : Agent
             wall.transform.localScale = localScale;
             GiveModel("SmallWallJump", smallWallBrain);
         }
-        else if (config == 2)
+        else /*if (config == 2)*/
         {
             var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_min_height", 8);
             var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_max_height", 8);
@@ -352,11 +363,17 @@ public class WallJumpAgent : Agent
             wall.transform.localScale = localScale;
             GiveModel("BigWallJump", bigWallBrain);
         }
-        else
-        {
-            Destroy(wall);
-            wall = Instantiate(DynamicWallHole, dynamicWallTransform.position, Quaternion.identity);
-            GiveModel("HoleWallJump", holeWallBrain);
-        }
+        //else
+        //{
+        //    var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("hole_wall_min_percentage", 0.4f);
+        //    var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("hole_wall_max_percentage", 0.4f);
+        //    var perc = min + Random.value * (max - min);
+
+        //    Destroy(wall);
+        //    wall = Instantiate(DynamicWallHole, dynamicWallTransform.position, Quaternion.identity);
+        //    wall.GetComponent<WallHole>().PercentageHole = perc;
+        //    wall.GetComponent<WallHole>().ResetHole();
+        //    GiveModel("HoleWallJump", holeWallBrain);
+        //}
     }
 }
