@@ -585,6 +585,12 @@ PrefabInstance:
       propertyPath: m_Size.x
       value: 18
       objectReference: {fileID: 0}
+    - target: {fileID: 114176423636690854, guid: 812997c7bc2544b6f927ff684c03450f,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 0d98d82ac5a0a944a852f6cfd6b89594,
+        type: 3}
     - target: {fileID: 114965703901356864, guid: 812997c7bc2544b6f927ff684c03450f,
         type: 3}
       propertyPath: agent

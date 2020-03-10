@@ -6,21 +6,15 @@ public class HitWall : MonoBehaviour
     public int lastAgentHit;
     public bool net;
 
-    public enum FloorHit
-        {
-            Service,
-            FloorHitUnset,
-            FloorAHit,
-            FloorBHit
-        }
-
-    public FloorHit lastFloorHit;
+    private int currentReward;
 
     private bool hasTouchedFloor;
+    private bool hasTouchedWall;
+    private bool hasTouchedAgent;
+    private bool firstTouch;
+
 
     TennisArea m_Area;
-    //TennisAgent m_AgentA;
-    //TennisAgent m_AgentB;
     TennisAgent m_Agent;
 
     //  Use this for initialization
@@ -29,124 +23,45 @@ public class HitWall : MonoBehaviour
         m_Area = areaObject.GetComponent<TennisArea>();
         m_Agent = m_Area.agent.GetComponent<TennisAgent>();
         hasTouchedFloor = false;
+        hasTouchedWall = false;
+        hasTouchedAgent = false;
+        firstTouch = true;
+        currentReward = 0;
     }
 
     void Reset()
     {
+        m_Agent.Done();
         m_Area.MatchReset();
-        lastFloorHit = FloorHit.Service;
         net = false;
         hasTouchedFloor = false;
+        hasTouchedWall = false;
+        firstTouch = true;
+        currentReward = 0;
     }
-    
-    /*void AgentAWins()
-    {
-        m_AgentA.SetReward(1);
-        m_AgentB.SetReward(-1);
-        m_AgentA.score += 1;
-        Reset();
-
-    }
-
-    void AgentBWins()
-    {
-        m_AgentA.SetReward(-1);
-        m_AgentB.SetReward(1);
-        m_AgentB.score += 1;
-        Reset();
-
-    }*/
 
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.name == "Floor") {
-            if (!hasTouchedFloor) hasTouchedFloor = true;
-            else if (hasTouchedFloor) {
-                //refuerzo negativo por el segundo bote
-                m_Agent.SetReward(-1);
+            if (!hasTouchedFloor) {
+                hasTouchedFloor = true;
+            } else if (hasTouchedFloor) { // segundo bote
+                if (firstTouch) currentReward--; // Extra if no touch
+                m_Agent.SetReward(currentReward - 1);
                 Reset();
             }
+            
         } else if(collision.gameObject.name == "WallFront") {
-            hasTouchedFloor = false; //reset
-        }
-        /*if (collision.gameObject.CompareTag("iWall"))
-        {
-            if (collision.gameObject.name == "wallA")
-            {
-                // Agent A hits into wall or agent B hit a winner
-                if (lastAgentHit == 0 || lastFloorHit == FloorHit.FloorAHit)
-                {
-                    AgentBWins();
-                }
-                // Agent B hits long
-                else
-                {
-                    AgentAWins();
-                }
+            if(hasTouchedAgent) hasTouchedWall = true;
+        } else if (collision.gameObject.name == "Agent") { // Toca raqueta
+            if (firstTouch) {
+                currentReward += 2; // Boost al principio
+            } else if (hasTouchedWall && hasTouchedFloor) {
+                hasTouchedWall = false;
+                hasTouchedFloor = false;
+                currentReward++;
             }
-            else if (collision.gameObject.name == "wallB")
-            {
-                // Agent B hits into wall or agent A hit a winner
-                if (lastAgentHit == 1 || lastFloorHit == FloorHit.FloorBHit)
-                {
-                    AgentAWins();
-                }
-                // Agent A hits long
-                else
-                {
-                    AgentBWins();
-                }
-            }
-            else if (collision.gameObject.name == "floorA")
-            {
-                // Agent A hits into floor, double bounce or service
-                if (lastAgentHit == 0 || lastFloorHit == FloorHit.FloorAHit || lastFloorHit == FloorHit.Service)
-                {
-                    AgentBWins();
-                }
-                else
-                {
-                    lastFloorHit = FloorHit.FloorAHit;
-                    //successful serve
-                    if (!net)
-                    {
-                        net = true;
-                    }
-                }
-            }
-            else if (collision.gameObject.name == "floorB")
-            {
-                // Agent B hits into floor, double bounce or service
-                if (lastAgentHit == 1 || lastFloorHit == FloorHit.FloorBHit || lastFloorHit == FloorHit.Service)
-                {
-                    AgentAWins();
-                }
-                else
-                {
-                    lastFloorHit = FloorHit.FloorBHit;
-                    //successful serve
-                    if (!net)
-                    {
-                        net = true;
-                    }
-                }
-            }
-            else if (collision.gameObject.name == "net" && !net)
-            {
-                if (lastAgentHit == 0)
-                {
-                    AgentBWins();
-                }
-                else if (lastAgentHit == 1)
-                {
-                    AgentAWins();
-                }
-            }
-        }*/
-        else if (collision.gameObject.name == "Agent")
-        {
-            m_Agent.SetReward(1);
-
+            hasTouchedAgent = true;
         }
         /*else if (collision.gameObject.name == "AgentB")
         {
