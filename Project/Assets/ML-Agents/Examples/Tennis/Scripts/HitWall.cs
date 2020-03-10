@@ -5,6 +5,7 @@ public class HitWall : MonoBehaviour
     public GameObject areaObject;
     public int lastAgentHit;
     public bool net;
+    public int currentLoses;
 
     private int currentReward;
 
@@ -27,6 +28,7 @@ public class HitWall : MonoBehaviour
         hasTouchedAgent = false;
         firstTouch = true;
         currentReward = 0;
+        currentLoses = 0;
     }
 
     void Reset()
@@ -38,6 +40,7 @@ public class HitWall : MonoBehaviour
         hasTouchedWall = false;
         firstTouch = true;
         currentReward = 0;
+        currentLoses++;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -46,7 +49,10 @@ public class HitWall : MonoBehaviour
             if (!hasTouchedFloor) {
                 hasTouchedFloor = true;
             } else if (hasTouchedFloor) { // segundo bote
-                if (firstTouch) currentReward--; // Extra if no touch
+                if (firstTouch) {
+                    currentReward--; // Extra if no touch
+                    if (currentLoses >= 10000) currentReward -= 4;
+                }
                 m_Agent.SetReward(currentReward - 1);
                 Reset();
             }

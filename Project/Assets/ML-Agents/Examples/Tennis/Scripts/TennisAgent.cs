@@ -6,6 +6,7 @@ public class TennisAgent : Agent
 {
     [Header("Specific to Tennis")]
     public GameObject ball;
+    public GameObject agent;
     public bool invertX;
     public int score;
     public GameObject myArea;
@@ -81,7 +82,7 @@ public class TennisAgent : Agent
                 transform.position.z);
         }
 
-        m_TextComponent.text = score.ToString();
+        m_TextComponent.text = (ball.GetComponent<HitWall>().currentLoses).ToString();
     }
 
     public override float[] Heuristic()
