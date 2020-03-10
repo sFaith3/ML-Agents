@@ -94,6 +94,7 @@ public class g08_PyramidAgent : Agent
         transform.rotation = Quaternion.Euler(new Vector3(0f, Random.Range(0, 360)));
 
         m_SwitchLogic.ResetSwitch(items[1], items[2]);
+        m_MyArea.CreatePyramid(1, items[2]);
         m_MyArea.CreateStonePyramid(1, items[3]);
         m_MyArea.CreateStonePyramid(1, items[4]);
         m_MyArea.CreateStonePyramid(1, items[5]);
@@ -104,7 +105,7 @@ public class g08_PyramidAgent : Agent
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("goal"))
+        if (collision.gameObject.CompareTag("switchOn"))
         {
             SetReward(2f);
             Done();
