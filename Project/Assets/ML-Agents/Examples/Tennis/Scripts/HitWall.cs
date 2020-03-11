@@ -50,10 +50,11 @@ public class HitWall : MonoBehaviour
                 hasTouchedFloor = true;
             } else if (hasTouchedFloor) { // segundo bote
                 if (firstTouch) {
-                    currentReward--; // Extra if no touch
-                    if (currentLoses >= 10000) currentReward -= 4;
+                    if (currentLoses >= 2500) m_Agent.AddReward(-4); //currentReward -= 3;
+                    else if(currentLoses <2500) m_Agent.AddReward(-1); //currentReward--; // Extra if no touch
                 }
-                m_Agent.SetReward(currentReward - 1);
+                //m_Agent.AddReward(currentReward - 1);
+                m_Agent.AddReward(-1);
                 Reset();
             }
             
@@ -61,11 +62,14 @@ public class HitWall : MonoBehaviour
             if(hasTouchedAgent) hasTouchedWall = true;
         } else if (collision.gameObject.name == "Agent") { // Toca raqueta
             if (firstTouch) {
-                currentReward += 2; // Boost al principio
+                //currentReward += 2; // Boost al principio
+                m_Agent.AddReward(2);
+                firstTouch = false;
             } else if (hasTouchedWall && hasTouchedFloor) {
                 hasTouchedWall = false;
                 hasTouchedFloor = false;
-                currentReward++;
+                //currentReward++;
+                m_Agent.AddReward(1);
             }
             hasTouchedAgent = true;
         }
