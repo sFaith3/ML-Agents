@@ -4,18 +4,20 @@ using MLAgents;
 public class Ball3DWithCubeAgent : Agent
 {
     [Header("Specific to Ball3D")]
-    public GameObject ball1;
-    public GameObject ball2;
-    Rigidbody m_BallRb1;
-    Rigidbody m_BallRb2;
+    public GameObject ball;
+    public GameObject cube;
+    Rigidbody m_BallRb;
+    Rigidbody m_CubeRb;
     IFloatProperties m_ResetParams;
-    float minBallDist = 1.2f;
-    float maxBallDist = 6.0f;
+
+    float minReward = 0.1f;
+    float maxReward = 0.95f;
+    float normalThreshold = 0.5f;
 
     public override void InitializeAgent()
     {
-        m_BallRb1 = ball1.GetComponent<Rigidbody>();
-        m_BallRb2 = ball2.GetComponent<Rigidbody>();
+        m_BallRb = ball.GetComponent<Rigidbody>();
+        m_CubeRb = cube.GetComponent<Rigidbody>();
         m_ResetParams = Academy.Instance.FloatProperties;
         SetResetParameters();
     }
@@ -25,59 +27,103 @@ public class Ball3DWithCubeAgent : Agent
         AddVectorObs(gameObject.transform.rotation.z);
         AddVectorObs(gameObject.transform.rotation.x);
 
-        AddVectorObs(ball1.transform.position - gameObject.transform.position);
-        AddVectorObs(ball2.transform.position - gameObject.transform.position);
-        AddVectorObs(ball1.transform.position - ball2.transform.position);
-        
-        AddVectorObs(m_BallRb1.velocity);
-        AddVectorObs(m_BallRb2.velocity);
+        AddVectorObs(gameObject.transform.position.z);
+        AddVectorObs(gameObject.transform.position.x);
+
+        AddVectorObs(ball.transform.position - gameObject.transform.position);
+        AddVectorObs(cube.transform.position - gameObject.transform.position);
+        AddVectorObs(cube.transform.position - ball.transform.position);
+
+        AddVectorObs(m_BallRb.velocity);
+        AddVectorObs(m_CubeRb.velocity);
+        AddVectorObs(cube.transform.up);
+
     }
 
     public override void AgentAction(float[] vectorAction)
     {
-        var actionZ = 2f * Mathf.Clamp(vectorAction[0], -1f, 1f);
-        var actionX = 2f * Mathf.Clamp(vectorAction[1], -1f, 1f);
+        var actionRotateZ = 2f * Mathf.Clamp(vectorAction[0], -1f, 1f);
+        var actionRotateX = 2f * Mathf.Clamp(vectorAction[1], -1f, 1f);
+        var actionMoveZ = 0.5f * Mathf.Clamp(vectorAction[2], -1f, 1f);
+        var actionMoveX = 0.5f * Mathf.Clamp(vectorAction[3], -1f, 1f);
+        var actionMoveY = 0.5f * Mathf.Clamp(vectorAction[4], -1f, 1f);
 
-        if ((gameObject.transform.rotation.z < 0.25f && actionZ > 0f) ||
-            (gameObject.transform.rotation.z > -0.25f && actionZ < 0f))
+        //Rotation
+        if ((gameObject.transform.rotation.z < 0.25f && actionRotateZ > 0f) ||
+            (gameObject.transform.rotation.z > -0.25f && actionRotateZ < 0f))
         {
-            gameObject.transform.Rotate(new Vector3(0, 0, 1), actionZ);
+            gameObject.transform.Rotate(new Vector3(0, 0, 1), actionRotateZ);
         }
 
-        if ((gameObject.transform.rotation.x < 0.25f && actionX > 0f) ||
-            (gameObject.transform.rotation.x > -0.25f && actionX < 0f))
+        if ((gameObject.transform.rotation.x < 0.25f && actionRotateX > 0f) ||
+            (gameObject.transform.rotation.x > -0.25f && actionRotateX < 0f))
         {
-            gameObject.transform.Rotate(new Vector3(1, 0, 0), actionX);
+            gameObject.transform.Rotate(new Vector3(1, 0, 0), actionRotateX);
         }
-        if ((ball1.transform.position.y - gameObject.transform.position.y) < -2f ||
-            (ball2.transform.position.y - gameObject.transform.position.y) < -2f ||
-            Mathf.Abs(ball1.transform.position.x - gameObject.transform.position.x) > 3f ||
-            Mathf.Abs(ball2.transform.position.x - gameObject.transform.position.x) > 3f ||
-            Mathf.Abs(ball1.transform.position.z - gameObject.transform.position.z) > 3f ||
-            Mathf.Abs(ball2.transform.position.z - gameObject.transform.position.z) > 3f)
+
+        //Movement
+        if ((gameObject.transform.localPosition.z < 2f && actionMoveZ > 0f) ||
+            (gameObject.transform.localPosition.z > -2f && actionMoveZ < 0f))
+        {
+            gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y, gameObject.transform.localPosition.z + actionMoveZ);
+        }
+
+        if ((gameObject.transform.localPosition.x < 2f && actionMoveX > 0f) ||
+            (gameObject.transform.localPosition.x > -2f && actionMoveX < 0f))
+        {
+            gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x + actionMoveX, gameObject.transform.localPosition.y, gameObject.transform.localPosition.z);
+        }
+
+        if ((gameObject.transform.localPosition.y < 2f && actionMoveY > 0f) ||
+            (gameObject.transform.localPosition.y > -2f && actionMoveY < 0f))
+        {
+            gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y + actionMoveY, gameObject.transform.localPosition.z);
+        }
+
+        //Rewards
+        if ((ball.transform.position.y - gameObject.transform.position.y) < -2f ||
+            (cube.transform.position.y - gameObject.transform.position.y) < -2f ||
+            Mathf.Abs(ball.transform.position.x - gameObject.transform.position.x) > 3f ||
+            Mathf.Abs(ball.transform.position.z - gameObject.transform.position.z) > 3f ||
+            cube.transform.position.y - ball.transform.position.y < 1f ||
+            Vector3.Dot(cube.transform.up, Vector3.up) < normalThreshold)
         {
             SetReward(-1f);
             Done();
         }
         else
         {
-            
-            float reward = Mathf.Lerp(0.95f,0.1f,(Mathf.Clamp(Vector3.Distance(ball1.transform.position, ball2.transform.position),minBallDist,maxBallDist) -minBallDist) / maxBallDist);
+            float xDist = Mathf.Abs((ball.transform.position - transform.position).x);
+            float zDist = Mathf.Abs((ball.transform.position - transform.position).z);
+
+            float ballXReward = Mathf.Lerp(maxReward, minReward, (xDist/ 3f));
+            float ballZReward = Mathf.Lerp(maxReward, minReward, (zDist / 3f));
+            float ballReward = (ballXReward + ballZReward) / 2f;
+
+            float cubeReward = Mathf.Lerp(minReward, maxReward, (Vector3.Dot(cube.transform.up, Vector3.up) - normalThreshold) * 1f/(1f-normalThreshold));
+            float reward = (ballReward + cubeReward) / 2f;
             SetReward(reward);
         }
     }
 
     public override void AgentReset()
     {
+        gameObject.transform.localPosition = new Vector3(0f, 0f, 0f);
         gameObject.transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
         gameObject.transform.Rotate(new Vector3(1, 0, 0), Random.Range(-10f, 10f));
         gameObject.transform.Rotate(new Vector3(0, 0, 1), Random.Range(-10f, 10f));
-        m_BallRb1.velocity = new Vector3(0f, 0f, 0f);
-        m_BallRb2.velocity = new Vector3(0f, 0f, 0f);
-        ball1.transform.position = new Vector3(Random.Range(-0.6f, -1.5f), 4f, Random.Range(-1.5f, 1.5f))
-            + gameObject.transform.position;
-        ball2.transform.position = new Vector3(Random.Range(0.6f, 1.5f), 4f, Random.Range(-1.5f, 1.5f))
-            + gameObject.transform.position;
+        cube.transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
+
+        m_BallRb.velocity = new Vector3(0f, 0f, 0f);
+        m_BallRb.angularVelocity = new Vector3(0f, 0f, 0f);
+
+        m_CubeRb.velocity = new Vector3(0f, 0f, 0f);
+        m_CubeRb.angularVelocity = new Vector3(0f, 0f, 0f);
+
+        float xRange = Random.Range(-0.6f, -1.5f);
+        float zRange = Random.Range(-1.5f, 1.5f);
+        ball.transform.position = new Vector3(xRange, 4f, zRange) + gameObject.transform.position;
+        cube.transform.position = new Vector3(xRange, 6f, zRange) + gameObject.transform.position;
         //Reset the parameters when the Agent is reset.
         SetResetParameters();
     }
@@ -94,15 +140,23 @@ public class Ball3DWithCubeAgent : Agent
     public void SetBall()
     {
         //Set the attributes of the ball by fetching the information from the academy
-        m_BallRb1.mass = m_ResetParams.GetPropertyWithDefault("mass", 1.0f);
-        m_BallRb2.mass = m_ResetParams.GetPropertyWithDefault("mass", 1.0f);
+        m_BallRb.mass = m_ResetParams.GetPropertyWithDefault("mass", 1.0f);
+        m_CubeRb.mass = m_ResetParams.GetPropertyWithDefault("mass", 1.0f);
         var scale = m_ResetParams.GetPropertyWithDefault("scale", 1.0f);
-        ball1.transform.localScale = new Vector3(scale, scale, scale);
-        ball2.transform.localScale = new Vector3(scale, scale, scale);
+        ball.transform.localScale = new Vector3(scale, scale, scale);
     }
 
     public void SetResetParameters()
     {
         SetBall();
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "cube")
+        {
+            SetReward(-1);
+            Done();
+        }
     }
 }
