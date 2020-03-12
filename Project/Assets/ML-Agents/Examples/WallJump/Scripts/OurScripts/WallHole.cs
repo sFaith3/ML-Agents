@@ -24,10 +24,38 @@ public class WallHole : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            ResetHole();
-        }
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    ResetHole();
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.G))
+        //{
+        //    var localScale = transform.localScale;
+        //    localScale = new Vector3(localScale.x, 0f, localScale.z);
+        //    transform.localScale = localScale;
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.H))
+        //{
+        //    var localScale = transform.localScale;
+        //    localScale = new Vector3(localScale.x, 0.9222f, localScale.z);
+        //    transform.localScale = localScale;
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.J))
+        //{
+        //    var localScale = transform.localScale;
+        //    localScale = new Vector3(localScale.x, 1.5f, localScale.z);
+        //    transform.localScale = localScale;
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    var localScale = transform.localScale;
+        //    localScale = new Vector3(localScale.x, 3.5f, localScale.z);
+        //    transform.localScale = localScale;
+        //}
     }
 
     public void ResetHole()

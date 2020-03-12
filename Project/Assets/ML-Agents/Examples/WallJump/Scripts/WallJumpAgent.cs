@@ -35,6 +35,7 @@ public class WallJumpAgent : Agent
     public GameObject wall;
     public Transform normalWallTransform;
     public Transform dynamicWallTransform;
+    //public Transform holeTransform;
 
     Rigidbody m_ShortBlockRb;
     Rigidbody m_AgentRb;
@@ -150,6 +151,11 @@ public class WallJumpAgent : Agent
 
         AddVectorObs(agentPos / 20f);
         AddVectorObs(DoGroundCheck(true) ? 1 : 0);
+        AddVectorObs(CheckHoleCollision());
+        //if (m_Configuration > 2)
+        //    AddVectorObs(holeTransform.position);
+        //else
+        //    AddVectorObs(Vector3.zero);
     }
 
     /// <summary>
@@ -247,8 +253,8 @@ public class WallJumpAgent : Agent
                 GoalScoredSwapGroundMaterial(m_WallJumpSettings.failMaterial, .5f));
         }
 
-        if (CheckHoleCollision())
-            AddReward(0.05f);
+        //if (CheckHoleCollision())
+            //SetReward(0.5f);
     }
 
     public override float[] Heuristic()
@@ -287,13 +293,13 @@ public class WallJumpAgent : Agent
     }
 
     // Detect when the agent enters the hole
-    //private void ontriggerenter(collider col)
-    //{
-    //    if (col.gameobject.comparetag("hole"))
-    //    {
-    //        setreward(0.05f);
-    //    }
-    //}
+    private void ontriggerenter(Collider col)
+    {
+        if (col.gameObject.CompareTag("hole"))
+        {
+            SetReward(0.05f);
+        }
+    }
 
     private bool CheckHoleCollision()
     {
@@ -348,8 +354,14 @@ public class WallJumpAgent : Agent
     /// Other : Tall wall and BigWallBrain. </param>
     void ConfigureAgent(int config)
     {
+        //Destroy(wall);
+        //wall = Instantiate(NormalWall, normalWallTransform.position, Quaternion.identity);
+
         Destroy(wall);
-        wall = Instantiate(NormalWall, normalWallTransform.position, Quaternion.identity);
+        wall = Instantiate(DynamicWallHole, dynamicWallTransform.position, Quaternion.identity);
+        wall.GetComponent<WallHole>().PercentageHole = 0f;
+        wall.GetComponent<WallHole>().ResetHole();
+
         var localScale = wall.transform.localScale;
         if (config == 0)
         {
@@ -364,15 +376,15 @@ public class WallJumpAgent : Agent
         {
             localScale = new Vector3(
                 localScale.x,
-                Academy.Instance.FloatProperties.GetPropertyWithDefault("small_wall_height", 4),
+                Academy.Instance.FloatProperties.GetPropertyWithDefault("small_wall_height", 0.9222f),
                 localScale.z);
             wall.transform.localScale = localScale;
             GiveModel("SmallWallJump", smallWallBrain);
         }
         else if (config == 2)
         {
-            var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_min_height", 8);
-            var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_max_height", 8);
+            var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_min_height", 1.5f);
+            var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_max_height", 1.5f);
             var height = min + Random.value * (max - min);
             localScale = new Vector3(
                 localScale.x,
@@ -386,9 +398,6 @@ public class WallJumpAgent : Agent
             var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("hole_wall_min_percentage", 0.4f);
             var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("hole_wall_max_percentage", 0.4f);
             var perc = min + Random.value * (max - min);
-
-            Destroy(wall);
-            wall = Instantiate(DynamicWallHole, dynamicWallTransform.position, Quaternion.identity);
             wall.GetComponent<WallHole>().PercentageHole = perc;
             wall.GetComponent<WallHole>().ResetHole();
             GiveModel("HoleWallJump", holeWallBrain);
