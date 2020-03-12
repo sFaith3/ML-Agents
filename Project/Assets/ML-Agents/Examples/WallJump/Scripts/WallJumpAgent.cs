@@ -27,17 +27,17 @@ public class WallJumpAgent : Agent
 
     [Header("Scene References")]
     public GameObject ground;
-    public GameObject spawnArea;
-    Bounds m_SpawnAreaBounds;
+    //public GameObject spawnArea;
+    //Bounds m_SpawnAreaBounds;
 
     public GameObject goal;
-    public GameObject shortBlock;
+    //public GameObject shortBlock;
     public GameObject wall;
     public Transform normalWallTransform;
     public Transform dynamicWallTransform;
     //public Transform holeTransform;
 
-    Rigidbody m_ShortBlockRb;
+    //Rigidbody m_ShortBlockRb;
     Rigidbody m_AgentRb;
     Material m_GroundMaterial;
     Renderer m_GroundRenderer;
@@ -60,12 +60,12 @@ public class WallJumpAgent : Agent
         m_Configuration = Random.Range(0, 5);
 
         m_AgentRb = GetComponent<Rigidbody>();
-        m_ShortBlockRb = shortBlock.GetComponent<Rigidbody>();
-        m_SpawnAreaBounds = spawnArea.GetComponent<Collider>().bounds;
+        //m_ShortBlockRb = shortBlock.GetComponent<Rigidbody>();
+        //m_SpawnAreaBounds = spawnArea.GetComponent<Collider>().bounds;
         m_GroundRenderer = ground.GetComponent<Renderer>();
         m_GroundMaterial = m_GroundRenderer.material;
 
-        spawnArea.SetActive(false);
+        //spawnArea.SetActive(false);
     }
 
     // Begin the jump sequence
@@ -162,17 +162,17 @@ public class WallJumpAgent : Agent
     /// Gets a random spawn position in the spawningArea.
     /// </summary>
     /// <returns>The random spawn position.</returns>
-    public Vector3 GetRandomSpawnPos()
-    {
-        var randomPosX = Random.Range(-m_SpawnAreaBounds.extents.x,
-            m_SpawnAreaBounds.extents.x);
-        var randomPosZ = Random.Range(-m_SpawnAreaBounds.extents.z,
-            m_SpawnAreaBounds.extents.z);
+    //public Vector3 GetRandomSpawnPos()
+    //{
+    //    var randomPosX = Random.Range(-m_SpawnAreaBounds.extents.x,
+    //        m_SpawnAreaBounds.extents.x);
+    //    var randomPosZ = Random.Range(-m_SpawnAreaBounds.extents.z,
+    //        m_SpawnAreaBounds.extents.z);
 
-        var randomSpawnPos = spawnArea.transform.position +
-            new Vector3(randomPosX, 0.45f, randomPosZ);
-        return randomSpawnPos;
-    }
+    //    var randomSpawnPos = spawnArea.transform.position +
+    //        new Vector3(randomPosX, 0.45f, randomPosZ);
+    //    return randomSpawnPos;
+    //}
 
     /// <summary>
     /// Chenges the color of the ground for a moment
@@ -244,17 +244,17 @@ public class WallJumpAgent : Agent
     {
         MoveAgent(vectorAction);
         if ((!Physics.Raycast(m_AgentRb.position, Vector3.down, 20))
-            || (!Physics.Raycast(m_ShortBlockRb.position, Vector3.down, 20)))
+            /*|| (!Physics.Raycast(m_ShortBlockRb.position, Vector3.down, 20))*/)
         {
             SetReward(-1f);
             Done();
-            ResetBlock(m_ShortBlockRb);
+            //ResetBlock(m_ShortBlockRb);
             StartCoroutine(
                 GoalScoredSwapGroundMaterial(m_WallJumpSettings.failMaterial, .5f));
         }
 
-        //if (CheckHoleCollision())
-            //SetReward(0.5f);
+        if (CheckHoleCollision())
+            SetReward(0.5f);
     }
 
     public override float[] Heuristic()
@@ -293,13 +293,13 @@ public class WallJumpAgent : Agent
     }
 
     // Detect when the agent enters the hole
-    private void ontriggerenter(Collider col)
-    {
-        if (col.gameObject.CompareTag("hole"))
-        {
-            SetReward(0.05f);
-        }
-    }
+    //private void OnTriggerEnter(Collider col)
+    //{
+    //    if (col.gameObject.CompareTag("hole"))
+    //    {
+    //        SetReward(0.05f);
+    //    }
+    //}
 
     private bool CheckHoleCollision()
     {
@@ -319,16 +319,16 @@ public class WallJumpAgent : Agent
     }
 
     //Reset the orange block position
-    void ResetBlock(Rigidbody blockRb)
-    {
-        blockRb.transform.position = GetRandomSpawnPos();
-        blockRb.velocity = Vector3.zero;
-        blockRb.angularVelocity = Vector3.zero;
-    }
+    //void ResetBlock(Rigidbody blockRb)
+    //{
+    //    blockRb.transform.position = GetRandomSpawnPos();
+    //    blockRb.velocity = Vector3.zero;
+    //    blockRb.angularVelocity = Vector3.zero;
+    //}
 
     public override void AgentReset()
     {
-        ResetBlock(m_ShortBlockRb);
+        //ResetBlock(m_ShortBlockRb);
         transform.localPosition = new Vector3(
             18 * (Random.value - 0.5f), 1, -12);
         m_Configuration = Random.Range(0, 5);

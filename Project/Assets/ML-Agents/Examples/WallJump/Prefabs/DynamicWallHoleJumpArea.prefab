@@ -159,7 +159,7 @@ MonoBehaviour:
     vectorActionSize: 03000000030000000300000002000000
     vectorActionDescriptions: []
     vectorActionSpaceType: 0
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 7f1f504e877e5d14e9a0b4817ebf60a9, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: SmallWallJump
@@ -181,18 +181,20 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   maxStep: 2000
-  noWallBrain: {fileID: 0}
-  smallWallBrain: {fileID: 0}
-  bigWallBrain: {fileID: 0}
-  holeWallBrain: {fileID: 0}
+  noWallBrain: {fileID: 5022602860645237092, guid: 7f1f504e877e5d14e9a0b4817ebf60a9,
+    type: 3}
+  smallWallBrain: {fileID: 5022602860645237092, guid: 7f1f504e877e5d14e9a0b4817ebf60a9,
+    type: 3}
+  bigWallBrain: {fileID: 5022602860645237092, guid: 7829636d160a75a458cec92e7f57d619,
+    type: 3}
+  holeWallBrain: {fileID: 5022602860645237092, guid: 54f69f595aadd2342bd9020b9e142c17,
+    type: 3}
   DynamicWallHole: {fileID: 4240413658191375073, guid: 89c6c307825f9cb41b8f6cb31903ed05,
     type: 3}
   NormalWall: {fileID: 1831431273132548671, guid: 17c7d6c1fcf287643bcac5412bf8e3f9,
     type: 3}
   ground: {fileID: 1324926338613664}
-  spawnArea: {fileID: 1886170194660384}
   goal: {fileID: 1982078136115924}
-  shortBlock: {fileID: 1395477826315484}
   wall: {fileID: 0}
   normalWallTransform: {fileID: 6774835642255819660}
   dynamicWallTransform: {fileID: 8408273017964220155}
@@ -507,7 +509,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4294902888415044
 Transform:
   m_ObjectHideFlags: 0
@@ -1030,7 +1032,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4764219638476960
 Transform:
   m_ObjectHideFlags: 0
