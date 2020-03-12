@@ -14,7 +14,7 @@ public class GoalDetect : MonoBehaviour
     /// </summary>
     public GameObject goal;
 
-    [HideInInspector]
+    //[HideInInspector]
     public PushAgentBasic agent;  //
 
     void OnCollisionEnter(Collision col)
@@ -23,7 +23,7 @@ public class GoalDetect : MonoBehaviour
         if (col.gameObject.CompareTag("goal"))
         {
             if(col.gameObject == goal)
-                agent.ScoredAGoal();
+                agent.ScoredAGoal(transform.gameObject);
             else
                 agent.FaileddAGoal();
         }

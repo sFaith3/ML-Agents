@@ -809,7 +809,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d079d09ceed84ff49cf6841c66cf7ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 0}
+  goal: {fileID: 1626651094211584}
+  agent: {fileID: 114812843792483960}
 --- !u!1 &1626010291821672
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,6 +911,10 @@ MonoBehaviour:
     m_Extent: {x: 0, y: 0, z: 0}
   goal: {fileID: 1626651094211584}
   block: {fileID: 1609037632005304}
+  goalGreen: {fileID: 1626651094211584}
+  goalPurple: {fileID: 361702596221971205}
+  blockGreen: {fileID: 1609037632005304}
+  blockPurple: {fileID: 6396894772757387855}
   goalDetect: {fileID: 0}
   useVectorObs: 0
 --- !u!65 &65891831092422300
@@ -1640,4 +1645,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d079d09ceed84ff49cf6841c66cf7ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  agent: {fileID: 0}
+  goal: {fileID: 361702596221971205}
+  agent: {fileID: 114812843792483960}

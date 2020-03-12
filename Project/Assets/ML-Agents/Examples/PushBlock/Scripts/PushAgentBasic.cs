@@ -108,7 +108,7 @@ public class PushAgentBasic : Agent
     /// <summary>
     /// Called when the agent moves the right block into the goal.
     /// </summary>
-    public void ScoredAGoal()
+    public void ScoredAGoal(GameObject collidedBlock)
     {
         if(numOfGoals == 1)
         {
@@ -120,6 +120,8 @@ public class PushAgentBasic : Agent
 
             // Swap ground material for a bit to indicate we scored.
             StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.goalScoredMaterial, 0.5f));
+
+            numOfGoals = 0;
         }
         else if (numOfGoals == 0)
         {
@@ -130,16 +132,17 @@ public class PushAgentBasic : Agent
             StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.goalScoredMaterial, 0.5f));
 
             numOfGoals++;
+            collidedBlock.SetActive(false);
 
-            if(block == blockGreen)
+            if(collidedBlock == blockGreen)
             {
-                blockGreen.SetActive(false);
                 block = blockPurple;
+                goal = goalPurple;
             }
             else
             {
-                blockPurple.SetActive(false);
                 block = blockGreen;
+                goal = goalGreen;
             }
         }
     }
@@ -154,6 +157,7 @@ public class PushAgentBasic : Agent
 
         // By marking an agent as done AgentReset() will be called automatically.
         Done();
+        numOfGoals = 0;
 
         // Swap ground material for a bit to indicate we scored.
         StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.failMaterial, 0.5f));
@@ -254,6 +258,10 @@ public class PushAgentBasic : Agent
 
         // Reset block angularVelocity back to zero.
         m_rBlockRb.angularVelocity = Vector3.zero;
+
+        blockGreen.SetActive(true);
+        blockPurple.SetActive(true);
+        
     }
 
     /// <summary>
