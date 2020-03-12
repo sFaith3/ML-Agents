@@ -936,7 +936,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d079d09ceed84ff49cf6841c66cf7ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goal: {fileID: 1441513772919942}
+  goal: {fileID: 1312377323189360487}
   agent: {fileID: 114505490781873732}
 --- !u!1 &1948183181472910
 GameObject:
@@ -1368,5 +1368,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d079d09ceed84ff49cf6841c66cf7ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goal: {fileID: 1312377323189360487}
+  goal: {fileID: 1441513772919942}
   agent: {fileID: 114505490781873732}

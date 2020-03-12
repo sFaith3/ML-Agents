@@ -251,17 +251,16 @@ public class PushAgentBasic : Agent
     void ResetBlock()
     {
         // Get a random position for the block.
-        block.transform.position = GetRandomSpawnPos();
+        blockGreen.transform.position = GetRandomSpawnPos();
+        blockPurple.transform.position = GetRandomSpawnPos();
 
         // Reset block velocity back to zero.
         m_rBlockRb.velocity = Vector3.zero;
+        m_pBlockRb.velocity = Vector3.zero;
 
         // Reset block angularVelocity back to zero.
         m_rBlockRb.angularVelocity = Vector3.zero;
-
-        blockGreen.SetActive(true);
-        blockPurple.SetActive(true);
-        
+        m_pBlockRb.angularVelocity = Vector3.zero;
     }
 
     /// <summary>
@@ -273,6 +272,9 @@ public class PushAgentBasic : Agent
         var rotation = Random.Range(0, 4);
         var rotationAngle = rotation * 90f;
         area.transform.Rotate(new Vector3(0f, rotationAngle, 0f));
+
+        blockGreen.SetActive(true);
+        blockPurple.SetActive(true);
 
         ResetBlock();
         transform.position = GetRandomSpawnPos();
