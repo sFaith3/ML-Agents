@@ -22,7 +22,7 @@ public class GoalDetect : MonoBehaviour
         // Touched goal.
         if (col.gameObject.CompareTag("goal"))
         {
-            if(col.gameObject == goal)
+            if (col.gameObject == goal)
                 agent.ScoredAGoal(transform.gameObject);
             else
                 agent.FaileddAGoal();
