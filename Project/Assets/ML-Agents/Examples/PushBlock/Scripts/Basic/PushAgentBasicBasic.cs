@@ -1,10 +1,10 @@
-//Put this script on your blue cube.
+﻿//Put this script on your blue cube.
 
 using System.Collections;
 using UnityEngine;
 using MLAgents;
 
-public class PushAgentBasic : Agent
+public class PushAgentBasicBasic : Agent
 {
     /// <summary>
     /// The ground. The bounds are used to spawn the elements.
@@ -12,8 +12,6 @@ public class PushAgentBasic : Agent
     public GameObject ground;
 
     public GameObject area;
-
-    int numOfGoals;
 
     /// <summary>
     /// The area bounds.
@@ -34,19 +32,14 @@ public class PushAgentBasic : Agent
     public GameObject block;
 
     /// <summary>
-    /// References to green and blue block and goal
-    /// </summary>
-    public GameObject goalGreen, goalPurple, blockGreen, blockPurple;
-
-    /// <summary>
     /// Detects when the block touches the goal.
     /// </summary>
     [HideInInspector]
-    public GoalDetect goalDetect;
+    public GoalDetectBasic goalDetect;
 
     public bool useVectorObs;
 
-    Rigidbody m_rBlockRb, m_pBlockRb;  //cached on initialization
+    Rigidbody m_BlockRb;  //cached on initialization
     Rigidbody m_AgentRb;  //cached on initialization
     Material m_GroundMaterial; //cached on Awake()
 
@@ -58,20 +51,18 @@ public class PushAgentBasic : Agent
     void Awake()
     {
         m_PushBlockSettings = FindObjectOfType<PushBlockSettings>();
-        numOfGoals = 0;
     }
 
     public override void InitializeAgent()
     {
         base.InitializeAgent();
-        goalDetect = block.GetComponent<GoalDetect>();
+        goalDetect = block.GetComponent<GoalDetectBasic>();
         goalDetect.agent = this;
 
         // Cache the agent rigidbody
         m_AgentRb = GetComponent<Rigidbody>();
         // Cache the block rigidbody
-        m_rBlockRb = blockGreen.GetComponent<Rigidbody>();
-        m_pBlockRb = blockPurple.GetComponent<Rigidbody>();
+        m_BlockRb = block.GetComponent<Rigidbody>();
         // Get the ground's bounds
         areaBounds = ground.GetComponent<Collider>().bounds;
         // Get the ground renderer so we can change the material when a goal is scored
@@ -106,64 +97,19 @@ public class PushAgentBasic : Agent
     }
 
     /// <summary>
-    /// Called when the agent moves the right block into the goal.
+    /// Called when the agent moves the block into the goal.
     /// </summary>
-    public void ScoredAGoal(GameObject collidedBlock)
-    {
-        if(numOfGoals == 1)
-        {
-            // We use a reward of 5.
-            AddReward(.6f);
-
-            // By marking an agent as done AgentReset() will be called automatically.
-            Done();
-
-            // Swap ground material for a bit to indicate we scored.
-            StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.goalScoredMaterial, 0.5f));
-
-            numOfGoals = 0;
-        }
-        else if (numOfGoals == 0)
-        {
-            // We use a reward of 5.
-            AddReward(.4f);
-
-            // Swap ground material for a bit to indicate we scored.
-            StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.goalScoredMaterial, 0.5f));
-
-            numOfGoals++;
-            collidedBlock.SetActive(false);
-
-            if(collidedBlock == blockGreen)
-            {
-                block = blockPurple;
-                goal = goalPurple;
-            }
-            else
-            {
-                block = blockGreen;
-                goal = goalGreen;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Called when the agent moves the wrong block into the goal.
-    /// </summary>
-    public void FaileddAGoal()
+    public void ScoredAGoal()
     {
         // We use a reward of 5.
-        AddReward(-1f);
+        AddReward(5f);
 
         // By marking an agent as done AgentReset() will be called automatically.
         Done();
-        numOfGoals = 0;
 
         // Swap ground material for a bit to indicate we scored.
-        StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.failMaterial, 0.5f));
+        StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.goalScoredMaterial, 0.5f));
     }
-
-
 
     /// <summary>
     /// Swap ground material, wait time seconds, then swap back to the regular material.
@@ -251,16 +197,13 @@ public class PushAgentBasic : Agent
     void ResetBlock()
     {
         // Get a random position for the block.
-        blockGreen.transform.position = GetRandomSpawnPos();
-        blockPurple.transform.position = GetRandomSpawnPos();
+        block.transform.position = GetRandomSpawnPos();
 
         // Reset block velocity back to zero.
-        m_rBlockRb.velocity = Vector3.zero;
-        m_pBlockRb.velocity = Vector3.zero;
+        m_BlockRb.velocity = Vector3.zero;
 
         // Reset block angularVelocity back to zero.
-        m_rBlockRb.angularVelocity = Vector3.zero;
-        m_pBlockRb.angularVelocity = Vector3.zero;
+        m_BlockRb.angularVelocity = Vector3.zero;
     }
 
     /// <summary>
@@ -272,9 +215,6 @@ public class PushAgentBasic : Agent
         var rotation = Random.Range(0, 4);
         var rotationAngle = rotation * 90f;
         area.transform.Rotate(new Vector3(0f, rotationAngle, 0f));
-
-        blockGreen.SetActive(true);
-        blockPurple.SetActive(true);
 
         ResetBlock();
         transform.position = GetRandomSpawnPos();
@@ -300,10 +240,10 @@ public class PushAgentBasic : Agent
 
         var scale = resetParams.GetPropertyWithDefault("block_scale", 2);
         //Set the scale of the block
-        m_rBlockRb.transform.localScale = new Vector3(scale, 0.75f, scale);
+        m_BlockRb.transform.localScale = new Vector3(scale, 0.75f, scale);
 
         // Set the drag of the block
-        m_rBlockRb.drag = resetParams.GetPropertyWithDefault("block_drag", 0.5f);
+        m_BlockRb.drag = resetParams.GetPropertyWithDefault("block_drag", 0.5f);
     }
 
     public void SetResetParameters()
