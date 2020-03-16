@@ -31,6 +31,11 @@ public class g08_PyramidSwitch : MonoBehaviour
         myButton.GetComponent<Renderer>().material = offMaterial;
     }
 
+    public void changeTag()
+    {
+        tag = "goal";
+    }
+
     //void OnCollisionEnter(Collision other)
     //{
     //    if (other.gameObject.CompareTag("agent") && m_State == false)
