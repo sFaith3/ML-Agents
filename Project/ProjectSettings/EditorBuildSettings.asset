@@ -11,7 +11,13 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/ML-Agents/Examples/3DBall/Scenes/3DBallG102BallsAsCloseAsPosible.unity
     guid: 682153cffe605fe4f85341e6646a0be6
-  - enabled: 1
+  - enabled: 0
     path: Assets/ML-Agents/Examples/3DBall/Scenes/3DBallG10WithCube.unity
     guid: 7fff5549634925e48bf3d8b74b22e501
+  - enabled: 0
+    path: Assets/ML-Agents/Examples/PushBlock/Scenes/PushBlockBasic.unity
+    guid: 1a3fb3bed93ce344882c0a35abadf896
+  - enabled: 1
+    path: Assets/ML-Agents/Examples/PushBlock/Scenes/PushBlock_2Blocks.unity
+    guid: 1a85b5c36216fd64aa44a624f1465277
   m_configObjects: {}
