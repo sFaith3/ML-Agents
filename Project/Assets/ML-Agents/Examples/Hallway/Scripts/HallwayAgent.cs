@@ -72,7 +72,7 @@ public class HallwayAgent : Agent
 
     public override void AgentAction(float[] vectorAction)
     {
-        AddReward(-1f / maxStep);
+        AddReward(-0.1f / maxStep);
         MoveAgent(vectorAction);
     }
 
@@ -104,6 +104,8 @@ public class HallwayAgent : Agent
         if(col.gameObject.tag == "collectible")
         {
             hasCollectible = true;
+            SetReward(0.5f);
+            //StartCoroutine(GoalScoredSwapGroundMaterial(m_HallwaySettings.goalScoredMaterial, 0.5f));
             collectible.SetActive(false);
         }
         if (col.gameObject.tag == "hole")
