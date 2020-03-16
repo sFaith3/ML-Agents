@@ -24,9 +24,9 @@ public class g08_PyramidSwitch : MonoBehaviour
     public void ResetSwitch(int spawnAreaIndex, int pyramidSpawnIndex)
     {
         m_AreaComponent.PlaceObject(gameObject, spawnAreaIndex);
-        //m_State = false;
-        //m_PyramidIndex = pyramidSpawnIndex;
-        //tag = "switchOff";
+        m_State = false;
+        m_PyramidIndex = pyramidSpawnIndex;
+        tag = "switchOff";
         transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         myButton.GetComponent<Renderer>().material = offMaterial;
     }
@@ -35,10 +35,9 @@ public class g08_PyramidSwitch : MonoBehaviour
     //{
     //    if (other.gameObject.CompareTag("agent") && m_State == false)
     //    {
-    //myButton.GetComponent<Renderer>().material = onMaterial;
-    //m_State = true;
-    //m_AreaComponent.CreatePyramid(1, m_PyramidIndex);
-    //tag = "switchOn";
+    //        myButton.GetComponent<Renderer>().material = onMaterial;
+    //        m_State = true;
+    //        tag = "switchOn";
     //    }
     //}
 }

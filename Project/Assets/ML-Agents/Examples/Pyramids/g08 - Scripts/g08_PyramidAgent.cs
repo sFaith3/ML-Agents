@@ -105,7 +105,7 @@ public class g08_PyramidAgent : Agent
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("switchOn"))
+        if (collision.gameObject.CompareTag("goal"))
         {
             SetReward(2f);
             Done();

@@ -17,7 +17,7 @@ public class PyramidScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("agent"))
         {
-            button.gameObject.tag = "switchOn";
+            button.gameObject.tag = "goal";
         }
     }
 }
