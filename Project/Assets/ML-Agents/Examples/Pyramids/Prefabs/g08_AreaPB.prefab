@@ -656,6 +656,7 @@ MonoBehaviour:
   area: {fileID: 1464170487903594}
   areaSwitch: {fileID: 1432086782037750}
   useVectorObs: 1
+  button: {fileID: 1311237735163698}
 --- !u!65 &65345930959735878
 BoxCollider:
   m_ObjectHideFlags: 0

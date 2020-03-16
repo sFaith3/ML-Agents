@@ -12,6 +12,7 @@ public class g08_PyramidAgent : Agent
     g08_PyramidSwitch m_SwitchLogic;
     public GameObject areaSwitch;
     public bool useVectorObs;
+    public GameObject button;
 
     public override void InitializeAgent()
     {
@@ -110,5 +111,12 @@ public class g08_PyramidAgent : Agent
             SetReward(2f);
             Done();
         }
+
+        if (collision.gameObject.CompareTag("Target"))
+        {
+            AddReward(1f);
+            button.gameObject.tag = "goal";
+        }
+        
     }
 }

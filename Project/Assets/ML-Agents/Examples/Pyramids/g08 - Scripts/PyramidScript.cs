@@ -13,11 +13,5 @@ public class PyramidScript : MonoBehaviour
     }
 
 
-    void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.CompareTag("agent"))
-        {
-            button.gameObject.tag = "goal";
-        }
-    }
+
 }
