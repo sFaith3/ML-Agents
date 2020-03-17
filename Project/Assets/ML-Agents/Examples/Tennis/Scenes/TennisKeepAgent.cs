@@ -60,8 +60,8 @@ public class TennisKeepAgent : Agent
 
     public override void AgentAction(float[] vectorAction)
     {
-        Vector3 dirToGo = Vector3.zero;
-        var moveX = /*Mathf.Clamp(*/vectorAction[0] * m_InvertMult;
+        //Vector3 dirToGo = Vector3.zero;
+        var moveX = Mathf.Clamp(vectorAction[0], -1f, 1f) /** m_InvertMult*/;
         var moveY = Mathf.Clamp(vectorAction[1], -1f, 1f);
         //var rotate = Mathf.Clamp(0f, -1f, 1f) * m_InvertMult;
 
@@ -90,35 +90,30 @@ public class TennisKeepAgent : Agent
         //        break;
         //}
 
-        //float distance = Vector3.Distance(ball.gameObject.transform.position, transform.position);
-        //if (vectorAction[0] > 0.0f)
-        //    gameObject.GetComponent<Rigidbody>().AddForce(Vector3.right * 2.0f, ForceMode.Impulse);
-        //else if(vectorAction[0] < 0.0f)
-        //    gameObject.GetComponent<Rigidbody>().AddForce(Vector3.right * -2.0f, ForceMode.Impulse);
-        //if (vectorAction[1] > 0.0f)
-        //    gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up * 1.0f, ForceMode.Impulse);
-        //else if (vectorAction[1] < 0.0f)
-        //    gameObject.GetComponent<Rigidbody>().AddForce(Vector3.up * -1.0f, ForceMode.Impulse);
-
-        //m_AgentRb.AddForce(dirToGo, ForceMode.VelocityChange);
-        m_AgentRb.velocity = new Vector3(moveX * 30.0f, m_AgentRb.velocity.y, 0f);
+        //tensorboard --logdir=summaries --port=6006
+        //mlagents-learn config/trainer_config.yaml --run-id=314 --train
 
         transform.eulerAngles = new Vector3(-180.0f, -180.0f, 0.0f);
 
+        float distance = ball.transform.position.x - transform.position.x;
+        distance = Mathf.Abs(distance);
+        print(distance);
 
+        if (distance < 2.0f)
+        {
+            AddReward(1);
+        } 
+        else
+        {
+            AddReward(-1);
+        }
 
-
-
-
-
-
-
-
+        m_AgentRb.velocity = new Vector3(moveX * 30.0f, m_AgentRb.velocity.y, 0f);
 
         //m_AgentRb.velocity = new Vector3(moveX * 30.0f, m_AgentRb.velocity.y, 0f);
-
         ////m_AgentRb.transform.rotation = Quaternion.Euler(55.0f * rotate + m_InvertMult * 180.0f, 0.0f, 0.0f);
         //m_AgentRb.transform.rotation = Quaternion.Euler(55.0f * rotate + m_InvertMult * 180.0f, -180.0f, 0.0f);
+
         //if (invertX && transform.position.x - transform.parent.transform.position.x < -m_InvertMult ||
         //    !invertX && transform.position.x - transform.parent.transform.position.x > -m_InvertMult)
         //{
@@ -126,10 +121,6 @@ public class TennisKeepAgent : Agent
         //        transform.position.y,
         //        transform.position.z);
         //}
-
-
- 
-
 
         m_TextComponent.text = score.ToString();
     }
@@ -145,9 +136,9 @@ public class TennisKeepAgent : Agent
 
     public override void AgentReset()
     {
-        m_InvertMult = invertX ? -1f : 1f;
+        //m_InvertMult = invertX ? -1f : 1f;
 
-        transform.position = new Vector3(0.0f, -4.5f, 1.5f) + transform.parent.transform.position;
+        transform.position = new Vector3(1.0f, -4.5f, 1.5f);
         m_AgentRb.velocity = new Vector3(0f, 0f, 0f);
 
         SetResetParameters();

@@ -6,29 +6,28 @@ public class HitWall_Keep : MonoBehaviour
     public int lastAgentHit;
     public bool net;
 
-    public enum FloorHit
+    public enum Status
         {
             Service,
-            FloorHitUnset,
-            FloorAHit,
-            FloorBHit
+            Floor,
+            Agent,
+            Wall
         }
 
-    public FloorHit lastFloorHit;
-
-    private bool firstTouch;
+    public Status state;
 
     TennisKeepArea m_Area;
-    //TennisAgent m_AgentA;
-    //TennisAgent m_AgentB;
     TennisKeepAgent m_Agent;
+
+    int servicesFailed = 0;
 
     //  Use this for initialization
     void Start()
     {
         m_Area = areaObject.GetComponent<TennisKeepArea>();
         m_Agent = m_Area.agent.GetComponent<TennisKeepAgent>();
-        firstTouch = true;
+        //firstTouch = true;
+        state = Status.Service;
     }
 
     /*if (collision.gameObject.CompareTag("iWall"))
@@ -109,78 +108,95 @@ public class HitWall_Keep : MonoBehaviour
     void Reset()
     {
         m_Area.MatchReset();
-        lastFloorHit = FloorHit.Service;
-        net = false;
-        firstTouch = true;
         m_Agent.Done();
+
+        state = Status.Service;
     }
-    
-    /*void AgentAWins()
-    {
-        m_AgentA.SetReward(1);
-        m_AgentB.SetReward(-1);
-        m_AgentA.score += 1;
-        Reset();
-
-    }
-
-    void AgentBWins()
-    {
-        m_AgentA.SetReward(-1);
-        m_AgentB.SetReward(1);
-        m_AgentB.score += 1;
-        Reset();
-
-    }*/
 
     void OnCollisionEnter(Collision collision)
-    {
-        if(collision.gameObject.tag == "iWall")
-        {
-            m_Agent.AddReward(-1);
-            Reset();
-        }
-
+    { 
         if (collision.gameObject.name == "Floor") {
-            //refuerzo negativo
-            m_Agent.AddReward(-1);
-            Reset();
+            switch(state)
+            {
+                case Status.Service:
+                    m_Agent.AddReward(-4);
+                    Reset();
+                    break;
+                case Status.Floor:
+                    m_Agent.AddReward(-1);
+                    Reset();
+                    break;
+                case Status.Agent:
+                    m_Agent.AddReward(-1);
+                    Reset();
+                    break;
+                case Status.Wall:
+                    state = Status.Floor;
+                    break;
+            }
+            
+        }
+        else if (collision.gameObject.tag == "iWall")
+        {
+            switch (state)
+            {
+                case Status.Service: // No deberia ocurrir pero por si acaso
+                    m_Agent.AddReward(-3);
+                    break;
+
+                case Status.Floor: // De floor a wall
+                    m_Agent.AddReward(-1);
+                    break;
+
+                case Status.Agent:
+                    m_Agent.AddReward(2);
+                    state = Status.Wall;
+                    break;
+
+                case Status.Wall: // De pared a pared
+                    m_Agent.AddReward(-3);
+                    break;
+            }
+        }
+        else if (collision.gameObject.name == "Agent")
+        {
+            switch (state)
+            {
+                case Status.Service: // Si se está de saque y el agente le da
+                    //float tmpReward = 5;
+                    //if (servicesFailed > 5 && currentLoses < 9000) tmpReward += goodReward;
+                    m_Agent.AddReward(5);
+                    servicesFailed = 0; // reset de los fallados
+                    state = Status.Agent;
+                    break;
+
+                case Status.Floor: // Le da tras un bote
+                    m_Agent.AddReward(2);
+                    state = Status.Agent;
+                    break;
+
+                case Status.Agent: // Doble hit
+                    m_Agent.AddReward(-1f);
+                    break;
+
+                case Status.Wall: // Hit directo, ha de esperar a que toque el suelo
+                    m_Agent.AddReward(-1f);
+                    break;
+            }
         }
 
-        //else if (collision.gameObject.name == "Agent")
+
+        //if (collision.gameObject.tag == "iWall")
         //{
-        //    //if (!firstTouch) {
-        //    //    m_Agent.SetReward(1);
-        //    //} else if (firstTouch) {
-        //    //    firstTouch = false;
-        //    //    m_Agent.SetReward(2);
-        //    //}
-
+        //    m_Agent.AddReward(-0.5f);
+        //    Reset();
         //}
+
         
+        //if(collision.gameObject.tag == "Agent")
+        //{
+        //    m_Agent.AddReward(2);
+        //}
 
-        if(collision.gameObject.tag == "Agent")
-        {
-            m_Agent.AddReward(1);
-        }
-
-        /*else if (collision.gameObject.name == "AgentB")
-        {
-            // Agent B double hit
-            if (lastAgentHit == 1)
-            {
-                AgentAWins();
-            }
-            else
-            {
-                if (lastFloorHit != FloorHit.Service && !net)
-                {
-                    net = true;
-                }
-
-                lastAgentHit = 1;
-                lastFloorHit = FloorHit.FloorHitUnset;
-            }
-        }*/
     }
 }
