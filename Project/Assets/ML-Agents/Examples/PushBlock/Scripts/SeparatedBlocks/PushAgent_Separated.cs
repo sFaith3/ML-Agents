@@ -104,23 +104,33 @@ public class PushAgent_Separated : Agent
     /// <summary>
     /// Called when the agent moves the block into the goal.
     /// </summary>
-    public void ScoredAGoal()
+    public void ScoredAGoal(bool correct)
     {
-        // By marking an agent as done AgentReset() will be called automatically.
-        if (goalDetectGreen.scored && goalDetectPurple.scored) 
+        if (correct)
+        {
+            // By marking an agent as done AgentReset() will be called automatically.
+            if (goalDetectGreen.scored && goalDetectPurple.scored)
+            {
+                goalDetectGreen.scored = false;
+                goalDetectPurple.scored = false;
+                AddReward(1f);
+                Done();
+            }
+            else if (goalDetectGreen.scored || goalDetectPurple.scored)
+            {
+                AddReward(0.5f);
+            }
+
+            // Swap ground material for a bit to indicate we scored.
+            StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.goalScoredMaterial, 0.5f));
+        }
+        else 
         {
             goalDetectGreen.scored = false;
             goalDetectPurple.scored = false;
-            AddReward(1f);
+            AddReward(-0.02f);
             Done();
         }
-        else if (goalDetectGreen.scored || goalDetectPurple.scored)
-        {
-            AddReward(0.5f);
-        }
-
-        // Swap ground material for a bit to indicate we scored.
-        StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.goalScoredMaterial, 0.5f));
     }
 
     /// <summary>

@@ -630,7 +630,7 @@ MonoBehaviour:
     vectorActionSize: 07000000
     vectorActionDescriptions: []
     vectorActionSpaceType: 0
-  m_Model: {fileID: 5022602860645237092, guid: f35ecbe2752bfbf4cb20be040a5c7047, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: PushBlock
