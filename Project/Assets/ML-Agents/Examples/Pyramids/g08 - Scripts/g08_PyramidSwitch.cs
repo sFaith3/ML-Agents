@@ -34,6 +34,7 @@ public class g08_PyramidSwitch : MonoBehaviour
     public void changeTag()
     {
         tag = "goal";
+        myButton.GetComponent<Renderer>().material = onMaterial;
     }
 
     //void OnCollisionEnter(Collision other)
