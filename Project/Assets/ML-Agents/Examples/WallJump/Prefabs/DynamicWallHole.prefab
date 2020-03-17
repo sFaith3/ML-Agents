@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 72852155}
   - component: {fileID: 72852158}
   - component: {fileID: 72852157}
+  - component: {fileID: 5513562230121878310}
   m_Layer: 0
   m_Name: Hole
   m_TagString: Hole
@@ -79,6 +80,19 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &5513562230121878310
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72852154}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.99999994, z: 1}
+  m_Center: {x: 0.000000014901161, y: -0.000000059604645, z: 0}
 --- !u!1 &4240413656744128836
 GameObject:
   m_ObjectHideFlags: 0

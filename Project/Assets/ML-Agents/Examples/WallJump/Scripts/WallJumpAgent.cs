@@ -151,7 +151,7 @@ public class WallJumpAgent : Agent
 
         AddVectorObs(agentPos / 20f);
         AddVectorObs(DoGroundCheck(true) ? 1 : 0);
-        AddVectorObs(CheckHoleCollision());
+        //AddVectorObs(CheckHoleCollision());
         //if (m_Configuration > 2)
         //    AddVectorObs(holeTransform.position);
         //else
@@ -253,8 +253,8 @@ public class WallJumpAgent : Agent
                 GoalScoredSwapGroundMaterial(m_WallJumpSettings.failMaterial, .5f));
         }
 
-        if (CheckHoleCollision())
-            SetReward(0.5f);
+        //if (CheckHoleCollision())
+        //    SetReward(0.5f);
     }
 
     public override float[] Heuristic()
@@ -293,13 +293,13 @@ public class WallJumpAgent : Agent
     }
 
     // Detect when the agent enters the hole
-    //private void OnTriggerEnter(Collider col)
-    //{
-    //    if (col.gameObject.CompareTag("hole"))
-    //    {
-    //        SetReward(0.05f);
-    //    }
-    //}
+    private void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.CompareTag("Hole"))
+        {
+            SetReward(0.05f);
+        }
+    }
 
     private bool CheckHoleCollision()
     {
@@ -383,8 +383,8 @@ public class WallJumpAgent : Agent
         }
         else if (config == 2)
         {
-            var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_min_height", 1.5f);
-            var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_max_height", 1.5f);
+            var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_min_height", 1f);
+            var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_max_height", 1f);
             var height = min + Random.value * (max - min);
             localScale = new Vector3(
                 localScale.x,

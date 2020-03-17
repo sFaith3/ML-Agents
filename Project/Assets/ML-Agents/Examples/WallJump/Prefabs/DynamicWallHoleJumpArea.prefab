@@ -154,12 +154,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    vectorObservationSize: 5
+    vectorObservationSize: 4
     numStackedVectorObservations: 6
     vectorActionSize: 03000000030000000300000002000000
     vectorActionDescriptions: []
     vectorActionSpaceType: 0
-  m_Model: {fileID: 5022602860645237092, guid: 7f1f504e877e5d14e9a0b4817ebf60a9, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: e4f766b93e287454b9509c65fd6857b1, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: SmallWallJump
@@ -181,13 +181,13 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   maxStep: 2000
-  noWallBrain: {fileID: 5022602860645237092, guid: 7f1f504e877e5d14e9a0b4817ebf60a9,
+  noWallBrain: {fileID: 5022602860645237092, guid: e4f766b93e287454b9509c65fd6857b1,
     type: 3}
-  smallWallBrain: {fileID: 5022602860645237092, guid: 7f1f504e877e5d14e9a0b4817ebf60a9,
+  smallWallBrain: {fileID: 5022602860645237092, guid: e4f766b93e287454b9509c65fd6857b1,
     type: 3}
-  bigWallBrain: {fileID: 5022602860645237092, guid: 7829636d160a75a458cec92e7f57d619,
+  bigWallBrain: {fileID: 5022602860645237092, guid: d79d952c1ba1677449d2112f1bbd0b1c,
     type: 3}
-  holeWallBrain: {fileID: 5022602860645237092, guid: 54f69f595aadd2342bd9020b9e142c17,
+  holeWallBrain: {fileID: 5022602860645237092, guid: 19390e65ffab0e147bbfc7e4e4b8a3a0,
     type: 3}
   DynamicWallHole: {fileID: 4240413658191375073, guid: 89c6c307825f9cb41b8f6cb31903ed05,
     type: 3}
@@ -222,6 +222,7 @@ MonoBehaviour:
   - wall
   - goal
   - block
+  - Hole
   raysPerDirection: 3
   maxRayDegrees: 90
   sphereCastRadius: 0.5
@@ -252,6 +253,7 @@ MonoBehaviour:
   - wall
   - goal
   - block
+  - Hole
   raysPerDirection: 3
   maxRayDegrees: 90
   sphereCastRadius: 0.5
