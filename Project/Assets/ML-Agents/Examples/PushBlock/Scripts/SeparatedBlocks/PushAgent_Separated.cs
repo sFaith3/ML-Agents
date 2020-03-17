@@ -24,18 +24,18 @@ public class PushAgent_Separated : Agent
     /// <summary>
     /// The goal to push the block to.
     /// </summary>
-    public GameObject goal;
+    public GameObject goalGreen, goalPurple;
 
     /// <summary>
     /// The block to be pushed to the goal.
     /// </summary>
-    public GameObject[] blocks = new GameObject[2];
+    public GameObject blockGreen, blockPurple;
 
     /// <summary>
     /// Detects when the block touches the goal.
     /// </summary>
     [HideInInspector]
-    public GoalDetect_Separated goalDetect;
+    public GoalDetect_Separated goalDetectGreen, goalDetectPurple;
 
     public bool useVectorObs;
 
@@ -57,22 +57,23 @@ public class PushAgent_Separated : Agent
     {
         base.InitializeAgent();
 
-        for (int i = 0; i < blocks.Length; i++)
-        {
-            goalDetect = blocks[i].GetComponent<GoalDetect_Separated>();
-            goalDetect.agent = this;
+        goalDetectGreen = blockGreen.GetComponent<GoalDetect_Separated>();
+        goalDetectGreen.agent = this;
 
-            // Cache the agent rigidbody
-            m_AgentRb = GetComponent<Rigidbody>();
-            // Cache the block rigidbody
-            m_BlockRb = blocks[i].GetComponent<Rigidbody>();
-            // Get the ground's bounds
-            areaBounds = ground.GetComponent<Collider>().bounds;
-            // Get the ground renderer so we can change the material when a goal is scored
-            m_GroundRenderer = ground.GetComponent<Renderer>();
-            // Starting material
-            m_GroundMaterial = m_GroundRenderer.material;
-        }
+        goalDetectPurple = blockPurple.GetComponent<GoalDetect_Separated>();
+        goalDetectPurple.agent = this;
+
+        // Cache the agent rigidbody
+        m_AgentRb = GetComponent<Rigidbody>();
+        // Cache the block rigidbody
+        m_BlockRb = blockGreen.GetComponent<Rigidbody>();
+        m_BlockRb = blockPurple.GetComponent<Rigidbody>();
+        // Get the ground's bounds
+        areaBounds = ground.GetComponent<Collider>().bounds;
+        // Get the ground renderer so we can change the material when a goal is scored
+        m_GroundRenderer = ground.GetComponent<Renderer>();
+        // Starting material
+        m_GroundMaterial = m_GroundRenderer.material;
 
         SetResetParameters();
     }
@@ -106,21 +107,16 @@ public class PushAgent_Separated : Agent
     public void ScoredAGoal()
     {
         // By marking an agent as done AgentReset() will be called automatically.
-        if (blocks[0].GetComponent<GoalDetect_2Blocks>().scored && blocks[1].GetComponent<GoalDetect_2Blocks>().scored) 
+        if (goalDetectGreen.scored && goalDetectPurple.scored) 
         {
-            for (int i = 0; i < blocks.Length; i++) 
-            {
-                blocks[i].GetComponent<GoalDetect_2Blocks>().scored = false;
-            }
-
-            // We use a reward of 5.
-            AddReward(5f);
-
+            goalDetectGreen.scored = false;
+            goalDetectPurple.scored = false;
+            AddReward(1f);
             Done();
         }
-        else if (blocks[0].GetComponent<GoalDetect_2Blocks>().scored || blocks[1].GetComponent<GoalDetect_2Blocks>().scored) 
+        else if (goalDetectGreen.scored || goalDetectPurple.scored)
         {
-            AddReward(1f);
+            AddReward(0.5f);
         }
 
         // Swap ground material for a bit to indicate we scored.
@@ -213,10 +209,8 @@ public class PushAgent_Separated : Agent
     void ResetBlock()
     {
         // Get a random position for the block.
-        for (int i = 0; i < blocks.Length; i++)
-        {
-            blocks[i].transform.position = GetRandomSpawnPos();
-        }
+        blockPurple.transform.position = GetRandomSpawnPos();
+        blockGreen.transform.position = GetRandomSpawnPos();
 
         // Reset block velocity back to zero.
         m_BlockRb.velocity = Vector3.zero;
@@ -269,13 +263,5 @@ public class PushAgent_Separated : Agent
     {
         SetGroundMaterialFriction();
         SetBlockProperties();
-    }
-
-    public void Update()
-    {
-        for (int i = 0; i < 2; i++) 
-        {
-            Debug.Log(blocks[i].GetComponent<GoalDetect_2Blocks>().scored);
-        }
     }
 }

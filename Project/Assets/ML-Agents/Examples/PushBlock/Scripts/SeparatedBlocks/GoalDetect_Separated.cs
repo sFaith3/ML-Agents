@@ -15,13 +15,39 @@ public class GoalDetect_Separated : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
+        string myTag = transform.tag;
+
         // Touched goal.
-        if (col.gameObject.CompareTag("goal"))
+        if (myTag == "greenCube") 
         {
-            if (!scored)
+            if (col.gameObject.CompareTag("greenGoal"))
             {
-                scored = true;
-                agent.ScoredAGoal();
+                if (!scored)
+                {
+                    scored = true;
+                    agent.ScoredAGoal();
+                }
+            }
+            else if(col.gameObject.CompareTag("purpleGoal"))
+            {
+                agent.AddReward((float)-0.5);
+                agent.Done();   
+            }
+        }
+        else if(myTag == "purpleCube")
+        {
+            if (col.gameObject.CompareTag("purpleGoal"))
+            {
+                if (!scored)
+                {
+                    scored = true;
+                    agent.ScoredAGoal();
+                }
+            }
+            else if (col.gameObject.CompareTag("greenGoal"))
+            {
+                agent.AddReward((float)-0.5);
+                agent.Done();
             }
         }
     }

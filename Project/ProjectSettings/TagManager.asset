@@ -30,6 +30,9 @@ TagManager:
   - purpleAgent
   - purpleGoal
   - cube
+  - greenGoal
+  - greenCube
+  - purpleCube
   layers:
   - Default
   - TransparentFX
