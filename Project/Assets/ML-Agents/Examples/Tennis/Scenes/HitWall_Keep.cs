@@ -114,89 +114,90 @@ public class HitWall_Keep : MonoBehaviour
     }
 
     void OnCollisionEnter(Collision collision)
-    { 
-        if (collision.gameObject.name == "Floor") {
-            switch(state)
-            {
-                case Status.Service:
-                    m_Agent.AddReward(-4);
-                    Reset();
-                    break;
-                case Status.Floor:
-                    m_Agent.AddReward(-1);
-                    Reset();
-                    break;
-                case Status.Agent:
-                    m_Agent.AddReward(-1);
-                    Reset();
-                    break;
-                case Status.Wall:
-                    state = Status.Floor;
-                    break;
-            }
-            
-        }
-        else if (collision.gameObject.tag == "iWall")
-        {
-            switch (state)
-            {
-                case Status.Service: // No deberia ocurrir pero por si acaso
-                    m_Agent.AddReward(-3);
-                    break;
+    {
+        //if (collision.gameObject.name == "Floor") {
+        //    switch(state)
+        //    {
+        //        case Status.Service:
+        //            m_Agent.AddReward(-2);
+        //            Reset();
+        //            break;
+        //        case Status.Floor:
+        //            m_Agent.AddReward(-1);
+        //            Reset();
+        //            break;
+        //        case Status.Agent:
+        //            m_Agent.AddReward(-1);
+        //            Reset();
+        //            break;
+        //        case Status.Wall:
+        //            state = Status.Floor;
+        //            break;
+        //    }
 
-                case Status.Floor: // De floor a wall
-                    m_Agent.AddReward(-1);
-                    break;
-
-                case Status.Agent:
-                    m_Agent.AddReward(2);
-                    state = Status.Wall;
-                    break;
-
-                case Status.Wall: // De pared a pared
-                    m_Agent.AddReward(-3);
-                    break;
-            }
-        }
-        else if (collision.gameObject.name == "Agent")
-        {
-            switch (state)
-            {
-                case Status.Service: // Si se está de saque y el agente le da
-                    //float tmpReward = 5;
-                    //if (servicesFailed > 5 && currentLoses < 9000) tmpReward += goodReward;
-                    m_Agent.AddReward(5);
-                    servicesFailed = 0; // reset de los fallados
-                    state = Status.Agent;
-                    break;
-
-                case Status.Floor: // Le da tras un bote
-                    m_Agent.AddReward(2);
-                    state = Status.Agent;
-                    break;
-
-                case Status.Agent: // Doble hit
-                    m_Agent.AddReward(-1f);
-                    break;
-
-                case Status.Wall: // Hit directo, ha de esperar a que toque el suelo
-                    m_Agent.AddReward(-1f);
-                    break;
-            }
-        }
-
-
-        //if (collision.gameObject.tag == "iWall")
+        //}
+        //else if (collision.gameObject.tag == "iWall")
         //{
-        //    m_Agent.AddReward(-0.5f);
-        //    Reset();
+        //    switch (state)
+        //    {
+        //        case Status.Service: // No deberia ocurrir pero por si acaso
+        //            m_Agent.AddReward(-2);
+        //            break;
+
+        //        case Status.Floor: // De floor a wall
+        //            m_Agent.AddReward(-1);
+        //            break;
+
+        //        case Status.Agent:
+        //            m_Agent.AddReward(2);
+        //            state = Status.Wall;
+        //            break;
+
+        //        case Status.Wall: // De pared a pared
+        //            m_Agent.AddReward(-2);
+        //            break;
+        //    }
+        //}
+        //else if (collision.gameObject.name == "Agent")
+        //{
+        //    switch (state)
+        //    {
+        //        case Status.Service: // Si se está de saque y el agente le da
+        //            //float tmpReward = 5;
+        //            //if (servicesFailed > 5 && currentLoses < 9000) tmpReward += goodReward;
+        //            m_Agent.AddReward(5);
+        //            servicesFailed = 0; // reset de los fallados
+        //            state = Status.Agent;
+        //            break;
+
+        //        //case Status.Floor: // Le da tras un bote
+        //        //    m_Agent.AddReward(2);
+        //        //    state = Status.Agent;
+        //        //    break;
+        //        case Status.Agent: // Doble hit
+        //            m_Agent.AddReward(-1f);
+        //            break;
+
+        //        case Status.Wall: // Hit directo, ha de esperar a que toque el suelo
+        //            m_Agent.AddReward(-1f);
+        //            break;
+        //    }
         //}
 
-        
-        //if(collision.gameObject.tag == "Agent")
-        //{
-        //    m_Agent.AddReward(2);
-        //}
+        if (collision.gameObject.tag == "iWall")
+        {
+            m_Agent.AddReward(-0.5f);
+            Reset();
+        }
+        if (collision.gameObject.tag == "Agent")
+        {
+            m_Agent.AddReward(2);
+        }
+        if(collision.gameObject.name == "Floor")
+        {
+            m_Agent.AddReward(-1);
+            Reset();
+        }
 
     }
 }

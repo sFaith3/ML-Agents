@@ -24,6 +24,8 @@ public class TennisKeepAgent : Agent
     const string k_ScoreBoardAName = "ScoreA";
     const string k_ScoreBoardBName = "ScoreB";
 
+    private float distance = 0.0f;
+
     public override void InitializeAgent()
     {
         m_AgentRb = GetComponent<Rigidbody>();
@@ -56,6 +58,7 @@ public class TennisKeepAgent : Agent
         AddVectorObs(m_BallRb.velocity.y);
 
         AddVectorObs(m_InvertMult * gameObject.transform.rotation.x);
+        AddVectorObs(distance);
     }
 
     public override void AgentAction(float[] vectorAction)
@@ -90,12 +93,15 @@ public class TennisKeepAgent : Agent
         //        break;
         //}
 
+        Vector3 dir = ball.transform.position - transform.position;
+        dir.Normalize();
+
         //tensorboard --logdir=summaries --port=6006
         //mlagents-learn config/trainer_config.yaml --run-id=314 --train
 
         transform.eulerAngles = new Vector3(-180.0f, -180.0f, 0.0f);
 
-        float distance = ball.transform.position.x - transform.position.x;
+        distance = ball.transform.position.x - transform.position.x;
         distance = Mathf.Abs(distance);
         print(distance);
 
@@ -108,7 +114,7 @@ public class TennisKeepAgent : Agent
             AddReward(-1);
         }
 
-        m_AgentRb.velocity = new Vector3(moveX * 30.0f, m_AgentRb.velocity.y, 0f);
+        m_AgentRb.velocity = new Vector3(moveX * dir.x * 30.0f, m_AgentRb.velocity.y, 0f);
 
         //m_AgentRb.velocity = new Vector3(moveX * 30.0f, m_AgentRb.velocity.y, 0f);
         ////m_AgentRb.transform.rotation = Quaternion.Euler(55.0f * rotate + m_InvertMult * 180.0f, 0.0f, 0.0f);
