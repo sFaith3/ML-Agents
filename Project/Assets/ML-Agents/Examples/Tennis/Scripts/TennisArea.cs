@@ -16,7 +16,7 @@ public class TennisArea : MonoBehaviour
     public void MatchReset()
     {
         var ballOut = Random.Range(-6f, -8f); // distancia en x
-        ball.transform.position = new Vector3(ballOut, 6f, 0f) + transform.position;
+        ball.transform.position = new Vector3(ballOut, 0f, 0f) + transform.position;
         m_BallRb.velocity = new Vector3(0f, 0f, 0f); //reset velocidad, hace caida
         ball.transform.localScale = new Vector3(.5f, .5f, .5f);
         ball.GetComponent<HitWall>().lastAgentHit = -1;
