@@ -72,7 +72,7 @@ public class HallwayAgent : Agent
 
     public override void AgentAction(float[] vectorAction)
     {
-        AddReward(-0.1f / maxStep);
+        AddReward(-1f / maxStep);
         MoveAgent(vectorAction);
     }
 
@@ -90,13 +90,13 @@ public class HallwayAgent : Agent
                 }
                 else
                 {
-                    SetReward(-0.1f);
+                    SetReward(-0.2f);
                     StartCoroutine(GoalScoredSwapGroundMaterial(m_HallwaySettings.failMaterial, 0.5f));
                 }
             }
             else
             {
-                SetReward(-0.1f);
+                SetReward(-0.2f);
                 StartCoroutine(GoalScoredSwapGroundMaterial(m_HallwaySettings.failMaterial, 0.5f));
             }
             Done();
@@ -104,7 +104,7 @@ public class HallwayAgent : Agent
         if(col.gameObject.tag == "collectible")
         {
             hasCollectible = true;
-            SetReward(0.5f);
+            AddReward(0.5f);
             //StartCoroutine(GoalScoredSwapGroundMaterial(m_HallwaySettings.goalScoredMaterial, 0.5f));
             collectible.SetActive(false);
         }
@@ -180,8 +180,8 @@ public class HallwayAgent : Agent
             symbolOGoal.transform.position = new Vector3(-7f, 0.5f, 22.29f) + area.transform.position;
         }
         collectible.transform.position = new Vector3(0f + Random.Range(-5f, 5f), 0.73f, 0f + Random.Range(10, 14f)) + area.transform.position;
-        hole1.transform.position = new Vector3(0f + Random.Range(-7.5f, 7.5f), 0.73f, 0f + Random.Range(6, 8f)) + area.transform.position;
-        hole2.transform.position = new Vector3(0f + Random.Range(-7.5f, 7.5f), 0.73f, 0f + Random.Range(16, 18f)) + area.transform.position;
+        hole1.transform.position = new Vector3(0f + Random.Range(-5.5f, 5.5f), 0.73f, 0f + Random.Range(6, 8f)) + area.transform.position;
+        hole2.transform.position = new Vector3(0f + Random.Range(-5.5f, 5.5f), 0.73f, 0f + Random.Range(16, 18f)) + area.transform.position;
         hasCollectible = false;
     }
 }
