@@ -123,7 +123,7 @@ public class TennisKeepAgent : Agent
             //tensorboard --logdir=summaries --port=6006
             //mlagents-learn config/trainer_config.yaml --run-id=314 --train
 
-            transform.eulerAngles = new Vector3(-180.0f, -180.0f, 0.0f);
+            //transform.eulerAngles = new Vector3(-180.0f, -180.0f, 0.0f);
 
             //distance = ball.transform.position.x - transform.position.x;
             float distance1 = ball.transform.position.x - transform.position.x;
