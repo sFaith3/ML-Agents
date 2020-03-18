@@ -116,8 +116,9 @@ public class TennisKeepAgent : Agent
         else ///EX3
         {
             Vector3 dir = ball.transform.position - transform.position;
+            float magnitude = dir.magnitude * 30.0f;
             dir.Normalize();
-
+            
             //tensorboard --logdir=summaries --port=6006
             //mlagents-learn config/trainer_config.yaml --run-id=314 --train
 
@@ -149,7 +150,7 @@ public class TennisKeepAgent : Agent
                 AddReward(-0.5f);
             }
 
-            m_AgentRb.velocity = new Vector3(moveX * dir.x * 30.0f, m_AgentRb.velocity.y, moveZ * dir.z * 30.0f);
+            m_AgentRb.velocity = new Vector3(moveX * dir.x * magnitude, m_AgentRb.velocity.y, moveZ * dir.z * magnitude);
         }
         
 
