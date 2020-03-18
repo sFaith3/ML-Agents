@@ -10,27 +10,40 @@ public class WallJumpAgent : Agent
 {
     // Depending on this value, the wall will have different height
     int m_Configuration;
+
+    [Header("Brains")]
     // Brain to use when no wall is present
     public NNModel noWallBrain;
     // Brain to use when a jumpable wall is present
     public NNModel smallWallBrain;
     // Brain to use when a wall requiring a block to jump over is present
     public NNModel bigWallBrain;
+    // Brain to use when a wall requiring a block to jump through a hole is present
+    public NNModel holeWallBrain;
 
+    [Header("Wall Prefabs")]
+    public GameObject DynamicWallHole;
+    public GameObject NormalWall;
+
+    [Header("Scene References")]
     public GameObject ground;
-    public GameObject spawnArea;
-    Bounds m_SpawnAreaBounds;
-
+    //public GameObject spawnArea;
+    //Bounds m_SpawnAreaBounds;
 
     public GameObject goal;
-    public GameObject shortBlock;
+    //public GameObject shortBlock;
     public GameObject wall;
-    Rigidbody m_ShortBlockRb;
+    public Transform normalWallTransform;
+    public Transform dynamicWallTransform;
+    //public Transform holeTransform;
+
+    //Rigidbody m_ShortBlockRb;
     Rigidbody m_AgentRb;
     Material m_GroundMaterial;
     Renderer m_GroundRenderer;
     WallJumpSettings m_WallJumpSettings;
 
+    [Header("Config Parameters")]
     public float jumpingTime;
     public float jumpTime;
     // This is a downward force applied when falling to make jumps look
@@ -47,12 +60,12 @@ public class WallJumpAgent : Agent
         m_Configuration = Random.Range(0, 5);
 
         m_AgentRb = GetComponent<Rigidbody>();
-        m_ShortBlockRb = shortBlock.GetComponent<Rigidbody>();
-        m_SpawnAreaBounds = spawnArea.GetComponent<Collider>().bounds;
+        //m_ShortBlockRb = shortBlock.GetComponent<Rigidbody>();
+        //m_SpawnAreaBounds = spawnArea.GetComponent<Collider>().bounds;
         m_GroundRenderer = ground.GetComponent<Renderer>();
         m_GroundMaterial = m_GroundRenderer.material;
 
-        spawnArea.SetActive(false);
+        //spawnArea.SetActive(false);
     }
 
     // Begin the jump sequence
@@ -138,23 +151,28 @@ public class WallJumpAgent : Agent
 
         AddVectorObs(agentPos / 20f);
         AddVectorObs(DoGroundCheck(true) ? 1 : 0);
+        //AddVectorObs(CheckHoleCollision());
+        //if (m_Configuration > 2)
+        //    AddVectorObs(holeTransform.position);
+        //else
+        //    AddVectorObs(Vector3.zero);
     }
 
     /// <summary>
     /// Gets a random spawn position in the spawningArea.
     /// </summary>
     /// <returns>The random spawn position.</returns>
-    public Vector3 GetRandomSpawnPos()
-    {
-        var randomPosX = Random.Range(-m_SpawnAreaBounds.extents.x,
-            m_SpawnAreaBounds.extents.x);
-        var randomPosZ = Random.Range(-m_SpawnAreaBounds.extents.z,
-            m_SpawnAreaBounds.extents.z);
+    //public Vector3 GetRandomSpawnPos()
+    //{
+    //    var randomPosX = Random.Range(-m_SpawnAreaBounds.extents.x,
+    //        m_SpawnAreaBounds.extents.x);
+    //    var randomPosZ = Random.Range(-m_SpawnAreaBounds.extents.z,
+    //        m_SpawnAreaBounds.extents.z);
 
-        var randomSpawnPos = spawnArea.transform.position +
-            new Vector3(randomPosX, 0.45f, randomPosZ);
-        return randomSpawnPos;
-    }
+    //    var randomSpawnPos = spawnArea.transform.position +
+    //        new Vector3(randomPosX, 0.45f, randomPosZ);
+    //    return randomSpawnPos;
+    //}
 
     /// <summary>
     /// Chenges the color of the ground for a moment
@@ -226,14 +244,17 @@ public class WallJumpAgent : Agent
     {
         MoveAgent(vectorAction);
         if ((!Physics.Raycast(m_AgentRb.position, Vector3.down, 20))
-            || (!Physics.Raycast(m_ShortBlockRb.position, Vector3.down, 20)))
+            /*|| (!Physics.Raycast(m_ShortBlockRb.position, Vector3.down, 20))*/)
         {
             SetReward(-1f);
             Done();
-            ResetBlock(m_ShortBlockRb);
+            //ResetBlock(m_ShortBlockRb);
             StartCoroutine(
                 GoalScoredSwapGroundMaterial(m_WallJumpSettings.failMaterial, .5f));
         }
+
+        //if (CheckHoleCollision())
+        //    SetReward(0.5f);
     }
 
     public override float[] Heuristic()
@@ -271,17 +292,43 @@ public class WallJumpAgent : Agent
         }
     }
 
-    //Reset the orange block position
-    void ResetBlock(Rigidbody blockRb)
+    // Detect when the agent enters the hole
+    private void OnTriggerEnter(Collider col)
     {
-        blockRb.transform.position = GetRandomSpawnPos();
-        blockRb.velocity = Vector3.zero;
-        blockRb.angularVelocity = Vector3.zero;
+        if (col.gameObject.CompareTag("Hole"))
+        {
+            SetReward(0.05f);
+        }
     }
+
+    private bool CheckHoleCollision()
+    {
+        return (m_Configuration > 2 && wall == DynamicWallHole &&
+        transform.position.x > wall.GetComponent<WallHole>().CubeLeft.GetComponent<MeshRenderer>().bounds.center.x
+                                 + wall.GetComponent<WallHole>().CubeLeft.GetComponent<MeshRenderer>().bounds.size.x / 2
+        && transform.position.x < wall.GetComponent<WallHole>().CubeRight.GetComponent<MeshRenderer>().bounds.center.x
+                                 - wall.GetComponent<WallHole>().CubeRight.GetComponent<MeshRenderer>().bounds.size.x / 2
+        && transform.position.y > wall.GetComponent<WallHole>().CubeBottom.GetComponent<MeshRenderer>().bounds.center.y
+                                 + wall.GetComponent<WallHole>().CubeBottom.GetComponent<MeshRenderer>().bounds.size.y / 2
+        && transform.position.y < wall.GetComponent<WallHole>().CubeTop.GetComponent<MeshRenderer>().bounds.center.y
+                                 - wall.GetComponent<WallHole>().CubeTop.GetComponent<MeshRenderer>().bounds.size.y / 2
+        && transform.position.z < wall.GetComponent<WallHole>().CubeBottom.GetComponent<MeshRenderer>().bounds.center.z
+                                 + wall.GetComponent<WallHole>().CubeBottom.GetComponent<MeshRenderer>().bounds.size.z / 2
+        && transform.position.z > wall.GetComponent<WallHole>().CubeBottom.GetComponent<MeshRenderer>().bounds.center.z
+                                 - wall.GetComponent<WallHole>().CubeBottom.GetComponent<MeshRenderer>().bounds.size.z / 2);
+    }
+
+    //Reset the orange block position
+    //void ResetBlock(Rigidbody blockRb)
+    //{
+    //    blockRb.transform.position = GetRandomSpawnPos();
+    //    blockRb.velocity = Vector3.zero;
+    //    blockRb.angularVelocity = Vector3.zero;
+    //}
 
     public override void AgentReset()
     {
-        ResetBlock(m_ShortBlockRb);
+        //ResetBlock(m_ShortBlockRb);
         transform.localPosition = new Vector3(
             18 * (Random.value - 0.5f), 1, -12);
         m_Configuration = Random.Range(0, 5);
@@ -307,6 +354,14 @@ public class WallJumpAgent : Agent
     /// Other : Tall wall and BigWallBrain. </param>
     void ConfigureAgent(int config)
     {
+        //Destroy(wall);
+        //wall = Instantiate(NormalWall, normalWallTransform.position, Quaternion.identity);
+
+        Destroy(wall);
+        wall = Instantiate(DynamicWallHole, dynamicWallTransform.position, Quaternion.identity);
+        wall.GetComponent<WallHole>().PercentageHole = 0f;
+        wall.GetComponent<WallHole>().ResetHole();
+
         var localScale = wall.transform.localScale;
         if (config == 0)
         {
@@ -321,15 +376,15 @@ public class WallJumpAgent : Agent
         {
             localScale = new Vector3(
                 localScale.x,
-                Academy.Instance.FloatProperties.GetPropertyWithDefault("small_wall_height", 4),
+                Academy.Instance.FloatProperties.GetPropertyWithDefault("small_wall_height", 0.9222f),
                 localScale.z);
             wall.transform.localScale = localScale;
             GiveModel("SmallWallJump", smallWallBrain);
         }
-        else
+        else if (config == 2)
         {
-            var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_min_height", 8);
-            var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_max_height", 8);
+            var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_min_height", 1f);
+            var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("big_wall_max_height", 1f);
             var height = min + Random.value * (max - min);
             localScale = new Vector3(
                 localScale.x,
@@ -337,6 +392,15 @@ public class WallJumpAgent : Agent
                 localScale.z);
             wall.transform.localScale = localScale;
             GiveModel("BigWallJump", bigWallBrain);
+        }
+        else
+        {
+            var min = Academy.Instance.FloatProperties.GetPropertyWithDefault("hole_wall_min_percentage", 0.4f);
+            var max = Academy.Instance.FloatProperties.GetPropertyWithDefault("hole_wall_max_percentage", 0.4f);
+            var perc = min + Random.value * (max - min);
+            wall.GetComponent<WallHole>().PercentageHole = perc;
+            wall.GetComponent<WallHole>().ResetHole();
+            GiveModel("HoleWallJump", holeWallBrain);
         }
     }
 }
