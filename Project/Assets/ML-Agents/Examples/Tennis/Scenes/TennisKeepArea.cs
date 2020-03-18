@@ -33,7 +33,7 @@ public class TennisKeepArea : MonoBehaviour
         }    
         ball.transform.localScale = new Vector3(.5f, .5f, .5f);
         ball.GetComponent<HitWall_Keep>().lastAgentHit = -1;
-        agent.transform.position = new Vector3(0, -3, 0);
+        agent.transform.position = new Vector3(0, -3, 1.5f);
     }
 
     void FixedUpdate()

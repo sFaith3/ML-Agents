@@ -116,11 +116,11 @@ public class HitWall_Keep : MonoBehaviour
         if (collision.gameObject.tag == "Agent")
         {
             m_Agent.AddReward(2);
-            if (EX3)
-            {
-                gameObject.GetComponent<Rigidbody>()
-                    .AddForce(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)), ForceMode.Impulse);
-            }
+            //if (EX3)
+            //{
+            //    gameObject.GetComponent<Rigidbody>()
+            //        .AddForce(new Vector3(Random.Range(-1, 1), Random.Range(-1, 1), Random.Range(-1, 1)), ForceMode.Impulse);
+            //}
         }
         if(collision.gameObject.name == "Floor")
         {

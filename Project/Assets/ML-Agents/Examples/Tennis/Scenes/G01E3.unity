@@ -1380,7 +1380,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1170495231318460}
-  m_LocalRotation: {x: -0.017867746, y: -0.09318962, z: -0.98982, w: -0.106079444}
+  m_LocalRotation: {x: -0, y: 0, z: -1, w: 0}
   m_LocalPosition: {x: 0, y: -3, z: 0}
   m_LocalScale: {x: 0.005, y: 0.005, z: 0.005}
   m_Children:
@@ -1388,7 +1388,7 @@ Transform:
   - {fileID: 4715305261754192}
   m_Father: {fileID: 4172343192766894}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: -169.59, y: -176.78601, z: -12.527}
+  m_LocalEulerAnglesHint: {x: -180, y: -180, z: 0}
 --- !u!4 &4715305261754192
 Transform:
   m_ObjectHideFlags: 0
@@ -2068,7 +2068,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 0
   m_CollisionDetection: 1
 --- !u!65 &65238780060476238
 BoxCollider:
@@ -2205,7 +2205,7 @@ MonoBehaviour:
     vectorActionSize: 03000000
     vectorActionDescriptions: []
     vectorActionSpaceType: 1
-  m_Model: {fileID: 0}
+  m_Model: {fileID: 5022602860645237092, guid: 351465d8bfb6d5f498ecdaec021f32a6, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: Tennis

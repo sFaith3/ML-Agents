@@ -67,6 +67,7 @@ public class TennisKeepAgent : Agent
     public override void AgentAction(float[] vectorAction)
     {
         //Vector3 dirToGo = Vector3.zero;
+        var rotate = Mathf.Clamp(vectorAction[2], -1f, 1f);
         if (EX3)
         {
             moveX = vectorAction[0];
@@ -130,7 +131,7 @@ public class TennisKeepAgent : Agent
 
             distance1 = Mathf.Abs(distance);
             distance2 = Mathf.Abs(distance);
-            print(distance2);
+            print(distance2);         
 
             if (distance1 < 2.0f)
             {
@@ -150,7 +151,8 @@ public class TennisKeepAgent : Agent
                 AddReward(-0.5f);
             }
 
-            m_AgentRb.velocity = new Vector3(moveX * dir.x * magnitude, m_AgentRb.velocity.y, moveZ * dir.z * magnitude);
+            m_AgentRb.velocity = new Vector3(moveX * dir.x * magnitude, m_AgentRb.velocity.y, moveX * dir.z * magnitude);
+            m_AgentRb.transform.rotation = Quaternion.Euler(-180f, -180f, 55f * rotate);
         }
         
 
