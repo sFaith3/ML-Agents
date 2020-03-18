@@ -10,52 +10,27 @@ public class GoalDetect_TouchBlock : MonoBehaviour
     /// Don't need to manually set.
     /// </summary>
     [HideInInspector]
-    public PushAgent_TouchBlock agent;  //
+    public PushAgent_TouchBlock agent;  
     public bool scored = false;
+    public bool blockScored = false;
 
     void OnCollisionEnter(Collision col)
     {
-        string myTag = transform.tag;
-
         // Touched goal.
-        if (myTag == "greenCube") 
+        if (col.gameObject.CompareTag("goal"))
         {
-            if (col.gameObject.CompareTag("greenGoal"))
+            if (!scored)
             {
-                if (!scored)
-                {
-                    scored = true;
-                    agent.ScoredAGoal(PushAgent_TouchBlock.AgentGoal.SECOND_GOAL,true, col.gameObject.tag);
-                }
-            }
-            else if(col.gameObject.CompareTag("purpleGoal"))
-            {
-                agent.ScoredAGoal(PushAgent_TouchBlock.AgentGoal.TOUCH_CUBE, false, col.gameObject.tag);
-                agent.Done();   
-            }
-            else if (col.gameObject.CompareTag("purpleCube")) 
-            {
-                agent.ScoredAGoal(PushAgent_TouchBlock.AgentGoal.FIRST_GOAL, true, col.gameObject.tag);
+                scored = true;
+                agent.ScoredAGoal();
             }
         }
-        else if(myTag == "purpleCube")
+        else if (col.gameObject.CompareTag("block")) 
         {
-            if (col.gameObject.CompareTag("purpleGoal"))
+            if (!blockScored)
             {
-                if (!scored)
-                {
-                    scored = true;
-                    agent.ScoredAGoal(PushAgent_TouchBlock.AgentGoal.SECOND_GOAL, true, col.gameObject.tag);
-                }
-            }
-            else if (col.gameObject.CompareTag("greenGoal"))
-            {
-                agent.ScoredAGoal(PushAgent_TouchBlock.AgentGoal.TOUCH_CUBE, false, col.gameObject.tag);
-                agent.Done();
-            }
-            else if (col.gameObject.CompareTag("greenCube"))
-            {
-                agent.ScoredAGoal(PushAgent_TouchBlock.AgentGoal.FIRST_GOAL, true, col.gameObject.tag);
+                blockScored = true;
+                agent.ScoredAGoal();
             }
         }
     }

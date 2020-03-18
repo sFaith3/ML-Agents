@@ -13,9 +13,6 @@ public class PushAgent_TouchBlock : Agent
 
     public GameObject area;
 
-    public enum AgentGoal {TOUCH_CUBE, FIRST_GOAL, SECOND_GOAL};
-    AgentGoal currState = AgentGoal.TOUCH_CUBE;
-
     /// <summary>
     /// The area bounds.
     /// </summary>
@@ -27,18 +24,18 @@ public class PushAgent_TouchBlock : Agent
     /// <summary>
     /// The goal to push the block to.
     /// </summary>
-    public GameObject goalGreen, goalPurple;
+    public GameObject goal;
 
     /// <summary>
     /// The block to be pushed to the goal.
     /// </summary>
-    public GameObject blockGreen, blockPurple;
+    public GameObject[] blocks = new GameObject[2];
 
     /// <summary>
     /// Detects when the block touches the goal.
     /// </summary>
     [HideInInspector]
-    public GoalDetect_TouchBlock goalDetectGreen, goalDetectPurple;
+    public GoalDetect_TouchBlock []goalScript = new GoalDetect_TouchBlock[2];
 
     public bool useVectorObs;
 
@@ -60,23 +57,23 @@ public class PushAgent_TouchBlock : Agent
     {
         base.InitializeAgent();
 
-        goalDetectGreen = blockGreen.GetComponent<GoalDetect_TouchBlock>();
-        goalDetectGreen.agent = this;
+        for (int i = 0; i < blocks.Length; i++)
+        {
+            GoalDetect_TouchBlock aux = blocks[i].GetComponent<GoalDetect_TouchBlock>();
+            goalScript[i] = aux;
+            blocks[i].GetComponent<GoalDetect_TouchBlock>().agent = this;
 
-        goalDetectPurple = blockPurple.GetComponent<GoalDetect_TouchBlock>();
-        goalDetectPurple.agent = this;
-
-        // Cache the agent rigidbody
-        m_AgentRb = GetComponent<Rigidbody>();
-        // Cache the block rigidbody
-        m_BlockRb = blockGreen.GetComponent<Rigidbody>();
-        m_BlockRb = blockPurple.GetComponent<Rigidbody>();
-        // Get the ground's bounds
-        areaBounds = ground.GetComponent<Collider>().bounds;
-        // Get the ground renderer so we can change the material when a goal is scored
-        m_GroundRenderer = ground.GetComponent<Renderer>();
-        // Starting material
-        m_GroundMaterial = m_GroundRenderer.material;
+            // Cache the agent rigidbody
+            m_AgentRb = GetComponent<Rigidbody>();
+            // Cache the block rigidbody
+            m_BlockRb = blocks[i].GetComponent<Rigidbody>();
+            // Get the ground's bounds
+            areaBounds = ground.GetComponent<Collider>().bounds;
+            // Get the ground renderer so we can change the material when a goal is scored
+            m_GroundRenderer = ground.GetComponent<Renderer>();
+            // Starting material
+            m_GroundMaterial = m_GroundRenderer.material;
+        }
 
         SetResetParameters();
     }
@@ -104,62 +101,56 @@ public class PushAgent_TouchBlock : Agent
         return randomSpawnPos;
     }
 
-    private void EndStep() 
-    {
-        // We restart the agent.
-        goalDetectGreen.scored = false;
-        goalDetectPurple.scored = false;
-        currState = AgentGoal.TOUCH_CUBE;
-        Done();
-    }
-
     /// <summary>
     /// Called when the agent moves the block into the goal.
     /// </summary>
-    public void ScoredAGoal(AgentGoal newState, bool correct, string collTag)
+    public void ScoredAGoal()
     {
-        if (correct)
+        // Si els cubs encara no s'han tocat...
+        if (!goalScript[0].blockScored || !goalScript[1].blockScored)
         {
-            if (currState == AgentGoal.TOUCH_CUBE)
+            if (goalScript[0].blockScored || goalScript[1].blockScored)
             {
-                if(collTag == "purpleCube" || collTag == "greenCube") 
-                {
-                    SetReward(0.25f);
-                    currState = newState;
-                }
-                else 
-                {
-                    SetReward(0.1f);
-                    EndStep();
-                }
-            }
-            else if (currState == AgentGoal.FIRST_GOAL)
-            {
-                if(collTag == "purpleGoal" || collTag == "greenGoal") 
-                {
-                    SetReward(0.5f);
-                    currState = newState;
-                }
+                goalScript[0].blockScored = true;
+                goalScript[1].blockScored = true;
+                SetReward(0.5f);
             }
             else
             {
-                if (collTag == "purpleGoal" || collTag == "greenGoal")
-                {
-                    SetReward(1f);
-                    EndStep();
-                }
+                goalScript[0].blockScored = false;
+                goalScript[1].blockScored = false;
+                goalScript[0].scored = false;
+                goalScript[1].scored = false;
+                SetReward(0.1f);
+                Done();
             }
         }
-        else 
+        else
         {
-            SetReward(0.1f);
-            EndStep();
-        }
-    }
+            if (goalScript[0].scored && goalScript[1].scored)
+            {
+                for (int i = 0; i < blocks.Length; i++)
+                {
+                    goalScript[i].scored = false;
+                }
 
-    private void Update()
-    {
-        Debug.Log(GetCumulativeReward());
+                // We use a reward of 5.
+                SetReward(1f);
+                // Swap ground material for a bit to indicate we scored.
+                StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.goalScoredMaterial, 0.5f));
+                // Restart
+                goalScript[0].blockScored = false;
+                goalScript[1].blockScored = false;
+                goalScript[0].scored = false;
+                goalScript[1].scored = false;
+
+                Done();
+            }
+            else if (goalScript[0].scored || goalScript[1].scored)
+            {
+                SetReward(0.75f);
+            }
+        }
     }
 
     /// <summary>
@@ -248,8 +239,10 @@ public class PushAgent_TouchBlock : Agent
     void ResetBlock()
     {
         // Get a random position for the block.
-        blockPurple.transform.position = GetRandomSpawnPos();
-        blockGreen.transform.position = GetRandomSpawnPos();
+        for (int i = 0; i < blocks.Length; i++)
+        {
+            blocks[i].transform.position = GetRandomSpawnPos();
+        }
 
         // Reset block velocity back to zero.
         m_BlockRb.velocity = Vector3.zero;
@@ -302,5 +295,10 @@ public class PushAgent_TouchBlock : Agent
     {
         SetGroundMaterialFriction();
         SetBlockProperties();
+    }
+
+    private void Update()
+    {
+        Debug.Log(GetCumulativeReward());
     }
 }

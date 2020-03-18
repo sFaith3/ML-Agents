@@ -20,7 +20,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/ML-Agents/Examples/PushBlock/Scenes/PushBlock_2Blocks.unity
     guid: 1a85b5c36216fd64aa44a624f1465277
-  - enabled: 1
+  - enabled: 0
     path: Assets/ML-Agents/Examples/PushBlock/Scenes/PushBlock_SeparatedBlocks.unity
     guid: 5f37f5f620c02774fbbcb9cd4ac16855
+  - enabled: 1
+    path: Assets/ML-Agents/Examples/PushBlock/Scenes/PushBlock_TouchBlock.unity
+    guid: 30c883639709b0741a81468978049361
   m_configObjects: {}

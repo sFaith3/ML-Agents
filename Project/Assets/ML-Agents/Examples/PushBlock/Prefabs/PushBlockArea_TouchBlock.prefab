@@ -1,98 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2118499054482559056
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2118499054482559057}
-  - component: {fileID: 2118499054482559060}
-  - component: {fileID: 2118499054482559063}
-  - component: {fileID: 2118499054482559062}
-  m_Layer: 0
-  m_Name: Goal_Purple
-  m_TagString: purpleGoal
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2118499054482559057
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118499054482559056}
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.03, z: 10.5}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.010748733}
-  m_Children: []
-  m_Father: {fileID: 6476249099046244328}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &2118499054482559060
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118499054482559056}
-  m_Mesh: {fileID: 4300004, guid: c639386c12f5f7841892163a199dfacc, type: 3}
---- !u!23 &2118499054482559063
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118499054482559056}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: ff14134b548ad4790809bd7ffdffbf32, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 0
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
---- !u!65 &2118499054482559062
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2118499054482559056}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 2500, y: 300, z: 400}
-  m_Center: {x: 0, y: 2.5, z: 0}
 --- !u!1 &6478532168692726076
 GameObject:
   m_ObjectHideFlags: 0
@@ -317,8 +224,8 @@ GameObject:
   - component: {fileID: 6426618593002982028}
   - component: {fileID: 2118499053140605600}
   m_Layer: 0
-  m_Name: Block_Green
-  m_TagString: greenCube
+  m_Name: Block_1
+  m_TagString: block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -698,7 +605,6 @@ GameObject:
   - component: {fileID: 6375300490645937812}
   - component: {fileID: 6375094545844562294}
   - component: {fileID: 2704087705245969724}
-  - component: {fileID: 7405111616775946588}
   - component: {fileID: 2118499053140605602}
   m_Layer: 0
   m_Name: Agent
@@ -756,7 +662,7 @@ MonoBehaviour:
     vectorActionSize: 07000000
     vectorActionDescriptions: []
     vectorActionSpaceType: 0
-  m_Model: {fileID: 5022602860645237092, guid: 341762bb3e3d7d849afb200de3ed7ba1, type: 3}
+  m_Model: {fileID: 0}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: PushBlock
@@ -789,11 +695,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensorName: RayPerceptionSensor
   detectableTags:
-  - greenCube
-  - greenGoal
-  - purpleCube
-  - purpleGoal
   - wall
+  - goal
+  - block
   raysPerDirection: 3
   maxRayDegrees: 90
   sphereCastRadius: 0.5
@@ -821,11 +725,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensorName: OffsetRayPerceptionSensor
   detectableTags:
-  - greenCube
-  - greenGoal
-  - purpleCube
-  - purpleGoal
   - wall
+  - goal
+  - block
   raysPerDirection: 3
   maxRayDegrees: 90
   sphereCastRadius: 0.5
@@ -854,34 +756,6 @@ MonoBehaviour:
   DecisionPeriod: 5
   RepeatAction: 1
   offsetStep: 0
---- !u!114 &7405111616775946588
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6479330263447981868}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9172c35e1e3450c44b295f1813059eab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agentParameters:
-    maxStep: 0
-  hasUpgradedFromAgentParameters: 1
-  maxStep: 5000
-  ground: {fileID: 6479320094924814042}
-  area: {fileID: 6478592667095165742}
-  areaBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  goalGreen: {fileID: 6479379573385130790}
-  goalPurple: {fileID: 2118499054482559056}
-  blockGreen: {fileID: 6478709537164352440}
-  blockPurple: {fileID: 7405111617479341854}
-  goalDetectGreen: {fileID: 0}
-  goalDetectPurple: {fileID: 0}
-  useVectorObs: 0
 --- !u!114 &2118499053140605602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -903,12 +777,11 @@ MonoBehaviour:
   areaBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  goalGreen: {fileID: 6479379573385130790}
-  goalPurple: {fileID: 2118499054482559056}
-  blockGreen: {fileID: 6478709537164352440}
-  blockPurple: {fileID: 7405111617479341854}
-  goalDetectGreen: {fileID: 0}
-  goalDetectPurple: {fileID: 0}
+  goal: {fileID: 6479379573385130790}
+  blocks:
+  - {fileID: 6478709537164352440}
+  - {fileID: 7405111617479341854}
+  goalDetect: {fileID: 0}
   useVectorObs: 0
 --- !u!1 &6479359813942725922
 GameObject:
@@ -1002,8 +875,8 @@ GameObject:
   - component: {fileID: 6465720967327461924}
   - component: {fileID: 6415303412094704052}
   m_Layer: 0
-  m_Name: Goal_Green
-  m_TagString: greenGoal
+  m_Name: Goal
+  m_TagString: goal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1194,7 +1067,6 @@ Transform:
   - {fileID: 6484882982968492652}
   - {fileID: 6476610577278833024}
   - {fileID: 7405111617479341853}
-  - {fileID: 2118499054482559057}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1292,8 +1164,8 @@ GameObject:
   - component: {fileID: 7405111617479341851}
   - component: {fileID: 2118499053140605601}
   m_Layer: 0
-  m_Name: Block_Purple
-  m_TagString: purpleCube
+  m_Name: Block_2
+  m_TagString: block
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1351,7 +1223,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ff14134b548ad4790809bd7ffdffbf32, type: 2}
+  - {fileID: 2100000, guid: c67450f290f3e4897bc40276a619e78d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
