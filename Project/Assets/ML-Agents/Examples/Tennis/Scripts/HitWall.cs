@@ -71,6 +71,10 @@ public class HitWall : MonoBehaviour
         m_Agent.AddReward(-1); 
         Reset();
     }
+    public void Death(float reward) {       
+        m_Agent.AddReward(reward); 
+        Reset();
+    }
     public void GivePositiveReward() {
         m_Agent.AddReward(1); //como maxSteps es 50M, no llegaremos a 25M asi que lo dejamos en +1
        //m_Agent.AddReward(Mathf.Min(2 * Mathf.Abs(1f - ((float)m_Agent.GetStepCount() / (float)m_Agent.maxStep)), 1f)); //Hasta que no llegue a la mitad de los maxSteps, conseguira un reward de +1. Luego, dicho reward irá bajando de forma lineal.
