@@ -663,8 +663,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensorName: RayPerceptionSensor
   detectableTags:
-  - block
-  - goal
+  - greenCube
+  - greenGoal
+  - purpleCube
+  - purpleGoal
   - wall
   raysPerDirection: 3
   maxRayDegrees: 90
@@ -693,8 +695,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensorName: OffsetRayPerceptionSensor
   detectableTags:
-  - block
-  - goal
+  - greenCube
+  - greenGoal
+  - purpleCube
+  - purpleGoal
   - wall
   raysPerDirection: 3
   maxRayDegrees: 90

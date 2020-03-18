@@ -104,7 +104,7 @@ public class PushAgent_Separated : Agent
     /// <summary>
     /// Called when the agent moves the block into the goal.
     /// </summary>
-    public void ScoredAGoal(bool correct)
+    public void ScoredAGoal(bool correct, string tag)
     {
         if (correct)
         {
@@ -113,22 +113,46 @@ public class PushAgent_Separated : Agent
             {
                 goalDetectGreen.scored = false;
                 goalDetectPurple.scored = false;
-                AddReward(1f);
+                SetReward(1f);
                 Done();
             }
             else if (goalDetectGreen.scored || goalDetectPurple.scored)
             {
-                AddReward(0.5f);
+                SetReward(0.5f);
             }
 
-            // Swap ground material for a bit to indicate we scored.
-            StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.goalScoredMaterial, 0.5f));
+            //// Swap ground material for a bit to indicate we scored.
+            //StartCoroutine(GoalScoredSwapGroundMaterial(m_PushBlockSettings.goalScoredMaterial, 0.5f));
+            //if (!goalDetectGreen.scored) 
+            //{
+            //    if(tag == "greenCube") 
+            //    {
+            //        SetReward(0.5f);
+            //    }
+            //    else 
+            //    {
+            //        goalDetectGreen.scored = false;
+            //        goalDetectPurple.scored = false;
+            //        SetReward(0.1f);
+            //        Done();
+            //    }
+            //}
+            //else 
+            //{
+            //    if(tag == "purpleCube") 
+            //    {
+            //        goalDetectGreen.scored = false;
+            //        goalDetectPurple.scored = false;
+            //        SetReward(1f);
+            //        Done();
+            //    }
+            //}
         }
         else 
         {
             goalDetectGreen.scored = false;
             goalDetectPurple.scored = false;
-            AddReward(-0.02f);
+            SetReward(0.1f);
             Done();
         }
     }

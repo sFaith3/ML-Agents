@@ -25,12 +25,12 @@ public class GoalDetect_Separated : MonoBehaviour
                 if (!scored)
                 {
                     scored = true;
-                    agent.ScoredAGoal(true);
+                    agent.ScoredAGoal(true, myTag);
                 }
             }
             else if(col.gameObject.CompareTag("purpleGoal"))
             {
-                agent.ScoredAGoal(false);
+                agent.ScoredAGoal(false, myTag);
                 agent.Done();   
             }
         }
@@ -41,12 +41,12 @@ public class GoalDetect_Separated : MonoBehaviour
                 if (!scored)
                 {
                     scored = true;
-                    agent.ScoredAGoal(true);
+                    agent.ScoredAGoal(true, myTag);
                 }
             }
             else if (col.gameObject.CompareTag("greenGoal"))
             {
-                agent.ScoredAGoal(false);
+                agent.ScoredAGoal(false, myTag);
                 agent.Done();
             }
         }
