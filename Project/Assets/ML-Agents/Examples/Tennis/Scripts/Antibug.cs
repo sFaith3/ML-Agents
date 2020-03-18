@@ -25,7 +25,8 @@ public class Antibug : MonoBehaviour
         if (counter) {
             elapsedTime = Time.time - startTime;
             if(elapsedTime > 5.0f) {
-                ball.GetComponent<HitWall>().Death(-20);
+                ball.GetComponent<HitWall>().Death(-5);
+  
                 elapsedTime = 0.0f;
                 counter = false;
             }
@@ -39,6 +40,7 @@ public class Antibug : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        
+        elapsedTime = 0.0f;
+        counter = false;
     }
 }
