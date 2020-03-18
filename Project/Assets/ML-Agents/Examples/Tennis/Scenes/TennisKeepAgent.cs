@@ -26,6 +26,9 @@ public class TennisKeepAgent : Agent
 
     private float distance = 0.0f;
 
+    public bool EX3 = false;
+    float moveX, moveY, moveZ;
+
     public override void InitializeAgent()
     {
         m_AgentRb = GetComponent<Rigidbody>();
@@ -64,11 +67,20 @@ public class TennisKeepAgent : Agent
     public override void AgentAction(float[] vectorAction)
     {
         //Vector3 dirToGo = Vector3.zero;
-        var moveX = Mathf.Clamp(vectorAction[0], -1f, 1f) /** m_InvertMult*/;
-        var moveY = Mathf.Clamp(vectorAction[1], -1f, 1f);
+        if (EX3)
+        {
+            moveX = vectorAction[0];
+            moveY = Mathf.Clamp(vectorAction[1], -1f, 1f);
+            moveZ = vectorAction[2];
+        } 
+        else
+        {
+            moveX = Mathf.Clamp(vectorAction[0], -1f, 1f) /** m_InvertMult*/;
+            moveY = Mathf.Clamp(vectorAction[1], -1f, 1f);
+            moveZ = vectorAction[2];
+        }
+ 
         //var rotate = Mathf.Clamp(0f, -1f, 1f) * m_InvertMult;
-
-        //print(new Vector2(moveX, moveY) + m_InvertMult.ToString());
 
         ////
         if (moveY > 0.5 && transform.position.y - transform.parent.transform.position.y < -1.5f)
@@ -76,45 +88,70 @@ public class TennisKeepAgent : Agent
             m_AgentRb.velocity = new Vector3(m_AgentRb.velocity.x, 7f, 0f);
         }
 
-        //switch (vectorAction[0])
-        //{
-        //    case 1:
-        //        dirToGo = transform.forward * 10.0f;
-        //        break;
-        //}
-
-        //switch (vectorAction[1])
-        //{
-        //    case 1:
-        //        dirToGo = transform.right * 3f;
-        //        break;
-        //    case 2:
-        //        dirToGo = transform.right * -3f;
-        //        break;
-        //}
-
-        Vector3 dir = ball.transform.position - transform.position;
-        dir.Normalize();
-
-        //tensorboard --logdir=summaries --port=6006
-        //mlagents-learn config/trainer_config.yaml --run-id=314 --train
-
-        transform.eulerAngles = new Vector3(-180.0f, -180.0f, 0.0f);
-
-        distance = ball.transform.position.x - transform.position.x;
-        distance = Mathf.Abs(distance);
-        print(distance);
-
-        if (distance < 2.0f)
+        if(!EX3) ///EX2
         {
-            AddReward(1);
+            Vector3 dir = ball.transform.position - transform.position;
+            dir.Normalize();
+
+            //tensorboard --logdir=summaries --port=6006
+            //mlagents-learn config/trainer_config.yaml --run-id=314 --train
+
+            transform.eulerAngles = new Vector3(-180.0f, -180.0f, 0.0f);
+
+            distance = ball.transform.position.x - transform.position.x;
+            distance = Mathf.Abs(distance);
+            print(distance);
+
+            if (distance < 2.0f)
+            {
+                AddReward(1);
+            }
+            else
+            {
+                AddReward(-1);
+            }
+
+            m_AgentRb.velocity = new Vector3(moveX * dir.x * 30.0f, m_AgentRb.velocity.y, 0f);
         } 
-        else
+        else ///EX3
         {
-            AddReward(-1);
-        }
+            Vector3 dir = ball.transform.position - transform.position;
+            dir.Normalize();
 
-        m_AgentRb.velocity = new Vector3(moveX * dir.x * 30.0f, m_AgentRb.velocity.y, 0f);
+            //tensorboard --logdir=summaries --port=6006
+            //mlagents-learn config/trainer_config.yaml --run-id=314 --train
+
+            transform.eulerAngles = new Vector3(-180.0f, -180.0f, 0.0f);
+
+            //distance = ball.transform.position.x - transform.position.x;
+            float distance1 = ball.transform.position.x - transform.position.x;
+            float distance2 = ball.transform.position.z - transform.position.z;
+
+            distance1 = Mathf.Abs(distance);
+            distance2 = Mathf.Abs(distance);
+            print(distance2);
+
+            if (distance1 < 2.0f)
+            {
+                AddReward(0.5f);
+            }
+            else
+            {
+                AddReward(-0.5f);
+            }
+
+            if (distance2 < 2.0f)
+            {
+                AddReward(0.5f);
+            }
+            else
+            {
+                AddReward(-0.5f);
+            }
+
+            m_AgentRb.velocity = new Vector3(moveX * dir.x * 30.0f, m_AgentRb.velocity.y, moveZ * dir.z * 30.0f);
+        }
+        
 
         //m_AgentRb.velocity = new Vector3(moveX * 30.0f, m_AgentRb.velocity.y, 0f);
         ////m_AgentRb.transform.rotation = Quaternion.Euler(55.0f * rotate + m_InvertMult * 180.0f, 0.0f, 0.0f);
