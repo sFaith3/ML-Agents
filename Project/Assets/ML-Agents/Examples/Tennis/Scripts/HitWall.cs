@@ -4,169 +4,83 @@ public class HitWall : MonoBehaviour
 {
     public GameObject areaObject;
     public int lastAgentHit;
-    public bool net;
+    public int currentLoses; //Variable de control de output de puntos fallados
+    public int currentTouches; //Variable de control de output de puntos buenos
 
-    public enum FloorHit
-        {
-            Service,
-            FloorHitUnset,
-            FloorAHit,
-            FloorBHit
-        }
+    private bool firstGame; //Variable de control si es saque.
 
-    public FloorHit lastFloorHit;
+    private enum Status { //Enum de control de estado de la pelota. Que ha tocado previamente a la colision
+        Floor, Agent, Wall
+    };
+    Status state;
 
     TennisArea m_Area;
-    TennisAgent m_AgentA;
-    TennisAgent m_AgentB;
+    TennisAgent m_Agent;
 
-    //  Use this for initialization
     void Start()
     {
         m_Area = areaObject.GetComponent<TennisArea>();
-        m_AgentA = m_Area.agentA.GetComponent<TennisAgent>();
-        m_AgentB = m_Area.agentB.GetComponent<TennisAgent>();
+        m_Agent = m_Area.agent.GetComponent<TennisAgent>();
+        currentLoses = 0;
+        currentTouches = 0;
+        state = Status.Floor;
+        firstGame = true;
     }
 
     void Reset()
     {
-        m_AgentA.Done();
-        m_AgentB.Done();
+        m_Agent.Done();
         m_Area.MatchReset();
-        lastFloorHit = FloorHit.Service;
-        net = false;
-    }
-    
-    void AgentAWins()
-    {
-        m_AgentA.SetReward(1);
-        m_AgentB.SetReward(-1);
-        m_AgentA.score += 1;
-        Reset();
-
+        currentLoses++;
+        state = Status.Floor;
+        firstGame = true;
     }
 
-    void AgentBWins()
-    {
-        m_AgentA.SetReward(-1);
-        m_AgentB.SetReward(1);
-        m_AgentB.score += 1;
-        Reset();
+    void OnCollisionEnter(Collision collision) {
+        switch (state) {
+            case Status.Floor:
+                if (collision.gameObject.name == "Agent") {
+                    state = Status.Agent;
+                } 
+                else Death();
+                break;
 
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("iWall"))
-        {
-            if (collision.gameObject.name == "wallA")
-            {
-                // Agent A hits into wall or agent B hit a winner
-                if (lastAgentHit == 0 || lastFloorHit == FloorHit.FloorAHit)
-                {
-                    AgentBWins();
-                }
-                // Agent B hits long
-                else
-                {
-                    AgentAWins();
-                }
-            }
-            else if (collision.gameObject.name == "wallB")
-            {
-                // Agent B hits into wall or agent A hit a winner
-                if (lastAgentHit == 1 || lastFloorHit == FloorHit.FloorBHit)
-                {
-                    AgentAWins();
-                }
-                // Agent A hits long
-                else
-                {
-                    AgentBWins();
-                }
-            }
-            else if (collision.gameObject.name == "floorA")
-            {
-                // Agent A hits into floor, double bounce or service
-                if (lastAgentHit == 0 || lastFloorHit == FloorHit.FloorAHit || lastFloorHit == FloorHit.Service)
-                {
-                    AgentBWins();
-                }
-                else
-                {
-                    lastFloorHit = FloorHit.FloorAHit;
-                    //successful serve
-                    if (!net)
-                    {
-                        net = true;
+            case Status.Agent:
+                if (collision.gameObject.name == "WallFront") {
+                    if (!firstGame) {
+                        currentTouches++;
+                        GivePositiveReward();
                     }
-                }
-            }
-            else if (collision.gameObject.name == "floorB")
-            {
-                // Agent B hits into floor, double bounce or service
-                if (lastAgentHit == 1 || lastFloorHit == FloorHit.FloorBHit || lastFloorHit == FloorHit.Service)
-                {
-                    AgentAWins();
-                }
-                else
-                {
-                    lastFloorHit = FloorHit.FloorBHit;
-                    //successful serve
-                    if (!net)
-                    {
-                        net = true;
+                    else {
+                        firstGame = false;
+                        GivePositiveReward_Less();
                     }
+                    state = Status.Wall;
                 }
-            }
-            else if (collision.gameObject.name == "net" && !net)
-            {
-                if (lastAgentHit == 0)
-                {
-                    AgentBWins();
-                }
-                else if (lastAgentHit == 1)
-                {
-                    AgentAWins();
-                }
-            }
-        }
-        else if (collision.gameObject.name == "AgentA")
-        {
-            // Agent A double hit
-            if (lastAgentHit == 0)
-            {
-                AgentBWins();
-            }
-            else
-            {
-                //agent can return serve in the air
-                if (lastFloorHit != FloorHit.Service && !net)
-                {
-                    net = true;
-                }
+                else Death();
+                break;
 
-                lastAgentHit = 0;
-                lastFloorHit = FloorHit.FloorHitUnset;
-            }
+            case Status.Wall:
+                if (collision.gameObject.name == "Floor") state = Status.Floor;
+                else Death();
+                break;
         }
-        else if (collision.gameObject.name == "AgentB")
-        {
-            // Agent B double hit
-            if (lastAgentHit == 1)
-            {
-                AgentAWins();
-            }
-            else
-            {
-                if (lastFloorHit != FloorHit.Service && !net)
-                {
-                    net = true;
-                }
+    }
 
-                lastAgentHit = 1;
-                lastFloorHit = FloorHit.FloorHitUnset;
-            }
-        }
+    public void Death() {       
+        m_Agent.AddReward(-1); 
+        Reset();
+    }
+    public void Death(float reward) {       
+        m_Agent.AddReward(reward); 
+        Reset();
+    }
+    public void GivePositiveReward() {
+        m_Agent.AddReward(1); //como maxSteps es 50M, no llegaremos a 25M asi que lo dejamos en +1
+       //m_Agent.AddReward(Mathf.Min(2 * Mathf.Abs(1f - ((float)m_Agent.GetStepCount() / (float)m_Agent.maxStep)), 1f)); //Hasta que no llegue a la mitad de los maxSteps, conseguira un reward de +1. Luego, dicho reward irá bajando de forma lineal.
+    }
+    public void GivePositiveReward_Less() {
+        m_Agent.AddReward(0.5f); //Lo mismo que en GivePositiveReward
+        //m_Agent.AddReward((Mathf.Min(2 * Mathf.Abs(1f - ((float)m_Agent.GetStepCount() / (float)m_Agent.maxStep)), 1f)/10)*5); //Lo mismo pero en vez de +1, consigue +0.5f
     }
 }

@@ -6,13 +6,14 @@ public class TennisAgent : Agent
 {
     [Header("Specific to Tennis")]
     public GameObject ball;
+    public GameObject agent;
     public bool invertX;
     public int score;
     public GameObject myArea;
     public float angle;
     public float scale;
 
-    Text m_TextComponent;
+    Text m_TextComponent, pointsMadeText;
     Rigidbody m_AgentRb;
     Rigidbody m_BallRb;
     float m_InvertMult;
@@ -40,6 +41,7 @@ public class TennisAgent : Agent
             scoreBoard = canvas.transform.Find(k_ScoreBoardAName).gameObject;
         }
         m_TextComponent = scoreBoard.GetComponent<Text>();
+        pointsMadeText = canvas.transform.Find(k_ScoreBoardBName).gameObject.GetComponent<Text>();
         SetResetParameters();
     }
 
@@ -81,7 +83,9 @@ public class TennisAgent : Agent
                 transform.position.z);
         }
 
-        m_TextComponent.text = score.ToString();
+        m_TextComponent.text = (ball.GetComponent<HitWall>().currentLoses).ToString();
+        pointsMadeText.text = (ball.GetComponent<HitWall>().currentTouches).ToString();
+
     }
 
     public override float[] Heuristic()
