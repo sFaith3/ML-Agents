@@ -30,7 +30,13 @@ TagManager:
   - purpleAgent
   - purpleGoal
   - cube
+<<<<<<< HEAD
   - Hole
+=======
+  - greenGoal
+  - greenCube
+  - purpleCube
+>>>>>>> push-block
   layers:
   - Default
   - TransparentFX
