@@ -1,9 +1,9 @@
 using UnityEngine;
 using MLAgents;
+using System.Collections.Generic;
 
 public class FoodCollectorAgent : Agent
 {
-    FoodCollectorSettings m_FoodCollecterSettings;
     public GameObject area;
     FoodCollectorArea m_MyArea;
     bool m_Frozen;
@@ -17,9 +17,6 @@ public class FoodCollectorAgent : Agent
     // Speed of agent rotation.
     public float turnSpeed = 300;
 
-    public bool hasFood = false;
-    public GameObject foodGrabbed;
-
     // Speed of agent movement.
     public float moveSpeed = 2;
     public Material normalMaterial;
@@ -30,26 +27,27 @@ public class FoodCollectorAgent : Agent
     public bool contribute;
     public bool useVectorObs;
 
+    private bool hasFood;
+
     public override void InitializeAgent()
     {
         base.InitializeAgent();
         m_AgentRb = GetComponent<Rigidbody>();
         Monitor.verticalOffset = 1f;
         m_MyArea = area.GetComponent<FoodCollectorArea>();
-        m_FoodCollecterSettings = FindObjectOfType<FoodCollectorSettings>();
 
         SetResetParameters();
     }
 
     public override void CollectObservations()
     {
-        if (useVectorObs)
+       if (useVectorObs)
         {
             var localVelocity = transform.InverseTransformDirection(m_AgentRb.velocity);
             AddVectorObs(localVelocity.x);
             AddVectorObs(localVelocity.z);
             AddVectorObs(System.Convert.ToInt32(m_Frozen));
-            AddVectorObs(System.Convert.ToInt32(m_Shoot));
+            AddVectorObs(System.Convert.ToInt32(m_Shoot));    
         }
     }
 
@@ -65,11 +63,25 @@ public class FoodCollectorAgent : Agent
     {
         m_Shoot = false;
 
+        //AddReward(-1.0f/maxStep);
+
+        /*if(hasFood)
+        {
+            List<string> tags = new List<string>() {"badFood", "wall", "agent", "frozenAgent"};
+            GetComponent<MLAgents.Sensor.RayPerceptionSensorComponent3D>().detectableTags = tags;
+        }
+        else
+        {
+            List<string> tags = new List<string>() {"food", "wall", "agent", "frozenAgent"};
+            GetComponent<MLAgents.Sensor.RayPerceptionSensorComponent3D>().detectableTags = tags;
+        }*/
+
+
         if (Time.time > m_FrozenTime + 4f && m_Frozen)
         {
             Unfreeze();
         }
-        if (Time.time > m_EffectTime + 15f)
+        if (Time.time > m_EffectTime + 0.5f)
         {
             if (m_Poisoned)
             {
@@ -142,6 +154,8 @@ public class FoodCollectorAgent : Agent
             m_AgentRb.velocity *= 0.95f;
         }
 
+
+
         if (m_Shoot)
         {
             var myTransform = transform;
@@ -154,6 +168,7 @@ public class FoodCollectorAgent : Agent
                 if (hit.collider.gameObject.CompareTag("agent"))
                 {
                     hit.collider.gameObject.GetComponent<FoodCollectorAgent>().Freeze();
+                    //AddReward(0.5f);
                 }
             }
         }
@@ -175,7 +190,15 @@ public class FoodCollectorAgent : Agent
     {
         m_Frozen = false;
         gameObject.tag = "agent";
-        gameObject.GetComponentInChildren<Renderer>().material = normalMaterial;
+        if(hasFood)
+        {
+            gameObject.GetComponentInChildren<Renderer>().material = goodMaterial;
+        }
+        else
+        {
+            gameObject.GetComponentInChildren<Renderer>().material = badMaterial;
+        }
+       
     }
 
     void Poison()
@@ -193,7 +216,6 @@ public class FoodCollectorAgent : Agent
 
     void Satiate()
     {
-        hasFood = true;
         m_Satiated = true;
         m_EffectTime = Time.time;
         gameObject.GetComponentInChildren<Renderer>().material = goodMaterial;
@@ -201,7 +223,6 @@ public class FoodCollectorAgent : Agent
 
     void Unsatiate()
     {
-        hasFood = false;
         m_Satiated = false;
         gameObject.GetComponentInChildren<Renderer>().material = normalMaterial;
     }
@@ -237,8 +258,6 @@ public class FoodCollectorAgent : Agent
     public override void AgentReset()
     {
         Unfreeze();
-        Unpoison();
-        Unsatiate();
         m_Shoot = false;
         m_AgentRb.velocity = Vector3.zero;
         myLaser.transform.localScale = new Vector3(0f, 0f, 0f);
@@ -252,67 +271,65 @@ public class FoodCollectorAgent : Agent
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("food") && !collision.gameObject.GetComponent<FoodLogic>().isEaten)
+        if (collision.gameObject.CompareTag("food"))
         {
             if(!hasFood)
             {
-                collision.gameObject.GetComponent<FoodLogic>().isEaten = true;
+                gameObject.GetComponentInChildren<Renderer>().material = goodMaterial;
                 collision.gameObject.GetComponent<FoodLogic>().OnEaten();
-                //foodGrabbed = collision.gameObject;
-                //Destroy(collision.GetComponent<Rigidbody>());
-                //collision.gameObject.transform.parent = transform;
-                Satiate();
+                AddReward(1.0f);
+                hasFood = true;
             }
             else
             {
                 collision.gameObject.GetComponent<FoodLogic>().OnEaten();
-                AddReward(-1f);
-                if (contribute)
-                {
-                    m_FoodCollecterSettings.totalScore -= 1;
-                }
+                //SetReward(-0.1f);
             }
-            
+                       
         }
         if (collision.gameObject.CompareTag("badFood"))
         {
             if(hasFood)
             {
+                gameObject.GetComponentInChildren<Renderer>().material = badMaterial;
                 collision.gameObject.GetComponent<FoodLogic>().OnEaten();
-                AddReward(1f);
-                /*if(foodGrabbed != null)
-                {
-                    foodGrabbed.GetComponent<FoodLogic>().Respawn();
-                    foodGrabbed = null;
-                }*/
-                if (contribute)
-                {
-                    m_FoodCollecterSettings.totalScore += 1;
-                }
+                AddReward(1.0f);
+                hasFood = false;
             }
             else
             {
-                Poison();
                 collision.gameObject.GetComponent<FoodLogic>().OnEaten();
-                AddReward(-1f);
-                if (contribute)
-                {
-                    m_FoodCollecterSettings.totalScore -= 1;
-                }
+                //SetReward(-0.1f);
             }
-            
+                       
         }
+        
+        /*if (collision.gameObject.CompareTag("wall"))
+        {
+            AddReward(-1.0f);
+            AgentReset();
+        }*/
     }
+
+    /*void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("wall"))
+        {
+            AddReward(-1.0f);
+            AgentReset();
+        }
+    }*/
 
     public void SetLaserLengths()
     {
-        m_LaserLength = Academy.Instance.FloatProperties.GetPropertyWithDefault("laser_length", 1.0f);
+        //m_LaserLength = m_MyAcademy.resetParameters.TryGetValue("laser_length", out m_LaserLength) ? m_LaserLength : 1.0f;
     }
 
     public void SetAgentScale()
     {
-        float agentScale = Academy.Instance.FloatProperties.GetPropertyWithDefault("agent_scale", 1.0f);
-        gameObject.transform.localScale = new Vector3(agentScale, agentScale, agentScale);
+      /*  float agentScale;
+        agentScale = m_MyAcademy.resetParameters.TryGetValue("agent_scale", out agentScale) ? agentScale : 1.0f;
+        gameObject.transform.localScale = new Vector3(agentScale, agentScale, agentScale);*/
     }
 
     public void SetResetParameters()
