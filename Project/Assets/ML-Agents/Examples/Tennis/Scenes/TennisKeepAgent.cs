@@ -153,6 +153,7 @@ public class TennisKeepAgent : Agent
 
             m_AgentRb.velocity = new Vector3(moveX * dir.x * magnitude, m_AgentRb.velocity.y, moveX * dir.z * magnitude);
             m_AgentRb.transform.rotation = Quaternion.Euler(-180f, -180f, 55f * rotate);
+            //High steps: Brain model working. 
         }
         
 
