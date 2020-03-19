@@ -17,12 +17,12 @@ public class Ball3DAgent : Agent
 
     public override void CollectObservations()
     {
-        AddVectorObs(gameObject.transform.rotation.z);
-        AddVectorObs(gameObject.transform.rotation.x);
+        //AddVectorObs(gameObject.transform.rotation.z);
+        //AddVectorObs(gameObject.transform.rotation.x);
 
         AddVectorObs(ball1.transform.position - gameObject.transform.position);
         
-        AddVectorObs(m_BallRb1.velocity);
+        //AddVectorObs(m_BallRb1.velocity);
     }
 
     public override void AgentAction(float[] vectorAction)
