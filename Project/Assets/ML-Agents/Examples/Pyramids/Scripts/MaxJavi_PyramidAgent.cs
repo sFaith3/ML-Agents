@@ -116,20 +116,19 @@ public class MaxJavi_PyramidAgent : Agent
             SetReward(2f);
             Done();
         }
-        if (collision.gameObject.CompareTag("switchOff"))
+
+        if (collision.gameObject.CompareTag("switchOff_O")&&buttonCounter==0)
         {
-            if(collision.gameObject.name == "OrangeSwitch" && buttonCounter == 0)
-            {
-                Debug.Log("ORANGE");
-                SetReward(-1f);
-                Done();
-            }
-            else
-            {
-                Debug.Log("RED");
-                SetReward(1f);
-            }
-          
+            Debug.Log("ORANGE");
+            AddReward(-0.3f);
+            Done();
         }
+        if (collision.gameObject.CompareTag("switchOff_R") && buttonCounter == 0)
+        {
+            Debug.Log("ORANGE");
+            AddReward(0.8f);
+        }
+
+
     }
 }

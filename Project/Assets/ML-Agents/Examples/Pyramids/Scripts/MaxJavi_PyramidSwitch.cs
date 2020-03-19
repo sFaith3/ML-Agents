@@ -34,7 +34,15 @@ public class MaxJavi_PyramidSwitch : MonoBehaviour
         m_AreaComponent.PlaceObject(gameObject, spawnAreaIndex);
         m_State = false;
         m_PyramidIndex = pyramidSpawnIndex;
-        tag = "switchOff";
+
+        if (gameObject.name == "RedSwitch")
+        {
+            tag = "switchOff_R";
+        }
+        else
+        {
+            tag = "switchOff_O";
+        }
         transform.rotation = Quaternion.Euler(0f, 0f, 0f);
         myButton.GetComponent<Renderer>().material = offMaterial;
         pyramidAgentScript.buttonCounter = 0;
@@ -47,7 +55,14 @@ public class MaxJavi_PyramidSwitch : MonoBehaviour
 
             myButton.GetComponent<Renderer>().material = onMaterial;
             m_State = true;
-            tag = "switchOn";
+            if (gameObject.name == "RedSwitch")
+            {
+                tag = "switchOn_R";
+            }
+            else
+            {
+                tag = "switchOn_O";
+            }
             pyramidAgentScript.buttonCounter += 1;
             
         }

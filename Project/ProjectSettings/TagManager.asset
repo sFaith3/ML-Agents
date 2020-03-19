@@ -15,9 +15,7 @@ TagManager:
   - goal
   - ground
   - block
-  - switchOff
   - pyramid
-  - switchOn
   - stone
   - target
   - badFood
@@ -29,6 +27,12 @@ TagManager:
   - symbol_O_Goal
   - purpleAgent
   - purpleGoal
+  - switchOn_R
+  - switchOff_R
+  - switchOn_O
+  - switchOff_O
+  - switchOff
+  - switchOn
   layers:
   - Default
   - TransparentFX
