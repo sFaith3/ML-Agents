@@ -12,7 +12,9 @@ public class GoalDetect : MonoBehaviour
     /// This will be set by the agent script on Initialization.
     /// Don't need to manually set.
     /// </summary>
-    [HideInInspector]
+    public GameObject goal;
+
+    //[HideInInspector]
     public PushAgentBasic agent;  //
 
     void OnCollisionEnter(Collision col)
@@ -20,7 +22,10 @@ public class GoalDetect : MonoBehaviour
         // Touched goal.
         if (col.gameObject.CompareTag("goal"))
         {
-            agent.ScoredAGoal();
+            if (col.gameObject == goal)
+                agent.ScoredAGoal(transform.gameObject);
+            else
+                agent.FaileddAGoal();
         }
     }
 }
