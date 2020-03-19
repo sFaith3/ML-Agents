@@ -142,7 +142,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  maxStep: 5000
+  maxStep: 20000
   ball: {fileID: 1856593870}
   cube: {fileID: 374854905}
 --- !u!1 &28604029 stripped
@@ -166,7 +166,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  maxStep: 5000
+  maxStep: 20000
   ball: {fileID: 426549690}
   cube: {fileID: 1456860217}
 --- !u!1001 &52493636
@@ -226,12 +226,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7a05945eabc91214188e1d99a9bf9897,
+      objectReference: {fileID: 5022602860645237092, guid: 5e714a814b6125e4aa88d49a81f2e789,
         type: 3}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
       propertyPath: m_BrainParameters.vectorObservationSize
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
@@ -414,12 +414,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7a05945eabc91214188e1d99a9bf9897,
+      objectReference: {fileID: 5022602860645237092, guid: 5e714a814b6125e4aa88d49a81f2e789,
         type: 3}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
       propertyPath: m_BrainParameters.vectorObservationSize
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
@@ -462,7 +462,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  maxStep: 5000
+  maxStep: 20000
   ball: {fileID: 115833416}
   cube: {fileID: 1873687466}
 --- !u!1001 &133001587
@@ -522,12 +522,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7a05945eabc91214188e1d99a9bf9897,
+      objectReference: {fileID: 5022602860645237092, guid: 5e714a814b6125e4aa88d49a81f2e789,
         type: 3}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
       propertyPath: m_BrainParameters.vectorObservationSize
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
@@ -600,12 +600,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7a05945eabc91214188e1d99a9bf9897,
+      objectReference: {fileID: 5022602860645237092, guid: 5e714a814b6125e4aa88d49a81f2e789,
         type: 3}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
       propertyPath: m_BrainParameters.vectorObservationSize
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
@@ -1001,12 +1001,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7a05945eabc91214188e1d99a9bf9897,
+      objectReference: {fileID: 5022602860645237092, guid: 5e714a814b6125e4aa88d49a81f2e789,
         type: 3}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
       propertyPath: m_BrainParameters.vectorObservationSize
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
@@ -1153,7 +1153,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  maxStep: 5000
+  maxStep: 20000
   ball: {fileID: 897104722}
   cube: {fileID: 1193277600}
 --- !u!4 &356026918 stripped
@@ -1299,7 +1299,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  maxStep: 5000
+  maxStep: 20000
   ball: {fileID: 1371075101}
   cube: {fileID: 1951233797}
 --- !u!1 &501375291 stripped
@@ -1523,12 +1523,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7a05945eabc91214188e1d99a9bf9897,
+      objectReference: {fileID: 5022602860645237092, guid: 5e714a814b6125e4aa88d49a81f2e789,
         type: 3}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
       propertyPath: m_BrainParameters.vectorObservationSize
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
@@ -1571,7 +1571,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  maxStep: 5000
+  maxStep: 20000
   ball: {fileID: 1065196275}
   cube: {fileID: 1314052141}
 --- !u!1001 &717465451
@@ -1631,12 +1631,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7a05945eabc91214188e1d99a9bf9897,
+      objectReference: {fileID: 5022602860645237092, guid: 5e714a814b6125e4aa88d49a81f2e789,
         type: 3}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
       propertyPath: m_BrainParameters.vectorObservationSize
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
@@ -1807,12 +1807,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7a05945eabc91214188e1d99a9bf9897,
+      objectReference: {fileID: 5022602860645237092, guid: 5e714a814b6125e4aa88d49a81f2e789,
         type: 3}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
       propertyPath: m_BrainParameters.vectorObservationSize
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
@@ -1855,7 +1855,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  maxStep: 5000
+  maxStep: 20000
   ball: {fileID: 1769317933}
   cube: {fileID: 508855258}
 --- !u!1 &1024414872 stripped
@@ -1879,7 +1879,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  maxStep: 5000
+  maxStep: 20000
   ball: {fileID: 501375291}
   cube: {fileID: 1066976860}
 --- !u!1 &1065196275 stripped
@@ -2251,7 +2251,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  maxStep: 5000
+  maxStep: 20000
   ball: {fileID: 1868352109}
   cube: {fileID: 82542948}
 --- !u!1 &1371075101 stripped
@@ -2323,12 +2323,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7a05945eabc91214188e1d99a9bf9897,
+      objectReference: {fileID: 5022602860645237092, guid: 5e714a814b6125e4aa88d49a81f2e789,
         type: 3}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
       propertyPath: m_BrainParameters.vectorObservationSize
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
@@ -2481,7 +2481,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  maxStep: 5000
+  maxStep: 20000
   ball: {fileID: 736675161}
   cube: {fileID: 335764724}
 --- !u!4 &1578786296 stripped
@@ -2562,7 +2562,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  maxStep: 5000
+  maxStep: 20000
   ball: {fileID: 517915993}
   cube: {fileID: 264574066}
 --- !u!1 &1613675541 stripped
@@ -2586,7 +2586,7 @@ MonoBehaviour:
   agentParameters:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
-  maxStep: 5000
+  maxStep: 20000
   ball: {fileID: 1540154940}
   cube: {fileID: 275731200}
 --- !u!1 &1746325439
@@ -3013,12 +3013,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7a05945eabc91214188e1d99a9bf9897,
+      objectReference: {fileID: 5022602860645237092, guid: 5e714a814b6125e4aa88d49a81f2e789,
         type: 3}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
       propertyPath: m_BrainParameters.vectorObservationSize
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
@@ -3091,12 +3091,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7a05945eabc91214188e1d99a9bf9897,
+      objectReference: {fileID: 5022602860645237092, guid: 5e714a814b6125e4aa88d49a81f2e789,
         type: 3}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
       propertyPath: m_BrainParameters.vectorObservationSize
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
@@ -3169,12 +3169,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Model
       value: 
-      objectReference: {fileID: 5022602860645237092, guid: 7a05945eabc91214188e1d99a9bf9897,
+      objectReference: {fileID: 5022602860645237092, guid: 5e714a814b6125e4aa88d49a81f2e789,
         type: 3}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
       propertyPath: m_BrainParameters.vectorObservationSize
-      value: 20
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 114368073295828880, guid: cfa81c019162c4e3caf6e2999c6fdf48,
         type: 3}
