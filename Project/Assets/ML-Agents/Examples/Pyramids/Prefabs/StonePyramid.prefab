@@ -2321,7 +2321,7 @@ GameObject:
   - component: {fileID: 4457284105463742}
   m_Layer: 0
   m_Name: StonePyramid
-  m_TagString: stone
+  m_TagString: pyramid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
