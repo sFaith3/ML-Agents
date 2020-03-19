@@ -13,6 +13,7 @@ public class Ball3DWithCubeAgent : Agent
     float minReward = 0.1f;
     float maxReward = 0.95f;
     float normalThreshold = 0.5f;
+    float maxMoveDist = 2f;
 
     public override void InitializeAgent()
     {
@@ -29,6 +30,7 @@ public class Ball3DWithCubeAgent : Agent
 
         AddVectorObs(gameObject.transform.position.z);
         AddVectorObs(gameObject.transform.position.x);
+        AddVectorObs(gameObject.transform.position.y);
 
         AddVectorObs(ball.transform.position - gameObject.transform.position);
         AddVectorObs(cube.transform.position - gameObject.transform.position);
@@ -62,20 +64,20 @@ public class Ball3DWithCubeAgent : Agent
         }
 
         //Movement
-        if ((gameObject.transform.localPosition.z < 2f && actionMoveZ > 0f) ||
-            (gameObject.transform.localPosition.z > -2f && actionMoveZ < 0f))
+        if ((gameObject.transform.localPosition.z < maxMoveDist && actionMoveZ > 0f) ||
+            (gameObject.transform.localPosition.z > -maxMoveDist && actionMoveZ < 0f))
         {
             gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y, gameObject.transform.localPosition.z + actionMoveZ);
         }
 
-        if ((gameObject.transform.localPosition.x < 2f && actionMoveX > 0f) ||
-            (gameObject.transform.localPosition.x > -2f && actionMoveX < 0f))
+        if ((gameObject.transform.localPosition.x < maxMoveDist && actionMoveX > 0f) ||
+            (gameObject.transform.localPosition.x > -maxMoveDist && actionMoveX < 0f))
         {
             gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x + actionMoveX, gameObject.transform.localPosition.y, gameObject.transform.localPosition.z);
         }
 
-        if ((gameObject.transform.localPosition.y < 2f && actionMoveY > 0f) ||
-            (gameObject.transform.localPosition.y > -2f && actionMoveY < 0f))
+        if ((gameObject.transform.localPosition.y < maxMoveDist && actionMoveY > 0f) ||
+            (gameObject.transform.localPosition.y > -maxMoveDist && actionMoveY < 0f))
         {
             gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, gameObject.transform.localPosition.y + actionMoveY, gameObject.transform.localPosition.z);
         }
@@ -101,7 +103,10 @@ public class Ball3DWithCubeAgent : Agent
             float ballReward = (ballXReward + ballZReward) / 2f;
 
             float cubeReward = Mathf.Lerp(minReward, maxReward, (Vector3.Dot(cube.transform.up, Vector3.up) - normalThreshold) * 1f/(1f-normalThreshold));
-            float reward = (ballReward + cubeReward) / 2f;
+
+            float headReward = Mathf.Lerp(maxReward, minReward, Mathf.Abs(gameObject.transform.localPosition.y) / maxMoveDist);
+
+            float reward = (ballReward + cubeReward + headReward) / 3f;
             SetReward(reward);
         }
     }
