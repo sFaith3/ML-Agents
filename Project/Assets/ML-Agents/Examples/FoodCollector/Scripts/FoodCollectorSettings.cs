@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
+//using UnityEngine.UI;
 using MLAgents;
 
 public class FoodCollectorSettings : MonoBehaviour
@@ -11,7 +11,7 @@ public class FoodCollectorSettings : MonoBehaviour
     public FoodCollectorArea[] listArea;
 
     public int totalScore;
-    public Text scoreText;
+    //public Text scoreText;
 
     public void Awake()
     {
@@ -43,6 +43,6 @@ public class FoodCollectorSettings : MonoBehaviour
 
     public void Update()
     {
-        scoreText.text = $"Score: {totalScore}";
+        //scoreText.text = $"Score: {totalScore}";
     }
 }
