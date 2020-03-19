@@ -2205,7 +2205,7 @@ MonoBehaviour:
     vectorActionSize: 03000000
     vectorActionDescriptions: []
     vectorActionSpaceType: 1
-  m_Model: {fileID: 5022602860645237092, guid: 351465d8bfb6d5f498ecdaec021f32a6, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: dec667e3800a7f34795b4fc870cb1d48, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: Tennis
