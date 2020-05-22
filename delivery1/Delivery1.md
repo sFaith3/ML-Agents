@@ -8,7 +8,7 @@ This first delivery of the input/output course at ENTI delivered during Spring 2
 
 ## Assets 
 
-The assets to explore and use are the ones available at the ml-agents repository, which for this course I have forked [here]( https://github.com/ENTI-Input-Output/ml-agents.git). It is also possible to add examples from the Marathon environmetns, which can be found [here](https://github.com/Unity-Technologies/marathon-envs)
+The assets to explore and use are the ones available at the ml-agents repository, which for this course I have forked [here]( https://github.com/ENTI-Input-Output/ml-agents.git ). It is also possible to add examples from the Marathon environmetns, which can be found [here](https://github.com/Unity-Technologies/marathon-envs)
  
  
  <img src="https://github.com/Unity-Technologies/marathon-envs/blob/master/images/MarathonEnvsBanner.gif" align="middle" width="3000"/>
@@ -61,5 +61,18 @@ The grades will follow these guidelines:
 * Your contributions should not collide with the ones from other development teams
 
 **All the extra requirements should be satisfied for the submission to be evaluated.**
+
+## Single evaluation
+
+
+For the student doing single evaluation, you should pick the tutorial project sent earlier, [here](https://www.immersivelimit.com/tutorials/unity-ml-agents-penguins), and work on that basis. This means:
+1.create a branch to work
+2. add the tutorial project to the repository, preserving the folder structure.
+3. Do the exercises listed above. For this, the case analysis will be the environment implemented through the the tutorial. If the ml-agents version used in the tutorial were not the same than in the repository, update the repository to make your project work, but do NOT merge in the branch develop-ENTI the result.
+
+You will use as name of group: GSE1
+
+
+
 
 
