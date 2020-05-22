@@ -8,7 +8,7 @@ This first delivery of the input/output course at ENTI delivered during Spring 2
 
 ## Assets 
 
-The assets to explore and use are the ones available at the ml-agents repository, which for this course I have forked [here]( https://github.com/joanllobera/ml-agents.git). It is also possible to add examples from the Marathon environmetns, which can be found [here](https://github.com/Unity-Technologies/marathon-envs)
+The assets to explore and use are the ones available at the ml-agents repository, which for this course I have forked [here]( https://github.com/ENTI-Input-Output/ml-agents.git). It is also possible to add examples from the Marathon environmetns, which can be found [here](https://github.com/Unity-Technologies/marathon-envs)
  
  
  <img src="https://github.com/Unity-Technologies/marathon-envs/blob/master/images/MarathonEnvsBanner.gif" align="middle" width="3000"/>
