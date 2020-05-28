@@ -97,6 +97,25 @@ Pyramids:
             strength: 0.02
             gamma: 0.99
             encoding_size: 256
+            
+g08-Pyramids:
+    summary_freq: 30000
+    time_horizon: 128
+    batch_size: 128
+    buffer_size: 2048
+    hidden_units: 512
+    num_layers: 2
+    beta: 1.0e-2
+    max_steps: 1.0e7
+    num_epoch: 3
+    reward_signals:
+        extrinsic:
+            strength: 1.0
+            gamma: 0.99
+        curiosity:
+            strength: 0.02
+            gamma: 0.99
+            encoding_size: 256
 
 VisualPyramids:
     time_horizon: 128
