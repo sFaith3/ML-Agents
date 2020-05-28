@@ -126,6 +126,11 @@ public class CrawlerAgent : Agent
         }
     }
 
+    public override float[] Heuristic()
+    {
+        return null;
+    }
+
     /// <summary>
     /// Agent touched the target
     /// </summary>
@@ -134,7 +139,7 @@ public class CrawlerAgent : Agent
         AddReward(1f);
         if (respawnTargetWhenTouched)
         {
-            GetRandomTargetPos();
+            //GetRandomTargetPos();
         }
     }
 
@@ -222,7 +227,14 @@ public class CrawlerAgent : Agent
         {
             RewardFunctionTimePenalty();
         }
-        RewardFunctionDodge();
+
+        //RewardFunctionDodge();
+        RewardFunctionAlign();
+    }
+
+    void RewardFunctionAlign()
+    {
+       
     }
 
     /// <summary>
@@ -230,8 +242,20 @@ public class CrawlerAgent : Agent
     /// </summary>
     void RewardFunctionMovingTowards()
     {
-        m_MovingTowardsDot = Vector3.Dot(m_JdController.bodyPartsDict[body].rb.velocity, m_DirToTarget.normalized);
-        SetReward(0.03f * m_MovingTowardsDot);
+        RaycastHit hit;
+
+        Debug.DrawRay(body.transform.position, m_DirToTarget, Color.yellow);
+        if (Physics.Raycast(body.transform.position, m_DirToTarget, out hit, 20f, layerMask))
+        {
+            Debug.Log("obstacle in the middle");
+            SetReward(-0.01f);
+        }
+        else
+        {
+            m_MovingTowardsDot = Vector3.Dot(m_JdController.bodyPartsDict[body].rb.velocity, m_DirToTarget.normalized);
+            SetReward(0.03f * m_MovingTowardsDot);
+        }
+       
     }
 
     void RewardFunctionDodge()
@@ -243,28 +267,28 @@ public class CrawlerAgent : Agent
         if (Physics.Raycast(body.transform.position, body.transform.TransformDirection(Vector3.forward), out hit, 4f, layerMask))
         {
             Debug.Log("piticaldo");
-            SetReward(-0.1f);
+            SetReward(-1f);
         }
         Debug.DrawRay(body.transform.position, body.transform.TransformDirection(Vector3.right) * 4f, Color.yellow);
 
         if (Physics.Raycast(body.transform.position, body.transform.TransformDirection(Vector3.right), out hit, 4f, layerMask))
         {
             Debug.Log("piticaldo");
-            SetReward(-0.1f);
+            SetReward(-1f);
         }
         Debug.DrawRay(body.transform.position, body.transform.TransformDirection(Vector3.left) * 4f, Color.yellow);
 
         if (Physics.Raycast(body.transform.position, body.transform.TransformDirection(Vector3.left), out hit, 4f, layerMask))
         {
             Debug.Log("piticaldo");
-            SetReward(-0.1f);
+            SetReward(-1f);
         }
         Debug.DrawRay(body.transform.position, body.transform.TransformDirection(Vector3.back) * 4f, Color.yellow);
 
         if (Physics.Raycast(body.transform.position, body.transform.TransformDirection(Vector3.back), out hit, 4f, layerMask))
         {
             Debug.Log("piticaldo");
-            SetReward(-0.1f);
+            SetReward(-1f);
         }
     }
 
@@ -302,7 +326,7 @@ public class CrawlerAgent : Agent
         }
         if (!targetIsStatic)
         {
-            GetRandomTargetPos();
+            //GetRandomTargetPos();
         }
     }
 }
