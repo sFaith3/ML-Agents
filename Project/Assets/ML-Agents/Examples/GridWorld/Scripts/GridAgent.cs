@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using System.Linq;
-using Unity.MLAgents;
+using MLAgents;
 using UnityEngine.Serialization;
 
 public class GridAgent : Agent
@@ -27,47 +27,55 @@ public class GridAgent : Agent
     const int k_Left = 3;
     const int k_Right = 4;
 
-    EnvironmentParameters m_ResetParams;
-
-    public override void Initialize()
+    public override void InitializeAgent()
     {
-        m_ResetParams = Academy.Instance.EnvironmentParameters;
     }
 
-    public override void CollectDiscreteActionMasks(DiscreteActionMasker actionMasker)
+    public override void CollectObservations()
     {
+        // There are no numeric observations to collect as this environment uses visual
+        // observations.
+
         // Mask the necessary actions if selected by the user.
         if (maskActions)
         {
-           // Prevents the agent from picking an action that would make it collide with a wall
-            var positionX = (int)transform.position.x;
-            var positionZ = (int)transform.position.z;
-            var maxPosition = (int)m_ResetParams.GetWithDefault("gridSize", 5f) - 1;
+            SetMask();
+        }
+    }
 
-            if (positionX == 0)
-            {
-                actionMasker.SetMask(0, new []{ k_Left});
-            }
+    /// <summary>
+    /// Applies the mask for the agents action to disallow unnecessary actions.
+    /// </summary>
+    void SetMask()
+    {
+        // Prevents the agent from picking an action that would make it collide with a wall
+        var positionX = (int)transform.position.x;
+        var positionZ = (int)transform.position.z;
+        var maxPosition = (int)Academy.Instance.FloatProperties.GetPropertyWithDefault("gridSize", 5f) - 1;
 
-            if (positionX == maxPosition)
-            {
-                actionMasker.SetMask(0, new []{k_Right});
-            }
+        if (positionX == 0)
+        {
+            SetActionMask(k_Left);
+        }
 
-            if (positionZ == 0)
-            {
-                actionMasker.SetMask(0, new []{k_Down});
-            }
+        if (positionX == maxPosition)
+        {
+            SetActionMask(k_Right);
+        }
 
-            if (positionZ == maxPosition)
-            {
-                actionMasker.SetMask(0, new []{k_Up});
-            }
+        if (positionZ == 0)
+        {
+            SetActionMask(k_Down);
+        }
+
+        if (positionZ == maxPosition)
+        {
+            SetActionMask(k_Up);
         }
     }
 
     // to be implemented by the developer
-    public override void OnActionReceived(float[] vectorAction)
+    public override void AgentAction(float[] vectorAction)
     {
         AddReward(-0.01f);
         var action = Mathf.FloorToInt(vectorAction[0]);
@@ -103,39 +111,39 @@ public class GridAgent : Agent
             if (hit.Where(col => col.gameObject.CompareTag("goal")).ToArray().Length == 1)
             {
                 SetReward(1f);
-                EndEpisode();
+                Done();
             }
             else if (hit.Where(col => col.gameObject.CompareTag("pit")).ToArray().Length == 1)
             {
                 SetReward(-1f);
-                EndEpisode();
+                Done();
             }
         }
     }
 
-    public override void Heuristic(float[] actionsOut)
+    public override float[] Heuristic()
     {
-        actionsOut[0] = k_NoAction;
         if (Input.GetKey(KeyCode.D))
         {
-            actionsOut[0] = k_Right;
+            return new float[] { k_Right };
         }
         if (Input.GetKey(KeyCode.W))
         {
-            actionsOut[0] = k_Up;
+            return new float[] { k_Up };
         }
         if (Input.GetKey(KeyCode.A))
         {
-            actionsOut[0] = k_Left;
+            return new float[] { k_Left };
         }
         if (Input.GetKey(KeyCode.S))
         {
-            actionsOut[0] = k_Down;
+            return new float[] { k_Down };
         }
+        return new float[] { k_NoAction };
     }
 
     // to be implemented by the developer
-    public override void OnEpisodeBegin()
+    public override void AgentReset()
     {
         area.AreaReset();
     }

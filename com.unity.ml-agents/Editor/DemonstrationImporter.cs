@@ -13,9 +13,9 @@ namespace Unity.MLAgents.Editor
     /// Asset Importer used to parse demonstration files.
     /// </summary>
     [ScriptedImporter(1, new[] {"demo"})]
-    internal class DemonstrationImporter : ScriptedImporter
+    public class DemonstrationImporter : ScriptedImporter
     {
-        const string k_IconPath = "Packages/com.unity.ml-agents/Editor/Icons/DemoIcon.png";
+        const string k_IconPath = "Assets/ML-Agents/Resources/DemoIcon.png";
 
         public override void OnImportAsset(AssetImportContext ctx)
         {
@@ -33,7 +33,7 @@ namespace Unity.MLAgents.Editor
                 var metaDataProto = DemonstrationMetaProto.Parser.ParseDelimitedFrom(reader);
                 var metaData = metaDataProto.ToDemonstrationMetaData();
 
-                reader.Seek(DemonstrationWriter.MetaDataBytes + 1, 0);
+                reader.Seek(DemonstrationStore.MetaDataBytes + 1, 0);
                 var brainParamsProto = BrainParametersProto.Parser.ParseDelimitedFrom(reader);
                 var brainParameters = brainParamsProto.ToBrainParameters();
 

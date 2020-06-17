@@ -1,0 +1,25 @@
+HoleWallJump:
+  measure: progress
+  thresholds: [0.1, 0.3, 0.5]
+  min_lesson_length: 100
+  signal_smoothing: true
+  parameters:
+    hole_wall_min_percentage: [1.0, 0.8, 0.6, 0.4]
+    hole_wall_max_percentage: [0.8, 0.3, 0.2, 0.2]
+
+BigWallJump:
+  measure: progress
+  thresholds: [0.1, 0.3, 0.5]
+  min_lesson_length: 100
+  signal_smoothing: true
+  parameters:
+    big_wall_min_height: [0.0, 0.922, 1.0, 1.5]
+    big_wall_max_height: [0.922, 1.3, 1.5, 1.5]
+
+SmallWallJump:
+  measure: progress
+  thresholds: [0.1, 0.3, 0.5]
+  min_lesson_length: 100
+  signal_smoothing: true
+  parameters:
+    small_wall_height: [0.1, 0.3, 0.5, 0.9222]

@@ -1,30 +1,31 @@
 using UnityEngine;
-using Unity.MLAgents;
-using Unity.MLAgents.Sensors;
+using MLAgents;
 
 public class Ball3DAgent : Agent
 {
     [Header("Specific to Ball3D")]
-    public GameObject ball;
-    Rigidbody m_BallRb;
-    EnvironmentParameters m_ResetParams;
+    public GameObject ball1;
+    Rigidbody m_BallRb1;
+    IFloatProperties m_ResetParams;
 
-    public override void Initialize()
+    public override void InitializeAgent()
     {
-        m_BallRb = ball.GetComponent<Rigidbody>();
-        m_ResetParams = Academy.Instance.EnvironmentParameters;
+        m_BallRb1 = ball1.GetComponent<Rigidbody>();
+        m_ResetParams = Academy.Instance.FloatProperties;
         SetResetParameters();
     }
 
-    public override void CollectObservations(VectorSensor sensor)
+    public override void CollectObservations()
     {
-        sensor.AddObservation(gameObject.transform.rotation.z);
-        sensor.AddObservation(gameObject.transform.rotation.x);
-        sensor.AddObservation(ball.transform.position - gameObject.transform.position);
-        sensor.AddObservation(m_BallRb.velocity);
+        //AddVectorObs(gameObject.transform.rotation.z);
+        //AddVectorObs(gameObject.transform.rotation.x);
+
+        AddVectorObs(ball1.transform.position - gameObject.transform.position);
+        
+        //AddVectorObs(m_BallRb1.velocity);
     }
 
-    public override void OnActionReceived(float[] vectorAction)
+    public override void AgentAction(float[] vectorAction)
     {
         var actionZ = 2f * Mathf.Clamp(vectorAction[0], -1f, 1f);
         var actionX = 2f * Mathf.Clamp(vectorAction[1], -1f, 1f);
@@ -40,12 +41,12 @@ public class Ball3DAgent : Agent
         {
             gameObject.transform.Rotate(new Vector3(1, 0, 0), actionX);
         }
-        if ((ball.transform.position.y - gameObject.transform.position.y) < -2f ||
-            Mathf.Abs(ball.transform.position.x - gameObject.transform.position.x) > 3f ||
-            Mathf.Abs(ball.transform.position.z - gameObject.transform.position.z) > 3f)
+        if ((ball1.transform.position.y - gameObject.transform.position.y) < -2f ||
+            Mathf.Abs(ball1.transform.position.x - gameObject.transform.position.x) > 3f ||
+            Mathf.Abs(ball1.transform.position.z - gameObject.transform.position.z) > 3f)
         {
             SetReward(-1f);
-            EndEpisode();
+            Done();
         }
         else
         {
@@ -53,30 +54,32 @@ public class Ball3DAgent : Agent
         }
     }
 
-    public override void OnEpisodeBegin()
+    public override void AgentReset()
     {
         gameObject.transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
         gameObject.transform.Rotate(new Vector3(1, 0, 0), Random.Range(-10f, 10f));
         gameObject.transform.Rotate(new Vector3(0, 0, 1), Random.Range(-10f, 10f));
-        m_BallRb.velocity = new Vector3(0f, 0f, 0f);
-        ball.transform.position = new Vector3(Random.Range(-1.5f, 1.5f), 4f, Random.Range(-1.5f, 1.5f))
-            + gameObject.transform.position;
+        m_BallRb1.velocity = new Vector3(0f, 0f, 0f);
+        ball1.transform.position = new Vector3(Random.Range(-0.6f, -1.5f), 4f, Random.Range(-1.5f, 1.5f)) + gameObject.transform.position;
         //Reset the parameters when the Agent is reset.
         SetResetParameters();
     }
 
-    public override void Heuristic(float[] actionsOut)
+    public override float[] Heuristic()
     {
-        actionsOut[0] = -Input.GetAxis("Horizontal");
-        actionsOut[1] = Input.GetAxis("Vertical");
+        var action = new float[2];
+
+        action[0] = -Input.GetAxis("Horizontal");
+        action[1] = Input.GetAxis("Vertical");
+        return action;
     }
 
     public void SetBall()
     {
         //Set the attributes of the ball by fetching the information from the academy
-        m_BallRb.mass = m_ResetParams.GetWithDefault("mass", 1.0f);
-        var scale = m_ResetParams.GetWithDefault("scale", 1.0f);
-        ball.transform.localScale = new Vector3(scale, scale, scale);
+        m_BallRb1.mass = m_ResetParams.GetPropertyWithDefault("mass", 1.0f);
+        var scale = m_ResetParams.GetPropertyWithDefault("scale", 1.0f);
+        ball1.transform.localScale = new Vector3(scale, scale, scale);
     }
 
     public void SetResetParameters()

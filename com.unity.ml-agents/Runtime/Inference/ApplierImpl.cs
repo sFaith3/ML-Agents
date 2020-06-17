@@ -31,6 +31,7 @@ namespace Unity.MLAgents.Inference
                     {
                         actionValue[j] = tensorProxy.data[agentIndex, j];
                     }
+
                 }
                 agentIndex++;
             }
@@ -113,6 +114,7 @@ namespace Unity.MLAgents.Inference
                     {
                         actionVal[j] = actionValues[agentIndex, j];
                     }
+
                 }
                 agentIndex++;
             }

@@ -1,31 +1,29 @@
-from mlagents_envs.base_env import (
-    BehaviorSpec,
-    ActionType,
-    DecisionSteps,
-    TerminalSteps,
-)
+from mlagents_envs.base_env import AgentGroupSpec, ActionType, BatchedStepResult
 from mlagents_envs.exception import UnityObservationException
 from mlagents_envs.timers import hierarchical_timer, timed
 from mlagents_envs.communicator_objects.agent_info_pb2 import AgentInfoProto
 from mlagents_envs.communicator_objects.observation_pb2 import (
     ObservationProto,
-    NONE as COMPRESSION_TYPE_NONE,
+    NONE as COMPRESSION_NONE,
 )
 from mlagents_envs.communicator_objects.brain_parameters_pb2 import BrainParametersProto
+import logging
 import numpy as np
 import io
 from typing import cast, List, Tuple, Union, Collection, Optional, Iterable
 from PIL import Image
 
+logger = logging.getLogger("mlagents_envs")
 
-def behavior_spec_from_proto(
+
+def agent_group_spec_from_proto(
     brain_param_proto: BrainParametersProto, agent_info: AgentInfoProto
-) -> BehaviorSpec:
+) -> AgentGroupSpec:
     """
-    Converts brain parameter and agent info proto to BehaviorSpec object.
+    Converts brain parameter and agent info proto to AgentGroupSpec object.
     :param brain_param_proto: protobuf object.
     :param agent_info: protobuf object.
-    :return: BehaviorSpec object.
+    :return: AgentGroupSpec object.
     """
     observation_shape = [tuple(obs.shape) for obs in agent_info.observations]
     action_type = (
@@ -39,7 +37,7 @@ def behavior_spec_from_proto(
         ] = brain_param_proto.vector_action_size[0]
     else:
         action_shape = tuple(brain_param_proto.vector_action_size)
-    return BehaviorSpec(observation_shape, action_type, action_shape)
+    return AgentGroupSpec(observation_shape, action_type, action_shape)
 
 
 @timed
@@ -79,7 +77,7 @@ def observation_to_np_array(
                 f"Observation did not have the expected shape - got {obs.shape} but expected {expected_shape}"
             )
     gray_scale = obs.shape[2] == 1
-    if obs.compression_type == COMPRESSION_TYPE_NONE:
+    if obs.compression_type == COMPRESSION_NONE:
         img = np.array(obs.float_data.data, dtype=np.float32)
         img = np.reshape(img, obs.shape)
         return img
@@ -112,26 +110,6 @@ def _process_visual_observation(
     return np.array(batched_visual, dtype=np.float32)
 
 
-def _raise_on_nan_and_inf(data: np.array, source: str) -> np.array:
-    # Check for NaNs or Infinite values in the observation or reward data.
-    # If there's a NaN in the observations, the np.mean() result will be NaN
-    # If there's an Infinite value (either sign) then the result will be Inf
-    # See https://stackoverflow.com/questions/6736590/fast-check-for-nan-in-numpy for background
-    # Note that a very large values (larger than sqrt(float_max)) will result in an Inf value here
-    # Raise a Runtime error in the case that NaNs or Infinite values make it into the data.
-    if data.size == 0:
-        return data
-
-    d = np.mean(data)
-    has_nan = np.isnan(d)
-    has_inf = not np.isfinite(d)
-
-    if has_nan:
-        raise RuntimeError(f"The {source} provided had NaN values.")
-    if has_inf:
-        raise RuntimeError(f"The {source} provided had Infinite values.")
-
-
 @timed
 def _process_vector_observation(
     obs_index: int,
@@ -149,80 +127,71 @@ def _process_vector_observation(
         ],
         dtype=np.float32,
     )
-    _raise_on_nan_and_inf(np_obs, "observations")
+    # Check for NaNs or infs in the observations
+    # If there's a NaN in the observations, the np.mean() result will be NaN
+    # If there's an Inf (either sign) then the result will be Inf
+    # See https://stackoverflow.com/questions/6736590/fast-check-for-nan-in-numpy for background
+    # Note that a very large values (larger than sqrt(float_max)) will result in an Inf value here
+    # This is OK though, worst case it results in an unnecessary (but harmless) nan_to_num call.
+    d = np.mean(np_obs)
+    has_nan = np.isnan(d)
+    has_inf = not np.isfinite(d)
+
+    # In we have any NaN or Infs, use np.nan_to_num to replace these with finite values
+    if has_nan or has_inf:
+        np_obs = np.nan_to_num(np_obs)
+
+    if has_nan:
+        logger.warning(f"An agent had a NaN observation in the environment")
     return np_obs
 
 
 @timed
-def steps_from_proto(
+def batched_step_result_from_proto(
     agent_info_list: Collection[
         AgentInfoProto
     ],  # pylint: disable=unsubscriptable-object
-    behavior_spec: BehaviorSpec,
-) -> Tuple[DecisionSteps, TerminalSteps]:
-    decision_agent_info_list = [
-        agent_info for agent_info in agent_info_list if not agent_info.done
-    ]
-    terminal_agent_info_list = [
-        agent_info for agent_info in agent_info_list if agent_info.done
-    ]
-    decision_obs_list: List[np.ndarray] = []
-    terminal_obs_list: List[np.ndarray] = []
-    for obs_index, obs_shape in enumerate(behavior_spec.observation_shapes):
+    group_spec: AgentGroupSpec,
+) -> BatchedStepResult:
+    obs_list: List[np.ndarray] = []
+    for obs_index, obs_shape in enumerate(group_spec.observation_shapes):
         is_visual = len(obs_shape) == 3
         if is_visual:
             obs_shape = cast(Tuple[int, int, int], obs_shape)
-            decision_obs_list.append(
-                _process_visual_observation(
-                    obs_index, obs_shape, decision_agent_info_list
-                )
-            )
-            terminal_obs_list.append(
-                _process_visual_observation(
-                    obs_index, obs_shape, terminal_agent_info_list
-                )
+            obs_list.append(
+                _process_visual_observation(obs_index, obs_shape, agent_info_list)
             )
         else:
-            decision_obs_list.append(
-                _process_vector_observation(
-                    obs_index, obs_shape, decision_agent_info_list
-                )
+            obs_list.append(
+                _process_vector_observation(obs_index, obs_shape, agent_info_list)
             )
-            terminal_obs_list.append(
-                _process_vector_observation(
-                    obs_index, obs_shape, terminal_agent_info_list
-                )
-            )
-    decision_rewards = np.array(
-        [agent_info.reward for agent_info in decision_agent_info_list], dtype=np.float32
-    )
-    terminal_rewards = np.array(
-        [agent_info.reward for agent_info in terminal_agent_info_list], dtype=np.float32
+    rewards = np.array(
+        [agent_info.reward for agent_info in agent_info_list], dtype=np.float32
     )
 
-    _raise_on_nan_and_inf(decision_rewards, "rewards")
-    _raise_on_nan_and_inf(terminal_rewards, "rewards")
+    d = np.dot(rewards, rewards)
+    has_nan = np.isnan(d)
+    has_inf = not np.isfinite(d)
+    # In we have any NaN or Infs, use np.nan_to_num to replace these with finite values
+    if has_nan or has_inf:
+        rewards = np.nan_to_num(rewards)
+    if has_nan:
+        logger.warning(f"An agent had a NaN reward in the environment")
 
+    done = np.array([agent_info.done for agent_info in agent_info_list], dtype=np.bool)
     max_step = np.array(
-        [agent_info.max_step_reached for agent_info in terminal_agent_info_list],
-        dtype=np.bool,
+        [agent_info.max_step_reached for agent_info in agent_info_list], dtype=np.bool
     )
-    decision_agent_id = np.array(
-        [agent_info.id for agent_info in decision_agent_info_list], dtype=np.int32
-    )
-    terminal_agent_id = np.array(
-        [agent_info.id for agent_info in terminal_agent_info_list], dtype=np.int32
+    agent_id = np.array(
+        [agent_info.id for agent_info in agent_info_list], dtype=np.int32
     )
     action_mask = None
-    if behavior_spec.is_action_discrete():
-        if any(
-            [agent_info.action_mask is not None]
-            for agent_info in decision_agent_info_list
-        ):
-            n_agents = len(decision_agent_info_list)
-            a_size = np.sum(behavior_spec.discrete_action_branches)
+    if group_spec.is_action_discrete():
+        if any([agent_info.action_mask is not None] for agent_info in agent_info_list):
+            n_agents = len(agent_info_list)
+            a_size = np.sum(group_spec.discrete_action_branches)
             mask_matrix = np.ones((n_agents, a_size), dtype=np.bool)
-            for agent_index, agent_info in enumerate(decision_agent_info_list):
+            for agent_index, agent_info in enumerate(agent_info_list):
                 if agent_info.action_mask is not None:
                     if len(agent_info.action_mask) == a_size:
                         mask_matrix[agent_index, :] = [
@@ -230,14 +199,9 @@ def steps_from_proto(
                             for k in range(a_size)
                         ]
             action_mask = (1 - mask_matrix).astype(np.bool)
-            indices = _generate_split_indices(behavior_spec.discrete_action_branches)
+            indices = _generate_split_indices(group_spec.discrete_action_branches)
             action_mask = np.split(action_mask, indices, axis=1)
-    return (
-        DecisionSteps(
-            decision_obs_list, decision_rewards, decision_agent_id, action_mask
-        ),
-        TerminalSteps(terminal_obs_list, terminal_rewards, max_step, terminal_agent_id),
-    )
+    return BatchedStepResult(obs_list, rewards, done, max_step, agent_id, action_mask)
 
 
 def _generate_split_indices(dims):

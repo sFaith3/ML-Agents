@@ -74,6 +74,9 @@ class AgentProcessor:
         if take_action_outputs:
             for _entropy in take_action_outputs["entropy"]:
                 self.stats_reporter.add_stat("Policy/Entropy", _entropy)
+            self.stats_reporter.add_stat(
+                "Policy/Learning Rate", take_action_outputs["learning_rate"]
+            )
 
         # Make unique agent_ids that are global across workers
         action_global_agent_ids = [

@@ -40,22 +40,22 @@ public class ReacherAgent : Agent
     /// We collect the normalized rotations, angularal velocities, and velocities of both
     /// limbs of the reacher as well as the relative position of the target and hand.
     /// </summary>
-    public override void CollectObservations(VectorSensor sensor)
+    public override void CollectObservations()
     {
-        sensor.AddObservation(pendulumA.transform.localPosition);
-        sensor.AddObservation(pendulumA.transform.rotation);
-        sensor.AddObservation(m_RbA.angularVelocity);
-        sensor.AddObservation(m_RbA.velocity);
+        AddVectorObs(pendulumA.transform.localPosition);
+        AddVectorObs(pendulumA.transform.rotation);
+        AddVectorObs(m_RbA.angularVelocity);
+        AddVectorObs(m_RbA.velocity);
 
-        sensor.AddObservation(pendulumB.transform.localPosition);
-        sensor.AddObservation(pendulumB.transform.rotation);
-        sensor.AddObservation(m_RbB.angularVelocity);
-        sensor.AddObservation(m_RbB.velocity);
+        AddVectorObs(pendulumB.transform.localPosition);
+        AddVectorObs(pendulumB.transform.rotation);
+        AddVectorObs(m_RbB.angularVelocity);
+        AddVectorObs(m_RbB.velocity);
 
-        sensor.AddObservation(goal.transform.localPosition);
-        sensor.AddObservation(hand.transform.localPosition);
+        AddVectorObs(goal.transform.localPosition);
+        AddVectorObs(hand.transform.localPosition);
 
-        sensor.AddObservation(m_GoalSpeed);
+        AddVectorObs(m_GoalSpeed);
     }
 
     /// <summary>

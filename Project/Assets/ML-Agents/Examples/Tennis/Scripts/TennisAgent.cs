@@ -7,13 +7,14 @@ public class TennisAgent : Agent
 {
     [Header("Specific to Tennis")]
     public GameObject ball;
+    public GameObject agent;
     public bool invertX;
     public int score;
     public GameObject myArea;
     public float angle;
     public float scale;
 
-    Text m_TextComponent;
+    Text m_TextComponent, pointsMadeText;
     Rigidbody m_AgentRb;
     Rigidbody m_BallRb;
     float m_InvertMult;
@@ -41,22 +42,23 @@ public class TennisAgent : Agent
             scoreBoard = canvas.transform.Find(k_ScoreBoardAName).gameObject;
         }
         m_TextComponent = scoreBoard.GetComponent<Text>();
+        pointsMadeText = canvas.transform.Find(k_ScoreBoardBName).gameObject.GetComponent<Text>();
         SetResetParameters();
     }
 
-    public override void CollectObservations(VectorSensor sensor)
+    public override void CollectObservations()
     {
-        sensor.AddObservation(m_InvertMult * (transform.position.x - myArea.transform.position.x));
-        sensor.AddObservation(transform.position.y - myArea.transform.position.y);
-        sensor.AddObservation(m_InvertMult * m_AgentRb.velocity.x);
-        sensor.AddObservation(m_AgentRb.velocity.y);
+        AddVectorObs(m_InvertMult * (transform.position.x - myArea.transform.position.x));
+        AddVectorObs(transform.position.y - myArea.transform.position.y);
+        AddVectorObs(m_InvertMult * m_AgentRb.velocity.x);
+        AddVectorObs(m_AgentRb.velocity.y);
 
-        sensor.AddObservation(m_InvertMult * (ball.transform.position.x - myArea.transform.position.x));
-        sensor.AddObservation(ball.transform.position.y - myArea.transform.position.y);
-        sensor.AddObservation(m_InvertMult * m_BallRb.velocity.x);
-        sensor.AddObservation(m_BallRb.velocity.y);
+        AddVectorObs(m_InvertMult * (ball.transform.position.x - myArea.transform.position.x));
+        AddVectorObs(ball.transform.position.y - myArea.transform.position.y);
+        AddVectorObs(m_InvertMult * m_BallRb.velocity.x);
+        AddVectorObs(m_BallRb.velocity.y);
 
-        sensor.AddObservation(m_InvertMult * gameObject.transform.rotation.z);
+        AddVectorObs(m_InvertMult * gameObject.transform.rotation.z);
     }
 
     public override void OnActionReceived(float[] vectorAction)
@@ -82,7 +84,9 @@ public class TennisAgent : Agent
                 transform.position.z);
         }
 
-        m_TextComponent.text = score.ToString();
+        m_TextComponent.text = (ball.GetComponent<HitWall>().currentLoses).ToString();
+        pointsMadeText.text = (ball.GetComponent<HitWall>().currentTouches).ToString();
+
     }
 
     public override void Heuristic(float[] actionsOut)

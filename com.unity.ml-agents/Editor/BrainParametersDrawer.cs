@@ -9,7 +9,7 @@ namespace Unity.MLAgents.Editor
     /// Inspector.
     /// </summary>
     [CustomPropertyDrawer(typeof(BrainParameters))]
-    internal class BrainParametersDrawer : PropertyDrawer
+    public class BrainParametersDrawer : PropertyDrawer
     {
         // The height of a line in the Unity Inspectors
         const float k_LineHeight = 17f;

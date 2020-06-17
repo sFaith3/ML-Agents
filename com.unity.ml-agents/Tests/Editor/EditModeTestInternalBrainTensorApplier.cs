@@ -10,6 +10,7 @@ namespace Unity.MLAgents.Tests
     {
         class TestAgent : Agent
         {
+
         }
 
         [Test]

@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using Unity.MLAgents;
-using Unity.MLAgents.Sensors;
+using MLAgents;
 
 public class HallwayAgent : Agent
 {
@@ -17,20 +16,25 @@ public class HallwayAgent : Agent
     Renderer m_GroundRenderer;
     HallwaySettings m_HallwaySettings;
     int m_Selection;
+    public GameObject collectible;
+    public GameObject hole1;
+    public GameObject hole2;
+    bool hasCollectible;
 
-    public override void Initialize()
+    public override void InitializeAgent()
     {
+        base.InitializeAgent();
         m_HallwaySettings = FindObjectOfType<HallwaySettings>();
         m_AgentRb = GetComponent<Rigidbody>();
         m_GroundRenderer = ground.GetComponent<Renderer>();
         m_GroundMaterial = m_GroundRenderer.material;
     }
 
-    public override void CollectObservations(VectorSensor sensor)
+    public override void CollectObservations()
     {
         if (useVectorObs)
         {
-            sensor.AddObservation(StepCount / (float)MaxStep);
+            AddVectorObs(GetStepCount() / (float)maxStep);
         }
     }
 
@@ -66,9 +70,9 @@ public class HallwayAgent : Agent
         m_AgentRb.AddForce(dirToGo * m_HallwaySettings.agentRunSpeed, ForceMode.VelocityChange);
     }
 
-    public override void OnActionReceived(float[] vectorAction)
+    public override void AgentAction(float[] vectorAction)
     {
-        AddReward(-1f / MaxStep);
+        AddReward(-1f / maxStep);
         MoveAgent(vectorAction);
     }
 
@@ -79,41 +83,63 @@ public class HallwayAgent : Agent
             if ((m_Selection == 0 && col.gameObject.CompareTag("symbol_O_Goal")) ||
                 (m_Selection == 1 && col.gameObject.CompareTag("symbol_X_Goal")))
             {
-                SetReward(1f);
-                StartCoroutine(GoalScoredSwapGroundMaterial(m_HallwaySettings.goalScoredMaterial, 0.5f));
+                if(hasCollectible)
+                {
+                    SetReward(1f);
+                    StartCoroutine(GoalScoredSwapGroundMaterial(m_HallwaySettings.goalScoredMaterial, 0.5f));
+                }
+                else
+                {
+                    SetReward(-0.2f);
+                    StartCoroutine(GoalScoredSwapGroundMaterial(m_HallwaySettings.failMaterial, 0.5f));
+                }
             }
             else
             {
-                SetReward(-0.1f);
+                SetReward(-0.2f);
                 StartCoroutine(GoalScoredSwapGroundMaterial(m_HallwaySettings.failMaterial, 0.5f));
             }
-            EndEpisode();
+            Done();
+        }
+        if(col.gameObject.tag == "collectible")
+        {
+            hasCollectible = true;
+            AddReward(0.5f);
+            //StartCoroutine(GoalScoredSwapGroundMaterial(m_HallwaySettings.goalScoredMaterial, 0.5f));
+            collectible.SetActive(false);
+        }
+        if (col.gameObject.tag == "hole")
+        {
+            SetReward(-0.1f);
+            StartCoroutine(GoalScoredSwapGroundMaterial(m_HallwaySettings.failMaterial, 0.5f));
+            Done();
         }
     }
 
-    public override void Heuristic(float[] actionsOut)
+    public override float[] Heuristic()
     {
-        actionsOut[0] = 0;
         if (Input.GetKey(KeyCode.D))
         {
-            actionsOut[0] = 3;
+            return new float[] { 3 };
         }
-        else if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W))
         {
-            actionsOut[0] = 1;
+            return new float[] { 1 };
         }
-        else if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
-            actionsOut[0] = 4;
+            return new float[] { 4 };
         }
-        else if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S))
         {
-            actionsOut[0] = 2;
+            return new float[] { 2 };
         }
+        return new float[] { 0 };
     }
 
-    public override void OnEpisodeBegin()
+    public override void AgentReset()
     {
+        collectible.SetActive(true);
         var agentOffset = -15f;
         var blockOffset = 0f;
         m_Selection = Random.Range(0, 2);
@@ -153,5 +179,9 @@ public class HallwayAgent : Agent
             symbolXGoal.transform.position = new Vector3(7f, 0.5f, 22.29f) + area.transform.position;
             symbolOGoal.transform.position = new Vector3(-7f, 0.5f, 22.29f) + area.transform.position;
         }
+        collectible.transform.position = new Vector3(0f + Random.Range(-5f, 5f), 0.73f, 0f + Random.Range(10, 14f)) + area.transform.position;
+        hole1.transform.position = new Vector3(0f + Random.Range(-5.5f, 5.5f), 0.73f, 0f + Random.Range(6, 8f)) + area.transform.position;
+        hole2.transform.position = new Vector3(0f + Random.Range(-5.5f, 5.5f), 0.73f, 0f + Random.Range(16, 18f)) + area.transform.position;
+        hasCollectible = false;
     }
 }

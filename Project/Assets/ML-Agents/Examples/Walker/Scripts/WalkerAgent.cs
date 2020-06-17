@@ -1,25 +1,16 @@
-using MLAgentsExamples;
 using UnityEngine;
-using Unity.MLAgents;
-using Unity.MLAgentsExamples;
-using Unity.MLAgents.Sensors;
-using BodyPart = Unity.MLAgentsExamples.BodyPart;
+using MLAgents;
+using MLAgentsExamples;
 
 public class WalkerAgent : Agent
 {
-    public float maximumWalkingSpeed = 999; //The max walk velocity magnitude an agent will be rewarded for
-    Vector3 m_WalkDir; //Direction to the target
-    Quaternion m_WalkDirLookRot; //Will hold the rotation to our target
-    
-    [Header("Target To Walk Towards")] [Space(10)]
-    public Transform target; //Target the agent will walk towards.
-    public float targetSpawnRadius; //The radius in which a target can be randomly spawned.
-    public bool detectTargets; //Should this agent detect targets
-    public bool respawnTargetWhenTouched; //Should the target respawn to a different position when touched
+    [Header("Specific to Walker")]
+    [Header("Target To Walk Towards")]
+    [Space(10)]
+    public Transform target;
 
-    public Transform ground; //Ground gameobject. The height will be used for target spawning
-
-    [Header("Body Parts")] [Space(10)] public Transform hips;
+    Vector3 m_DirToTarget;
+    public Transform hips;
     public Transform chest;
     public Transform spine;
     public Transform head;
@@ -35,21 +26,16 @@ public class WalkerAgent : Agent
     public Transform armR;
     public Transform forearmR;
     public Transform handR;
-    
-    [Header("Orientation")] [Space(10)]
-    //This will be used as a stable reference point for observations
-    //Because ragdolls can move erratically, using a standalone reference point can significantly improve learning
-    public GameObject orientationCube;
-
     JointDriveController m_JdController;
 
-    EnvironmentParameters m_ResetParams;
+    Rigidbody m_HipsRb;
+    Rigidbody m_ChestRb;
+    Rigidbody m_SpineRb;
 
-    public override void Initialize()
+    IFloatProperties m_ResetParams;
+
+    public override void InitializeAgent()
     {
-
-        UpdateOrientationCube();
-
         m_JdController = GetComponent<JointDriveController>();
         m_JdController.SetupBodyPart(hips);
         m_JdController.SetupBodyPart(chest);
@@ -68,7 +54,11 @@ public class WalkerAgent : Agent
         m_JdController.SetupBodyPart(forearmR);
         m_JdController.SetupBodyPart(handR);
 
-        m_ResetParams = Academy.Instance.EnvironmentParameters;
+        m_HipsRb = hips.GetComponent<Rigidbody>();
+        m_ChestRb = chest.GetComponent<Rigidbody>();
+        m_SpineRb = spine.GetComponent<Rigidbody>();
+
+        m_ResetParams = Academy.Instance.FloatProperties;
 
         SetResetParameters();
     }
@@ -76,43 +66,44 @@ public class WalkerAgent : Agent
     /// <summary>
     /// Add relevant information on each body part to observations.
     /// </summary>
-    public void CollectObservationBodyPart(BodyPart bp, VectorSensor sensor)
+    public void CollectObservationBodyPart(BodyPart bp)
     {
-        //GROUND CHECK
-        sensor.AddObservation(bp.groundContact.touchingGround ? 1 : 0); // Is this bp touching the ground
+        var rb = bp.rb;
+        AddVectorObs(bp.groundContact.touchingGround ? 1 : 0); // Is this bp touching the ground
+        AddVectorObs(rb.velocity);
+        AddVectorObs(rb.angularVelocity);
+        var localPosRelToHips = hips.InverseTransformPoint(rb.position);
+        AddVectorObs(localPosRelToHips);
 
-        //Get velocities in the context of our orientation cube's space
-        //Note: You can get these velocities in world space as well but it may not train as well.
-        sensor.AddObservation(orientationCube.transform.InverseTransformDirection(bp.rb.velocity));
-        sensor.AddObservation(orientationCube.transform.InverseTransformDirection(bp.rb.angularVelocity));
-
-        //Get position relative to hips in the context of our orientation cube's space
-        sensor.AddObservation(orientationCube.transform.InverseTransformDirection(bp.rb.position - hips.position));
-
-        if (bp.rb.transform != hips && bp.rb.transform != handL && bp.rb.transform != handR)
+        if (bp.rb.transform != hips && bp.rb.transform != handL && bp.rb.transform != handR &&
+            bp.rb.transform != footL && bp.rb.transform != footR && bp.rb.transform != head)
         {
-            sensor.AddObservation(bp.rb.transform.localRotation);
-            sensor.AddObservation(bp.currentStrength / m_JdController.maxJointForceLimit);
+            AddVectorObs(bp.currentXNormalizedRot);
+            AddVectorObs(bp.currentYNormalizedRot);
+            AddVectorObs(bp.currentZNormalizedRot);
+            AddVectorObs(bp.currentStrength / m_JdController.maxJointForceLimit);
         }
     }
 
     /// <summary>
     /// Loop over body parts to add them to observation.
     /// </summary>
-    public override void CollectObservations(VectorSensor sensor)
+    public override void CollectObservations()
     {
-        sensor.AddObservation(Quaternion.FromToRotation(hips.forward, orientationCube.transform.forward));
-        sensor.AddObservation(Quaternion.FromToRotation(head.forward, orientationCube.transform.forward));
+        m_JdController.GetCurrentJointForces();
 
-        sensor.AddObservation(orientationCube.transform.InverseTransformPoint(target.position));
+        AddVectorObs(m_DirToTarget.normalized);
+        AddVectorObs(m_JdController.bodyPartsDict[hips].rb.position);
+        AddVectorObs(hips.forward);
+        AddVectorObs(hips.up);
 
-        foreach (var bodyPart in m_JdController.bodyPartsList)
+        foreach (var bodyPart in m_JdController.bodyPartsDict.Values)
         {
-            CollectObservationBodyPart(bodyPart, sensor);
+            CollectObservationBodyPart(bodyPart);
         }
     }
 
-    public override void OnActionReceived(float[] vectorAction)
+    public override void AgentAction(float[] vectorAction)
     {
         var bpDict = m_JdController.bodyPartsDict;
         var i = -1;
@@ -126,6 +117,7 @@ public class WalkerAgent : Agent
         bpDict[shinR].SetJointTargetRotation(vectorAction[++i], 0, 0);
         bpDict[footR].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], vectorAction[++i]);
         bpDict[footL].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], vectorAction[++i]);
+
 
         bpDict[armL].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], 0);
         bpDict[armR].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], 0);
@@ -149,114 +141,49 @@ public class WalkerAgent : Agent
         bpDict[forearmR].SetJointStrength(vectorAction[++i]);
     }
 
-    void UpdateOrientationCube()
-    {
-        //FACING DIR
-        m_WalkDir = target.position - orientationCube.transform.position;
-        m_WalkDir.y = 0; //flatten dir on the y
-        m_WalkDirLookRot = Quaternion.LookRotation(m_WalkDir); //get our look rot to the target
-
-        //UPDATE ORIENTATION CUBE POS & ROT
-        orientationCube.transform.position = hips.position;
-        orientationCube.transform.rotation = m_WalkDirLookRot;
-    }
-
     void FixedUpdate()
     {
-        if (detectTargets)
-        {
-            foreach (var bodyPart in m_JdController.bodyPartsDict.Values)
-            {
-                if (bodyPart.targetContact && bodyPart.targetContact.touchingTarget)
-                {
-                    TouchedTarget();
-                }
-            }
-        }
-
-        UpdateOrientationCube();
-
         // Set reward for this step according to mixture of the following elements.
         // a. Velocity alignment with goal direction.
-        var moveTowardsTargetReward = Vector3.Dot(orientationCube.transform.forward,
-            Vector3.ClampMagnitude(m_JdController.bodyPartsDict[hips].rb.velocity, maximumWalkingSpeed));
         // b. Rotation alignment with goal direction.
-        var lookAtTargetReward = Vector3.Dot(orientationCube.transform.forward, head.forward);
         // c. Encourage head height.
-        var headHeightOverFeetReward = (head.position.y - footL.position.y) + (head.position.y - footR.position.y);
+        // d. Discourage head movement.
+        m_DirToTarget = target.position - m_JdController.bodyPartsDict[hips].rb.position;
         AddReward(
-            +0.02f * moveTowardsTargetReward
-            + 0.01f * lookAtTargetReward
-            + 0.01f * headHeightOverFeetReward
+            +0.03f * Vector3.Dot(m_DirToTarget.normalized, m_JdController.bodyPartsDict[hips].rb.velocity)
+            + 0.01f * Vector3.Dot(m_DirToTarget.normalized, hips.forward)
+            + 0.02f * (head.position.y - hips.position.y)
+            - 0.01f * Vector3.Distance(m_JdController.bodyPartsDict[head].rb.velocity,
+                m_JdController.bodyPartsDict[hips].rb.velocity)
         );
-    }
-
-    /// <summary>
-    /// Agent touched the target
-    /// </summary>
-    public void TouchedTarget()
-    {
-        AddReward(1f);
-        if (respawnTargetWhenTouched)
-        {
-            MoveTargetToRandomPosition();
-        }
-    }
-
-    /// <summary>
-    /// Moves target to a random position within specified radius.
-    /// </summary>
-    public void MoveTargetToRandomPosition()
-    {
-        var newTargetPos = Random.insideUnitSphere * targetSpawnRadius;
-        newTargetPos.y = 5;
-        target.position = newTargetPos + ground.position;
     }
 
     /// <summary>
     /// Loop over body parts and reset them to initial conditions.
     /// </summary>
-    public override void OnEpisodeBegin()
+    public override void AgentReset()
     {
-        //Reset all of the body parts
+        if (m_DirToTarget != Vector3.zero)
+        {
+            transform.rotation = Quaternion.LookRotation(m_DirToTarget);
+        }
+
         foreach (var bodyPart in m_JdController.bodyPartsDict.Values)
         {
             bodyPart.Reset(bodyPart);
         }
-
-        //Random start rotation to help generalize
-        transform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
-
-        UpdateOrientationCube();
-
-        if (detectTargets && respawnTargetWhenTouched)
-        {
-            MoveTargetToRandomPosition();
-        }
-
         SetResetParameters();
     }
 
     public void SetTorsoMass()
     {
-        m_JdController.bodyPartsDict[chest].rb.mass = m_ResetParams.GetWithDefault("chest_mass", 8);
-        m_JdController.bodyPartsDict[spine].rb.mass = m_ResetParams.GetWithDefault("spine_mass", 8);
-        m_JdController.bodyPartsDict[hips].rb.mass = m_ResetParams.GetWithDefault("hip_mass", 8);
+        m_ChestRb.mass = m_ResetParams.GetPropertyWithDefault("chest_mass", 8);
+        m_SpineRb.mass = m_ResetParams.GetPropertyWithDefault("spine_mass", 10);
+        m_HipsRb.mass = m_ResetParams.GetPropertyWithDefault("hip_mass", 15);
     }
 
     public void SetResetParameters()
     {
         SetTorsoMass();
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (Application.isPlaying)
-        {
-            Gizmos.color = Color.green;
-            Gizmos.matrix = orientationCube.transform.localToWorldMatrix;
-            Gizmos.DrawWireCube(Vector3.zero, orientationCube.transform.localScale);
-            Gizmos.DrawRay(Vector3.zero, Vector3.forward);
-        }
     }
 }

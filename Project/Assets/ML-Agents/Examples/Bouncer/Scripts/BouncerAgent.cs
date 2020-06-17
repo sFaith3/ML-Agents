@@ -26,10 +26,10 @@ public class BouncerAgent : Agent
         SetResetParameters();
     }
 
-    public override void CollectObservations(VectorSensor sensor)
+    public override void CollectObservations()
     {
-        sensor.AddObservation(gameObject.transform.localPosition);
-        sensor.AddObservation(target.transform.localPosition);
+        AddVectorObs(gameObject.transform.localPosition);
+        AddVectorObs(target.transform.localPosition);
     }
 
     public override void OnActionReceived(float[] vectorAction)

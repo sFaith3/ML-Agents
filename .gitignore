@@ -88,3 +88,4 @@ venv/
 .coverage
 coverage.xml
 /htmlcov/
+Project/ProjectSettings/ProjectVersion.txt
