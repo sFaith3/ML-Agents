@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using MLAgents;
+using TMPro;
 
 namespace Penguin
 {
@@ -24,6 +25,9 @@ namespace Penguin
         private GameObject baby;
         private bool isFull; // If true, penguin has a full stomach
         private float feedRadius = 0f;
+
+        private const float hurtCooldown = 2f;
+        private float lastHurtTime = -1f;
 
         private void FixedUpdate()
         {
@@ -143,7 +147,7 @@ namespace Penguin
             // Direction penguin is facing (1 Vector3 = 3 values)
             AddVectorObs(transform.forward);
 
-            // 1 + 1 + 3 + 3 = 8 total values
+            // 1 + (1) + 1 + 3 + 3 = 9 total values
         }
 
         /// <summary>
@@ -161,6 +165,11 @@ namespace Penguin
             {
                 // Try to feed the baby
                 RegurgitateFish();
+            }
+            else if (collision.transform.CompareTag("Orca"))
+            {
+                // Take damage from the Orca.
+                TakeDamage();
             }
         }
 
@@ -203,6 +212,15 @@ namespace Penguin
             if (penguinArea.FishRemaining <= 0)
             {
                 Done();
+            }
+        }
+
+        private void TakeDamage()
+        {
+            if (lastHurtTime < 0 || (Time.time - lastHurtTime > hurtCooldown) )
+            {
+                AddReward(-3f);
+                lastHurtTime = Time.time;
             }
         }
     }

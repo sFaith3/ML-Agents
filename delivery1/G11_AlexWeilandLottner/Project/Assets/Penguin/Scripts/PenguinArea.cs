@@ -24,6 +24,9 @@ namespace Penguin
         [Tooltip("Prefab of a live fish")]
         public Fish FishPrefab;
 
+        [Tooltip("Orca (killer whale) swimming inside the penguin area")]
+        public Fish Orca;
+
         private List<GameObject> fishList;
 
         /// <summary>
@@ -51,7 +54,9 @@ namespace Penguin
             RemoveAllFish();
             PlacePenguin();
             PlaceBaby();
-            SpawnFish(4, Academy.Instance.FloatProperties.GetPropertyWithDefault("fish_speed", 0.5f));
+            float fishSpeed = Academy.Instance.FloatProperties.GetPropertyWithDefault("fish_speed", 0.5f);
+            SpawnFish(4, fishSpeed);
+            Orca.FishSpeed = fishSpeed;
         }
 
         /// <summary>

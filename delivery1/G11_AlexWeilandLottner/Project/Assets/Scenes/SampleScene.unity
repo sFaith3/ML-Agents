@@ -213,6 +213,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: PenguinArea (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412455422480181330, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23, type: 3}
 --- !u!1 &653260035
@@ -355,6 +385,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: PenguinArea (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412455422480181330, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23, type: 3}
 --- !u!1001 &1350022354
@@ -448,6 +508,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PenguinArea (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412455422480181330, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23, type: 3}
@@ -699,6 +789,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: PenguinArea (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412455422480181330, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23, type: 3}
 --- !u!1001 &1965374004
@@ -792,6 +912,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PenguinArea (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412455422480181330, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23, type: 3}
@@ -887,6 +1037,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: PenguinArea (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412455422480181330, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23, type: 3}
 --- !u!1001 &2095938403
@@ -980,6 +1160,36 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PenguinArea (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.spaceCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.lineCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707279583249747898, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7412455422480181330, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e7f71ba9e9ebdf44b12fd9bcaf9df23, type: 3}

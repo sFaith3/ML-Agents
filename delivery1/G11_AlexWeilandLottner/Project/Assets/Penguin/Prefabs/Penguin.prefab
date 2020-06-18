@@ -31,7 +31,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5154841164926243383}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -135,7 +135,7 @@ MonoBehaviour:
     vectorActionSize: 0200000003000000
     vectorActionDescriptions: []
     vectorActionSpaceType: 0
-  m_Model: {fileID: 5022602860645237092, guid: d5a80764ba44d6c46885c8552fa984eb, type: 3}
+  m_Model: {fileID: 5022602860645237092, guid: b01279a2506f7ce42a6f26014d6f72a2, type: 3}
   m_InferenceDevice: 0
   m_BehaviorType: 0
   m_BehaviorName: PenguinLearning

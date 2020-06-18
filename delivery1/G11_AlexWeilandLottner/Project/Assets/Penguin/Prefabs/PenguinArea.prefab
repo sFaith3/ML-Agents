@@ -301,6 +301,7 @@ Transform:
   - {fileID: 2172299455555748918}
   - {fileID: 8193748633339947758}
   - {fileID: 4444980230087750037}
+  - {fileID: 9014810683323250437}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -321,6 +322,7 @@ MonoBehaviour:
   CumulativeRewardText: {fileID: 3586948992953765341}
   FishPrefab: {fileID: 6675665726890151312, guid: 039f692db8c655e4ab9334c859abe82e,
     type: 3}
+  Orca: {fileID: 727071977546285246}
 --- !u!1 &5077593827963815746
 GameObject:
   m_ObjectHideFlags: 0
@@ -1257,5 +1259,92 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cf03e65ca2a9d1149bc30ac02af67f05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!1001 &8447275390977193302
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 692421656970296560}
+    m_Modifications:
+    - target: {fileID: 585972334129103443, guid: 541dd9fbd740e45439079db17d3884dd,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 585972334129103443, guid: 541dd9fbd740e45439079db17d3884dd,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 585972334129103443, guid: 541dd9fbd740e45439079db17d3884dd,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -7.79
+      objectReference: {fileID: 0}
+    - target: {fileID: 585972334129103443, guid: 541dd9fbd740e45439079db17d3884dd,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 585972334129103443, guid: 541dd9fbd740e45439079db17d3884dd,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 585972334129103443, guid: 541dd9fbd740e45439079db17d3884dd,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 585972334129103443, guid: 541dd9fbd740e45439079db17d3884dd,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 585972334129103443, guid: 541dd9fbd740e45439079db17d3884dd,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 585972334129103443, guid: 541dd9fbd740e45439079db17d3884dd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 585972334129103443, guid: 541dd9fbd740e45439079db17d3884dd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 585972334129103443, guid: 541dd9fbd740e45439079db17d3884dd,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6320695395566479860, guid: 541dd9fbd740e45439079db17d3884dd,
+        type: 3}
+      propertyPath: m_Name
+      value: Orca
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 541dd9fbd740e45439079db17d3884dd, type: 3}
+--- !u!4 &9014810683323250437 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 585972334129103443, guid: 541dd9fbd740e45439079db17d3884dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 8447275390977193302}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &727071977546285246 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9164214097461491176, guid: 541dd9fbd740e45439079db17d3884dd,
+    type: 3}
+  m_PrefabInstance: {fileID: 8447275390977193302}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5467e43fdf71f743a765d6463c28d55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
