@@ -54,9 +54,8 @@ namespace Penguin
             RemoveAllFish();
             PlacePenguin();
             PlaceBaby();
-            float fishSpeed = Academy.Instance.FloatProperties.GetPropertyWithDefault("fish_speed", 0.5f);
-            SpawnFish(4, fishSpeed);
-            Orca.FishSpeed = fishSpeed;
+            SpawnFish(4, Academy.Instance.FloatProperties.GetPropertyWithDefault("fish_speed", 0.5f));
+            Orca.FishSpeed = Academy.Instance.FloatProperties.GetPropertyWithDefault("orca_speed", 0.5f);
         }
 
         /// <summary>
