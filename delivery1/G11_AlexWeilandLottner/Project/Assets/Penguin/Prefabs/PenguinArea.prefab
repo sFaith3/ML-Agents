@@ -1186,6 +1186,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Penguin
       objectReference: {fileID: 0}
+    - target: {fileID: 6845652558837085921, guid: 7ba58fd476ed15f4b8d5f193ed76578e,
+        type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: b01279a2506f7ce42a6f26014d6f72a2,
+        type: 3}
+    - target: {fileID: 7832739930687353049, guid: 7ba58fd476ed15f4b8d5f193ed76578e,
+        type: 3}
+      propertyPath: detectableTags.Array.size
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 8201887675660869668, guid: 7ba58fd476ed15f4b8d5f193ed76578e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1327,6 +1338,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Orca
+      objectReference: {fileID: 0}
+    - target: {fileID: 6320695395566479860, guid: 541dd9fbd740e45439079db17d3884dd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 541dd9fbd740e45439079db17d3884dd, type: 3}
