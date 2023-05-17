@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace MLAgents.Sensor
+namespace MLAgents
 {
     [AddComponentMenu("ML Agents/Ray Perception Sensor 2D", (int)MenuGroup.Sensors)]
     public class RayPerceptionSensorComponent2D : RayPerceptionSensorComponentBase
@@ -11,9 +11,9 @@ namespace MLAgents.Sensor
             rayLayerMask = Physics2D.DefaultRaycastLayers;
         }
 
-        public override RayPerceptionSensor.CastType GetCastType()
+        public override RayPerceptionCastType GetCastType()
         {
-            return RayPerceptionSensor.CastType.Cast2D;
+            return RayPerceptionCastType.Cast2D;
         }
     }
 }
